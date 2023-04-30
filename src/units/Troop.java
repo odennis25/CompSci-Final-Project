@@ -1,5 +1,5 @@
 package units;
 
-public class Troop {
+public abstract class Troop {
 
 }
