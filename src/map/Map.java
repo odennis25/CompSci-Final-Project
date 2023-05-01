@@ -16,7 +16,7 @@ public class Map {
 			for(int j=0; j<height; j++) 
 			{
 				
-				map.get(i).add(j, new Terrain(TerrainType.GROUND));
+				map.get(i).add(j, new Terrain(TerrainType.WATER));
 				
 			}
 			
@@ -30,5 +30,6 @@ public class Map {
 			return map;
 		
 	}
+	
 
 }

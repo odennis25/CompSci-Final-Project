@@ -9,18 +9,21 @@ import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.entity.Entity;
 import map.TerrainType;
+import map.UnitMap;
+import units.UnitType;
 import map.Map;
 
 public class RTSMain extends GameApplication {
 	
 	private static double blockSize=50;
 	Map map= new Map(16, 12);
+	UnitMap uMap = new UnitMap(16,12);
 	@Override
 	protected void initGame() {
 		getGameWorld().addEntityFactory(new Factory());
 		
 		initTerrain();
-	        
+		initUnits();    
 	}
 	
 	@Override
@@ -55,8 +58,29 @@ public class RTSMain extends GameApplication {
    }
 	}
 	}
-	
-	public static double getBlockSize() {
+
+	private void initUnits() {
+for(int i=0; i<uMap.getUMap().size(); i++) {
+        	
+        	for(int j = 0; j<uMap.getUMap().get(i).size();j++ ) {
+        		UnitType unitType =uMap.getUMap().get(i).get(j).getType();
+        		switch(unitType) {
+				
+					
+				case INFANTRY:
+					spawn("infantry",i*blockSize,j*blockSize);
+					break;
+
+				default:
+					break;
+        		
+        		}
+		
+	}
+}
+	}
+
+public static double getBlockSize() {
 		return blockSize;
 	}
 	
