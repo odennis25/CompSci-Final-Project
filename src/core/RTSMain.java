@@ -8,7 +8,7 @@ import static com.almasb.fxgl.dsl.FXGL.spawn;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.entity.Entity;
-
+import map.TerrainType;
 import map.Map;
 
 public class RTSMain extends GameApplication {
@@ -30,11 +30,28 @@ public class RTSMain extends GameApplication {
 	}
 
 	private void initTerrain() {
-        for(int i=0; i<map.getMap().size(); i++) {
+        
+		for(int i=0; i<map.getMap().size(); i++) {
         	
-        	for(int j = 0; j<map.getMap().get(j).size();j++ ) {
-		
-        		spawn("terrain",i*blockSize,j*blockSize);
+        	for(int j = 0; j<map.getMap().get(i).size();j++ ) {
+        		TerrainType terrain=map.getMap().get(i).get(j).getType();
+        		switch(terrain) {
+				
+					
+				case CLIFF:
+					spawn("cliff",i*blockSize,j*blockSize);
+					break;
+				case GROUND:
+					spawn("ground",i*blockSize,j*blockSize);
+					break;
+				case WATER:
+					spawn("water",i*blockSize,j*blockSize);
+					break;
+				default:
+					break;
+        		
+        		}
+        		
    }
 	}
 	}
