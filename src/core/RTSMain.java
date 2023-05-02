@@ -9,21 +9,18 @@ import java.util.ArrayList;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.entity.Entity;
-import com.almasb.fxgl.time.TimerAction;
-
-
-import javafx.util.Duration;
 import map.TerrainType;
 import map.UnitMap;
 import units.Unit;
 import units.UnitType;
-import map.Map;
+
+import map.TerrainMap;
 
 public class RTSMain extends GameApplication 
 {
 	
 	private static double blockSize=50;
-	Map map= new Map(16, 12);
+	TerrainMap terrainMap= new TerrainMap(16, 12);
 	UnitMap uMap = new UnitMap(16,12);
 	ArrayList<Entity> unitEntitys= new ArrayList<Entity>();
 
@@ -54,10 +51,7 @@ public class RTSMain extends GameApplication
 		renderUnits();   
 		
 	}
-	
 
-	
-	
 	
 	int frame=0;
 	int temp=1;
@@ -70,7 +64,7 @@ public class RTSMain extends GameApplication
 		{
 			frame=0;
 			
-			if(uMap.getUMap().get(1).get(temp).getType()!=UnitType.EMPTY) {System.out.println("render "+temp);// proof of concept
+			if(uMap.getUMap()[1][temp].getType()!=UnitType.EMPTY) {System.out.println("render "+temp);// proof of concept
 					MoveUnit(1, temp, 1, temp+=1, uMap);}
 			
 			renderUnits();
@@ -82,12 +76,12 @@ public class RTSMain extends GameApplication
 	private void renderTerrain() 
 	{
 		
-		for(int i=0; i<map.getMap().size(); i++) 
+		for(int i=0; i<terrainMap.getMap().size(); i++) 
 		{
         	
-        	for(int j = 0; j<map.getMap().get(i).size();j++ ) 
+        	for(int j = 0; j<terrainMap.getMap().get(i).size();j++ ) 
         	{
-        		TerrainType terrain=map.getMap().get(i).get(j).getType();
+        		TerrainType terrain=terrainMap.getMap().get(i).get(j).getType();
         		switch(terrain) 
         		{
 				
@@ -120,12 +114,15 @@ public class RTSMain extends GameApplication
 		
 		
 		
-		for(int i=0; i<uMap.getUMap().size(); i++) 
+		for(int i=0; i<uMap.getUMap().length; i++) 
 		{
         	
-        	for(int j = 0; j<uMap.getUMap().get(i).size();j++ ) 
+        	for(int j = 0; j<uMap.getUMap()[i].length;j++ ) 
         	{
-        		UnitType unitType =uMap.getUMap().get(i).get(j).getType();
+        		UnitType unitType =uMap.getUMap()[i][j].getUType();
+        		
+        		
+        		
         		switch(unitType) 
         		{
 				case INFANTRY:
@@ -146,7 +143,7 @@ public class RTSMain extends GameApplication
 	public static void MoveUnit(int startX, int startY, int desX, int desY, UnitMap map) 
 	{
 		
-		UnitType type =map.getUMap().get(startX).get(startY).getType();
+		UnitType type =map.getUMap()[startX][startY].getUType();
 		
 		map.setUMap(desX, desY, type);
 		map.setUMap(startX, startY, UnitType.EMPTY);
