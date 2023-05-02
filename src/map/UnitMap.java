@@ -26,12 +26,22 @@ public class UnitMap {
 			
 		}
 		map.get(1).set(1, new Unit(UnitType.INFANTRY));
+		map.get(1).set(5, new Unit(UnitType.INFANTRY));
 	}
 
 	public ArrayList<ArrayList<Unit>> getUMap() {
 		// TODO Auto-generated method stub
 		
 			return map;
+		
+	}
+	
+	public ArrayList<ArrayList<Unit>> setUMap(int row, int column, UnitType unit ) {
+		// TODO Auto-generated method stub
+		
+		map.get(row).set(column, new Unit(unit));
+		
+		return map;
 		
 	}
 }
