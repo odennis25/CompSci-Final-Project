@@ -2,12 +2,12 @@ package map;
 
 import java.util.ArrayList;
 import map.TerrainType;
-public class Map {
+public class TerrainMap {
 	private int width;
 	private int height;
 	private ArrayList<ArrayList<Terrain>> map;
 	
-	public Map(int width,int height) 
+	public TerrainMap(int width,int height) 
 	{
 		map = new ArrayList<ArrayList<Terrain>>();
 		for(int i=0; i<width;i++) 
