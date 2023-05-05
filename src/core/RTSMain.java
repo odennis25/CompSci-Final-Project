@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.entity.Entity;
+import com.almasb.fxgl.entity.GameWorld;
+
 import map.TerrainType;
 import map.UnitMap;
 import units.Unit;
@@ -24,7 +26,7 @@ public class RTSMain extends GameApplication
 	UnitMap uMap = new UnitMap(16,12);
 	ArrayList<Entity> unitEntitys= new ArrayList<Entity>();
 
-   
+	
 	
 
 	
@@ -56,17 +58,14 @@ public class RTSMain extends GameApplication
 	int frame=0;
 	int temp=1;
 	protected void onUpdate(double tpf) {
+		
 		frame++;
 		if(frame!=30) {}
 			
 			
-		else 
+		else //runs the code once every 30 times the onUpdate method runs
 		{
 			frame=0;
-			
-			if(uMap.getUMap()[1][temp].getType()!=UnitType.EMPTY) {System.out.println("render "+temp);// proof of concept
-					MoveUnit(1, temp, 1, temp+=1, uMap);}
-			
 			renderUnits();
 		}
 	}
@@ -75,7 +74,7 @@ public class RTSMain extends GameApplication
 	
 	private void renderTerrain() 
 	{
-		
+		//iterates through the terrain Map and spawns entity's with the terrains texture
 		for(int i=0; i<terrainMap.getMap().size(); i++) 
 		{
         	
@@ -107,48 +106,41 @@ public class RTSMain extends GameApplication
 
 	private void renderUnits() 
 	{
+		
 		for(int i=0; i<unitEntitys.size();i++) {
-			unitEntitys.get(i).removeFromWorld();//need working solution  
+			unitEntitys.get(i).removeFromWorld();//need better solution  
 		}
 		
 		
-		
+		//iterates through the unitMap and spawns entity's with the unit's texture 
 		
 		for(int i=0; i<uMap.getUMap().length; i++) 
 		{
         	
         	for(int j = 0; j<uMap.getUMap()[i].length;j++ ) 
         	{
+        		if(uMap.getUMap()[i][j]!=null) 
+        		{
         		UnitType unitType =uMap.getUMap()[i][j].getUType();
         		
         		
         		
         		switch(unitType) 
-        		{
+        			{
 				case INFANTRY:
 					unitEntitys.add(spawn("infantry",i*blockSize,j*blockSize));
-					break;
-					
-				case EMPTY:
 					break;
 
 				default:
 					break;
         		
+        			}
         		}
-		
         	}
 		}
 	}
-	public static void MoveUnit(int startX, int startY, int desX, int desY, UnitMap map) 
-	{
-		
-		UnitType type =map.getUMap()[startX][startY].getUType();
-		
-		map.setUMap(desX, desY, type);
-		map.setUMap(startX, startY, UnitType.EMPTY);
-		
-	}
+	
+	
 	
 public static double getBlockSize() 
 	{

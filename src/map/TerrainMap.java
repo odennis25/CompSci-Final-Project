@@ -9,6 +9,7 @@ public class TerrainMap {
 	
 	public TerrainMap(int width,int height) 
 	{
+		//fills the map with water--unfinished--
 		map = new ArrayList<ArrayList<Terrain>>();
 		for(int i=0; i<width;i++) 
 		{
@@ -25,8 +26,6 @@ public class TerrainMap {
 	}
 
 	public ArrayList<ArrayList<Terrain>> getMap() {
-		// TODO Auto-generated method stub
-		
 			return map;
 		
 	}
