@@ -11,6 +11,8 @@ import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.GameWorld;
 
+import javafx.scene.Node;
+import javafx.scene.input.KeyCode;
 import map.TerrainType;
 import map.UnitMap;
 import units.Unit;
@@ -18,14 +20,18 @@ import units.UnitType;
 
 import map.TerrainMap;
 
+
+import static com.almasb.fxgl.dsl.FXGL.*;
+
 public class RTSMain extends GameApplication 
 {
 	
-	private static double blockSize=50;
+	private static int blockSize=50;
 	TerrainMap terrainMap= new TerrainMap(16, 12);
 	UnitMap uMap = new UnitMap(16,12);
 	ArrayList<Entity> unitEntitys= new ArrayList<Entity>();
-
+	Node map;//used for camera
+	
 	
 	
 
@@ -40,13 +46,17 @@ public class RTSMain extends GameApplication
 	@Override
 	protected void initInput() {
 	
-		
+//		onKey(KeyCode.A, () -> camera.getComponent(PlayerComponent.class).moveLeft());
+//        onKey(KeyCode.D, () -> player.getComponent(PlayerComponent.class).moveRight());
+//        onKey(KeyCode.W, () -> player.getComponent(PlayerComponent.class).moveUp());
+//        onkey(KeyCode.S, ()-> camera.)
 	}
 	
 
 	
 	protected void initGame() 
 	{
+		//adds things to the game world
 		getGameWorld().addEntityFactory(new TerrainFactory());
 		getGameWorld().addEntityFactory(new UnitFactory());
 		renderTerrain();
@@ -70,7 +80,7 @@ public class RTSMain extends GameApplication
 		}
 	}
 	
-	
+
 	
 	private void renderTerrain() 
 	{
@@ -142,7 +152,7 @@ public class RTSMain extends GameApplication
 	
 	
 	
-public static double getBlockSize() 
+public static int getBlockSize() 
 	{
 		return blockSize;
 	}
