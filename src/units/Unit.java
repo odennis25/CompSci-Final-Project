@@ -56,7 +56,7 @@ public class Unit extends Entity {
 	
 	Unit type =map.getUMap()[x][y].getU();
 	map.setUMap(desX, desY, type);
-	map.setUMap(x, y, new Unit(UnitType.EMPTY,desX,desY,hp));
+	map.setUMap(x, y, new Unit(null,desX,desY,hp));
 	
 }
 	}

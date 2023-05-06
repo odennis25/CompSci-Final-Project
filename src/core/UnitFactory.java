@@ -14,6 +14,7 @@ import units.UnitType;
 public class UnitFactory implements EntityFactory{
 
 	
+	/**creates a specified entity at location specified in method call*/
 	@Spawns("infantry")
 	public Entity infantry(SpawnData data) 
 	{

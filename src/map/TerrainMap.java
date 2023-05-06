@@ -17,7 +17,7 @@ public class TerrainMap {
 			for(int j=0; j<height; j++) 
 			{
 				
-				map.get(i).add(j, new Terrain(TerrainType.WATER));
+				map.get(i).add(j, new Terrain(TerrainType.GROUND));
 				
 			}
 			

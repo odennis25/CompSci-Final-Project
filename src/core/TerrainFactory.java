@@ -22,6 +22,7 @@ public class TerrainFactory implements EntityFactory
 {
 
 
+	/**spawns specified terrain entity at location specified in method call*/
 	@Spawns("ground")
 	public Entity ground(SpawnData data) 
 	{
