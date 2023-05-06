@@ -15,7 +15,7 @@ public class UnitMap {
 	
 	public UnitMap(int width,int height) 
 	{
-		//fills the unitt[][] with null	
+		/**fills the unit[][] with null*/	
 		map =new Unit[width][height];
 		for(int i=0; i<width;i++) 
 		{

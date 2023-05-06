@@ -5,41 +5,50 @@ import map.TerrainMap;
 import map.UnitMap;
 import javafx.scene.transform.Translate;
 public class Camera {
-	private int globalX;
-	private int globalY;
-	Pane pane;
-	public Camera(int x, int y,Pane p) {
-		globalX=x*RTSMain.getBlockSize();
-		globalY=y*RTSMain.getBlockSize();;
-		pane=p;
+	private int X;
+	private int Y;
+	
+	public Camera(int x, int y) {
+		X=x;
+		Y=y;
+		
 	}
 	
 	public void moveUp() {
-		globalY-=1*RTSMain.getBlockSize();
+		Y-=1;
 		
 		
 	}
 	
 	public void moveDown() {
-		globalY+=1*RTSMain.getBlockSize();
+		Y+=1;
 		
 	}
 	
 	public void moveLeft() {
-		globalX-=1*RTSMain.getBlockSize();
-		
+		X-=1;		
 	}
 	
 	public void moveRight() {
-		globalX+=1*RTSMain.getBlockSize();
+		X+=1;
 		
 	}
 	
-	private void move(int dx, int dy) {
-		
-		
+	public int getDX() {
+		return X;
+	}
+	
+	public int getDY() {
+		return Y;
 	}
 
-
+	
+	public void setDX(int x) {
+		X=x;
+	}
+	
+	public void setDY(int y) {
+		Y=y;
+	}
 
 }

@@ -26,65 +26,103 @@ import static com.almasb.fxgl.dsl.FXGL.*;
 public class RTSMain extends GameApplication 
 {
 	
-	private static int blockSize=50;
-	TerrainMap terrainMap= new TerrainMap(16, 12);
-	UnitMap uMap = new UnitMap(16,12);
-	ArrayList<Entity> unitEntitys= new ArrayList<Entity>();
-	Node map;//used for camera
+	private static int blockSize=50;//the amount of space each entity will take up
+	private TerrainMap terrainMap= new TerrainMap(20, 20);
+	private UnitMap uMap = new UnitMap(20,20);
+	
+	private ArrayList<Entity> unitEntitys= new ArrayList<Entity>();
+	private ArrayList<Entity> terrainEntitys= new ArrayList<Entity>();
+	private Camera camera;
 	
 	
 	
 
 	
 	@Override
+	/**Initializes settings*/
 	protected void initSettings(GameSettings settings) 
 	{
+		camera= new Camera(0,0);
 		settings.setWidth(800);
         settings.setHeight(600);
 	}
 	
 	@Override
+	/**Initializes inputs*/
 	protected void initInput() {
-	
-//		onKey(KeyCode.A, () -> camera.getComponent(PlayerComponent.class).moveLeft());
-//        onKey(KeyCode.D, () -> player.getComponent(PlayerComponent.class).moveRight());
-//        onKey(KeyCode.W, () -> player.getComponent(PlayerComponent.class).moveUp());
-//        onkey(KeyCode.S, ()-> camera.)
+		onKey(KeyCode.A, () -> camera.moveLeft());
+		onKey(KeyCode.D, () -> camera.moveRight());
+		onKey(KeyCode.W, () -> camera.moveUp());
+        onKey(KeyCode.S, () -> camera.moveDown());
+		
 	}
 	
 
-	
+	/**Initializes game world*/
 	protected void initGame() 
 	{
-		//adds things to the game world
+		
 		getGameWorld().addEntityFactory(new TerrainFactory());
 		getGameWorld().addEntityFactory(new UnitFactory());
-		renderTerrain();
-		renderUnits();   
+		renderTerrain(0,0);
+		renderUnits(0,0);   
 		
 	}
 
 	
 	int frame=0;
 	int temp=1;
+	//runs at speed tpf
 	protected void onUpdate(double tpf) {
-		
 		frame++;
-		if(frame!=30) {}
+		if(frame!=12) {}
 			
+		else
 			
-		else //runs the code once every 30 times the onUpdate method runs
-		{
 			frame=0;
-			renderUnits();
-		}
+		
+			
+			moveTerrain(camera.getDX(),camera.getDY());
+			moveUnit(camera.getDX(),camera.getDY());
+			camera.setDX(0);
+			camera.setDY(0);
+			
+			
+		
 	}
-	
+
+	/**iterates through the terrain entity's list moving each entity on the panel, moving the entire map*/
+	private void moveTerrain(int dx, int dy) 
+	{
+		
+		
+		for(int i=0; i<terrainEntitys.size();i++) {
+			terrainEntitys.get(i).setPosition(terrainEntitys.get(i).getX()-(dx*blockSize),terrainEntitys.get(i).getY()-(dy*blockSize));//need better solution  
+		}
+  	
+		
+	}
+	/**iterates through the unit entity's list moving each entity on the panel, moving the entire map*/
+	private void moveUnit(int dx, int dy) 
+	{
+		
+		
+		for(int i=0; i<unitEntitys.size();i++) {
+			unitEntitys.get(i).setPosition(unitEntitys.get(i).getX()-(dx*blockSize),unitEntitys.get(i).getY()-(dy*blockSize));//need better solution  
+		}
+  	
+		
+	}
 
 	
-	private void renderTerrain() 
+	
+	
+	
+	/**iterates through the terrain Map and spawns entity's with the terrains texture*/
+	private void renderTerrain(int dx, int dy) 
 	{
-		//iterates through the terrain Map and spawns entity's with the terrains texture
+		
+		
 		for(int i=0; i<terrainMap.getMap().size(); i++) 
 		{
         	
@@ -96,14 +134,14 @@ public class RTSMain extends GameApplication
 				
 					
 				case CLIFF:
-					spawn("cliff",i*blockSize,j*blockSize);
+					terrainEntitys.add(spawn("cliff",(i+dx)*blockSize,(j+dy)*blockSize));
 					break;
 				case GROUND:
-					spawn("ground",i*blockSize,j*blockSize);
+					terrainEntitys.add(spawn("ground",(i+dx)*blockSize,(j+dy)*blockSize));
 			
 					break;
 				case WATER:
-					spawn("water",i*blockSize,j*blockSize);
+					terrainEntitys.add(spawn("water",(i+dx)*blockSize,(j+dy)*blockSize));
 					break;
 				default:
 					break;
@@ -114,16 +152,10 @@ public class RTSMain extends GameApplication
 		}
 	}
 
-	private void renderUnits() 
+	/**iterates through the unitMap and spawns entity's with the unit's texture*/ 
+	private void renderUnits(int dx, int dy) 
 	{
-		
-		for(int i=0; i<unitEntitys.size();i++) {
-			unitEntitys.get(i).removeFromWorld();//need better solution  
-		}
-		
-		
-		//iterates through the unitMap and spawns entity's with the unit's texture 
-		
+	
 		for(int i=0; i<uMap.getUMap().length; i++) 
 		{
         	
@@ -133,12 +165,10 @@ public class RTSMain extends GameApplication
         		{
         		UnitType unitType =uMap.getUMap()[i][j].getUType();
         		
-        		
-        		
         		switch(unitType) 
         			{
 				case INFANTRY:
-					unitEntitys.add(spawn("infantry",i*blockSize,j*blockSize));
+					unitEntitys.add(spawn("infantry",(i+dx)*blockSize,(j+dy)*blockSize));
 					break;
 
 				default:
@@ -151,14 +181,14 @@ public class RTSMain extends GameApplication
 	}
 	
 	
-	
+	/**returns block size*/ 
 public static int getBlockSize() 
 	{
 		return blockSize;
 	}
 	
-	
-	public static void main(String[] args) 
+	/**starts the game application*/ 
+	public static void main(String[] args)
 	{
 		
 		launch(args);
