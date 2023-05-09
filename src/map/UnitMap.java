@@ -1,10 +1,6 @@
 package map;
 
-import java.util.ArrayList;
 
-import com.almasb.fxgl.entity.Entity;
-
-import units.Troop;
 import units.Unit;
 import units.UnitType;
 
@@ -28,7 +24,7 @@ public class UnitMap {
 			}
 			
 		}
-		map[1][1]= new Unit(UnitType.INFANTRY,1,1,100);
+		map[9][9]= new Unit(UnitType.INFANTRY,9,9,100);
 		map[1][5]= new Unit(UnitType.INFANTRY,1,5,100);
 	}
 
