@@ -20,15 +20,16 @@ import units.UnitType;
 
 import map.TerrainMap;
 
-
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import static com.almasb.fxgl.dsl.FXGL.*;
 
 public class RTSMain extends GameApplication 
 {
 	
 	private static int blockSize=50;//the amount of space each entity will take up
-	private TerrainMap terrainMap= new TerrainMap(20, 20);
-	private UnitMap uMap = new UnitMap(20,20);
+	private TerrainMap terrainMap= new TerrainMap(21, 21);
+	private UnitMap uMap = new UnitMap(21,21);
 	
 	private ArrayList<Entity> unitEntitys= new ArrayList<Entity>();
 	private ArrayList<Entity> terrainEntitys= new ArrayList<Entity>();
@@ -38,7 +39,7 @@ public class RTSMain extends GameApplication
 	/**Initializes settings*/
 	protected void initSettings(GameSettings settings) 
 	{
-		camera= new Camera(0,0);
+		camera= new Camera(5,5);
 		settings.setWidth(800);
         settings.setHeight(600);
 	}
@@ -50,6 +51,7 @@ public class RTSMain extends GameApplication
 		onKey(KeyCode.D, () -> camera.moveRight());
 		onKey(KeyCode.W, () -> camera.moveUp());
         onKey(KeyCode.S, () -> camera.moveDown());
+      
 		
 	}
 	
@@ -78,33 +80,43 @@ public class RTSMain extends GameApplication
 			frame=0;
 		
 			
-			moveTerrain(camera.getDX(),camera.getDY());
-			moveUnit(camera.getDX(),camera.getDY());
-			camera.setDX(0);
-			camera.setDY(0);
+			moveTerrain(camera.getDX(),camera.getDY());//moves the camera
+			moveUnit(camera.getDX(),camera.getDY());//moves the camera
+			camera.setDX(0);//sets the change in  x to zero
+			camera.setDY(0);//sets the change in  x to zero
+			
 			
 			
 		
 	}
 
 	/**iterates through the terrain entity's list moving each entity on the panel, moving the entire map*/
-	private void moveTerrain(int dx, int dy) 
+	private void moveTerrain(double dx, double dy) 
 	{
 		
 		
 		for(int i=0; i<terrainEntitys.size();i++) {
-			terrainEntitys.get(i).setPosition(terrainEntitys.get(i).getX()-(dx*blockSize),terrainEntitys.get(i).getY()-(dy*blockSize));//need better solution  
+			terrainEntitys.get(i).setPosition(
+					terrainEntitys.get(i).getX() - (dx * blockSize ),
+					terrainEntitys.get(i).getY() - (dy * blockSize )
+				);//need better solution
+		
 		}
   	
 		
 	}
 	/**iterates through the unit entity's list moving each entity on the panel, moving the entire map*/
-	private void moveUnit(int dx, int dy) 
+	private void moveUnit(double dx, double dy) 
 	{
 		
 		
 		for(int i=0; i<unitEntitys.size();i++) {
-			unitEntitys.get(i).setPosition(unitEntitys.get(i).getX()-(dx*blockSize),unitEntitys.get(i).getY()-(dy*blockSize));//need better solution  
+			unitEntitys.get(i).setPosition(
+					unitEntitys.get(i).getX() - (dx * blockSize),
+					unitEntitys.get(i).getY() - (dy * blockSize)
+				);
+
+			
 		}
   	
 		
@@ -164,7 +176,7 @@ public class RTSMain extends GameApplication
         		switch(unitType) 
         			{
 				case INFANTRY:
-					unitEntitys.add(spawn("infantry",(i+dx)*blockSize,(j+dy)*blockSize));
+					unitEntitys.add( spawn("infantry",(i+dx)*blockSize,(j+dy)*blockSize));
 					break;
 
 				default:
@@ -184,6 +196,9 @@ public static int getBlockSize()
 	{
 		return blockSize;
 	}
+public static void setBlockSize(double b) {
+	blockSize=(int) b;
+}
 	
 	/**starts the game application*/ 
 	public static void main(String[] args)
