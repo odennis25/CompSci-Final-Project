@@ -33,11 +33,7 @@ public class RTSMain extends GameApplication
 	private ArrayList<Entity> unitEntitys= new ArrayList<Entity>();
 	private ArrayList<Entity> terrainEntitys= new ArrayList<Entity>();
 	private Camera camera;
-	
-	
-	
 
-	
 	@Override
 	/**Initializes settings*/
 	protected void initSettings(GameSettings settings) 
@@ -179,6 +175,8 @@ public class RTSMain extends GameApplication
         	}
 		}
 	}
+	
+
 	
 	
 	/**returns block size*/ 
