@@ -7,5 +7,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/FXGL"/>
+	<classpathentry kind="lib" path="C:/Users/dcurtis25/Downloads/fxgl-17.3-uber.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
