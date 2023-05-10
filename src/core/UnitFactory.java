@@ -9,6 +9,7 @@ import com.almasb.fxgl.entity.Spawns;
 import com.almasb.fxgl.texture.Texture;
 
 import javafx.scene.image.Image;
+import units.Unit;
 import units.UnitType;
 
 public class UnitFactory implements EntityFactory{
@@ -18,9 +19,9 @@ public class UnitFactory implements EntityFactory{
 	@Spawns("infantry")
 	public Entity infantry(SpawnData data) 
 	{
-	    Image image = new Image("D:\\CompSciFinal\\src\\resources/grass.png");//need to make this url universal
+	    Image image = new Image("D:\\CompSciFinal\\src\\resources/water.png");//need to make this url universal
 		
-	    return entityBuilder(data)
+	    return  entityBuilder(data)
 	            .type(UnitType.INFANTRY)
 	            .view(new Texture(image))
 	            .build();
