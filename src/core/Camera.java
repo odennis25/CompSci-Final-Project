@@ -14,33 +14,34 @@ public class Camera {
 		public Camera(double x, double y) {
 			dX = x;
 			dY = y;
+			this.x=x;
 			
+			this.y=0;
 		}
 		
 		public void moveUp() {
-			if(y>-4.8) {//boarder with 21x21 map and camera starting at 5,5
+			
 			dY -= 0.1;
 			y-=0.1;	}	
-			}
+			
 		
 		public void moveDown() {
-			if(y<4) {//boarder with 21x21 map and camera starting at 5,5
 			dY += 0.1;
-			y+=0.1;}
+			y+=0.1;
 		}
 		
 		public void moveLeft() {
 			
-			if(x>-4.9) {//boarder with 21x21 map and camera starting at 5,5
+			
 			dX -= 0.1;	
 			x-=0.1;}
-			}
+			
 		
 		public void moveRight() {
-			if(x<-0.1) {//boarder with 21x21 map and camera starting at 5,5
+			
 			dX += 0.1;	
 			x+=0.1;}
-		}
+		
 		
 		
 		public void setDX(double num) {
@@ -59,6 +60,7 @@ public class Camera {
 		public double gety() { //up down
 			return y;
 		}
+		
 		
 		
 		public double getDX() { //left right

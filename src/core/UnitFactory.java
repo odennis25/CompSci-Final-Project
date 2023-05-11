@@ -26,4 +26,14 @@ public class UnitFactory implements EntityFactory{
 	            .view(new Texture(image))
 	            .build();
 	}
+	
+	@Spawns ("none")
+	public Entity none(SpawnData data) 
+	{
+	    
+		
+	    return  entityBuilder(data)
+	            .type(UnitType.NONE)
+	            .build();
+	}
 }

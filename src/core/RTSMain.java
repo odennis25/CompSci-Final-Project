@@ -10,9 +10,12 @@ import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.GameWorld;
+import com.almasb.fxgl.input.Input;
+import com.almasb.fxgl.input.UserAction;
 
 import javafx.scene.Node;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseButton;
 import map.TerrainType;
 import map.UnitMap;
 import units.Unit;
@@ -31,10 +34,11 @@ public class RTSMain extends GameApplication
 	private TerrainMap terrainMap= new TerrainMap(21, 21);
 	private UnitMap uMap = new UnitMap(21,21);
 	
-	private ArrayList<Entity> unitEntitys= new ArrayList<Entity>();
+	private Entity[][] unitEntitys= new Entity[21][21];
 	private ArrayList<Entity> terrainEntitys= new ArrayList<Entity>();
 	private Camera camera;
-	
+	private int mouseX;
+	private int mouseY;
 	
 	
 
@@ -43,7 +47,7 @@ public class RTSMain extends GameApplication
 	/**Initializes settings*/
 	protected void initSettings(GameSettings settings) 
 	{
-		camera= new Camera(5,5);
+		camera= new Camera(0,0);
 		settings.setWidth(800);
         settings.setHeight(600);
 	}
@@ -51,12 +55,15 @@ public class RTSMain extends GameApplication
 	@Override
 	/**Initializes inputs*/
 	protected void initInput() {
+		Input input = getInput();
 		onKey(KeyCode.A, () -> camera.moveLeft());
 		onKey(KeyCode.D, () -> camera.moveRight());
 		onKey(KeyCode.W, () -> camera.moveUp());
         onKey(KeyCode.S, () -> camera.moveDown());
-      
-		
+        
+        onBtn(MouseButton.PRIMARY,() -> System.out.println( unitEntitys[mouseX][mouseY]));
+    	
+        onBtn(MouseButton.SECONDARY,() -> System.out.println( mouseX +" "+   mouseY));
 	}
 	
 
@@ -76,9 +83,12 @@ public class RTSMain extends GameApplication
 	int temp=1;
 	//runs at speed tpf
 	protected void onUpdate(double tpf) {
+		Input input = getInput();
 		frame++;
-		if(frame!=12) {}
-			
+		if(frame!=12) {
+			mouseX=(int)(input.getMouseXWorld()/blockSize+camera.getx());
+			mouseY=(int)(input.getMouseYWorld()/blockSize+camera.gety());
+		}
 		else
 			
 			frame=0;
@@ -114,10 +124,12 @@ public class RTSMain extends GameApplication
 	{
 		
 		
-		for(int i=0; i<unitEntitys.size();i++) {
-			unitEntitys.get(i).setPosition(
-					unitEntitys.get(i).getX() - (dx * blockSize),
-					unitEntitys.get(i).getY() - (dy * blockSize)
+		for(int i=0; i<unitEntitys.length;i++) {
+			
+			for(int j=0; j<unitEntitys[i].length;j++)
+			unitEntitys[i][j].setPosition(
+					unitEntitys[i][j].getX() - (dx * blockSize),
+					unitEntitys[i][j].getY() - (dy * blockSize)
 				);
 
 			
@@ -180,10 +192,11 @@ public class RTSMain extends GameApplication
         		switch(unitType) 
         			{
 				case INFANTRY:
-					unitEntitys.add( spawn("infantry",(i+dx)*blockSize,(j+dy)*blockSize));
+					unitEntitys[i][j]=(spawn("infantry",(i+dx)*blockSize,(j+dy)*blockSize));
 					break;
 
-				default:
+				case NONE:
+					unitEntitys[i][j]=(spawn("none",(i+dx)*blockSize,(j+dy)*blockSize));
 					break;
         		
         			}

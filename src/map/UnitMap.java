@@ -19,7 +19,7 @@ public class UnitMap {
 			for(int j=0; j<height; j++) 
 			{
 				
-				map[i][j]= null;
+				map[i][j]= new Unit(UnitType.NONE,i,j,0);
 				
 			}
 			
