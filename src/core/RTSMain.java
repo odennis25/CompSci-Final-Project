@@ -37,13 +37,12 @@ public class RTSMain extends GameApplication
 	private Entity[][] unitEntitys= new Entity[21][21];
 	private ArrayList<Entity> terrainEntitys= new ArrayList<Entity>();
 	private Camera camera;
-<<<<<<< HEAD
-=======
+
 	private int mouseX;
 	private int mouseY;
 	
 	
->>>>>>> 836dc12011c80a38215617899b398f5015439eba
+
 
 	@Override
 	/**Initializes settings*/
