@@ -19,7 +19,7 @@ public class UnitFactory implements EntityFactory{
 	@Spawns("infantry")
 	public Entity infantry(SpawnData data) 
 	{
-	    Image image = new Image("D:\\CompSciFinal\\src\\resources/water.png");//need to make this url universal
+	    Image image = new Image("resources/water.png");//need to make this url universal
 		
 	    return  entityBuilder(data)
 	            .type(UnitType.INFANTRY)

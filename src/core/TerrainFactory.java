@@ -26,7 +26,7 @@ public class TerrainFactory implements EntityFactory
 	@Spawns("ground")
 	public Entity ground(SpawnData data) 
 	{
-	    Image image = new Image("D:\\CompSciFinal\\src\\resources/grass.png");//need to make this url universal
+	    Image image = new Image("resources/grass.png");//need to make this url universal
 		
 	    return entityBuilder(data)
 	            .type(TerrainType.GROUND)
@@ -37,7 +37,7 @@ public class TerrainFactory implements EntityFactory
 	@Spawns("water")
 	public Entity water(SpawnData data)
 	{
-	    Image image = new Image("D:\\CompSciFinal\\src\\resources/water.png");//need to make this url universal
+	    Image image = new Image("resources/water.png");//need to make this url universal
 	   
 	    return entityBuilder(data)
 	            .type(TerrainType.WATER)
