@@ -9,11 +9,15 @@ public class Unit extends Entity {
 	private int x;
 	private int y;
 	private int hp;
+	private boolean selected;
+	
 	public Unit(UnitType type,int x,int y,int hp) {
 	
 		this.type=type;
+		
 	}
 		
+	
 	public UnitType getUType() {
 		return type;
 	}
@@ -35,6 +39,9 @@ public class Unit extends Entity {
 	}
 	
 	
+	public void setSelected() {
+		selected=true;
+	}
 	
 	
 	

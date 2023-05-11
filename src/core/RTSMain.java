@@ -82,6 +82,9 @@ public class RTSMain extends GameApplication
 	int frame=0;
 	int temp=1;
 	//runs at speed tpf
+	
+	
+	
 	protected void onUpdate(double tpf) {
 		Input input = getInput();
 		frame++;
