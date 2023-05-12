@@ -41,7 +41,12 @@ public class RTSMain extends GameApplication
 	private int mouseX;
 	private int mouseY;
 	
+<<<<<<< HEAD
 	private Node[][] nodeMap = new Node[20][20];
+=======
+	
+
+>>>>>>> c5ca88105bd505902c0eabd431a807a78eb91563
 
 	//returns nodeMap
 	public Node[][] getNMap()
@@ -67,9 +72,9 @@ public class RTSMain extends GameApplication
 		onKey(KeyCode.W, () -> camera.moveUp());
         onKey(KeyCode.S, () -> camera.moveDown());
         
-        onBtn(MouseButton.PRIMARY,() -> System.out.println( unitEntitys[mouseX][mouseY]));
+        onBtnDown(MouseButton.PRIMARY,() -> System.out.println( unitEntitys[mouseX][mouseY]));
     	
-        onBtn(MouseButton.SECONDARY,() -> System.out.println( mouseX +" "+   mouseY));
+        onBtnDown(MouseButton.SECONDARY,() -> System.out.println( mouseX +" "+   mouseY));
 	}
 	
 
