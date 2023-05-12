@@ -62,9 +62,9 @@ public class RTSMain extends GameApplication
 		onKey(KeyCode.W, () -> camera.moveUp());
         onKey(KeyCode.S, () -> camera.moveDown());
         
-        onBtn(MouseButton.PRIMARY,() -> System.out.println( unitEntitys[mouseX][mouseY]));
+        onBtnDown(MouseButton.PRIMARY,() -> System.out.println( unitEntitys[mouseX][mouseY]));
     	
-        onBtn(MouseButton.SECONDARY,() -> System.out.println( mouseX +" "+   mouseY));
+        onBtnDown(MouseButton.SECONDARY,() -> System.out.println( mouseX +" "+   mouseY));
 	}
 	
 
