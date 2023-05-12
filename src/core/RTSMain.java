@@ -41,12 +41,8 @@ public class RTSMain extends GameApplication
 	private int mouseX;
 	private int mouseY;
 	
-<<<<<<< HEAD
 	private Node[][] nodeMap = new Node[20][20];
-=======
-	
 
->>>>>>> c5ca88105bd505902c0eabd431a807a78eb91563
 
 	//returns nodeMap
 	public Node[][] getNMap()
