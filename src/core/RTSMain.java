@@ -33,7 +33,7 @@ public class RTSMain extends GameApplication
 	private static int blockSize=50;//the amount of space each entity will take up
 	private TerrainMap terrainMap= new TerrainMap(21, 21);
 	private UnitMap uMap = new UnitMap(21,21);
-	
+	private boolean multiSelect=false;
 	private Entity[][] unitEntitys= new Entity[21][21];
 	private ArrayList<Entity> terrainEntitys= new ArrayList<Entity>();
 	private Camera camera;
@@ -62,7 +62,12 @@ public class RTSMain extends GameApplication
 		onKey(KeyCode.W, () -> camera.moveUp());
         onKey(KeyCode.S, () -> camera.moveDown());
         
-        onBtnDown(MouseButton.PRIMARY,() -> System.out.println( unitEntitys[mouseX][mouseY]));
+        onKey(KeyCode.TAB,()-> multiSelect=true);
+        
+        
+        
+        
+        onBtnDown(MouseButton.PRIMARY,() -> System.out.println(unitEntitys[mouseX][mouseY]) );
     	
         onBtnDown(MouseButton.SECONDARY,() -> System.out.println( mouseX +" "+   mouseY));
 	}
@@ -90,26 +95,26 @@ public class RTSMain extends GameApplication
 		Input input = getInput();
 		frame++;
 		if(frame!=12) {
+			
 			mouseX=(int)(input.getMouseXWorld()/blockSize+camera.getx());
 			mouseY=(int)(input.getMouseYWorld()/blockSize+camera.gety());
 		}
 		else
-			
 			frame=0;
 		
 			
-			moveTerrain(camera.getDX(),camera.getDY());//moves the camera
-			moveUnit(camera.getDX(),camera.getDY());//moves the camera
+			moveTerrainMap(camera.getDX(),camera.getDY());//moves the camera
+			moveUnitMap(camera.getDX(),camera.getDY());//moves the camera
 			camera.setDX(0);//sets the change in  x to zero
 			camera.setDY(0);//sets the change in  x to zero
 			
 			
 			
-		
+			multiSelect=false;
 	}
 
 	/**iterates through the terrain entity's list moving each entity on the panel, moving the entire map*/
-	private void moveTerrain(double dx, double dy) 
+	private void moveTerrainMap(double dx, double dy) 
 	{
 		
 		
@@ -124,7 +129,7 @@ public class RTSMain extends GameApplication
 		
 	}
 	/**iterates through the unit entity's list moving each entity on the panel, moving the entire map*/
-	private void moveUnit(double dx, double dy) 
+	private void moveUnitMap(double dx, double dy) 
 	{
 		
 		
@@ -134,8 +139,9 @@ public class RTSMain extends GameApplication
 			unitEntitys[i][j].setPosition(
 					unitEntitys[i][j].getX() - (dx * blockSize),
 					unitEntitys[i][j].getY() - (dy * blockSize)
+					
 				);
-
+			System.out.println(dx+" "+ dy);
 			
 		}
   	
@@ -191,6 +197,8 @@ public class RTSMain extends GameApplication
         	{
         		if(uMap.getUMap()[i][j]!=null) 
         		{
+        		
+        			
         		UnitType unitType =uMap.getUMap()[i][j].getUType();
         		
         		switch(unitType) 

@@ -39,8 +39,8 @@ public class Unit extends Entity {
 	}
 	
 	
-	public void setSelected() {
-		selected=true;
+	public void setSelected(boolean b) {
+		selected=b;
 	}
 	
 	
