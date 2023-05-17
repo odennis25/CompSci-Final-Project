@@ -5,8 +5,8 @@ import java.util.ArrayList;
 public class Node implements Comparable<Node>
 {
 	//x+y coords for each node
-	private int x;
-	private int y;
+	private static int x;
+	private static int y;
 	
 	//id for each node
 	private int idCounter = 0;
@@ -67,6 +67,16 @@ public class Node implements Comparable<Node>
 			this.cost=cost;
 			this.node=node;
 		}
+	}
+	
+	public static int getX()
+	{
+		return x;
+	}
+	
+	public static int getY()
+	{
+		return y;
 	}
 	
 	public String toString()

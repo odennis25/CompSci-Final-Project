@@ -41,7 +41,7 @@ public class RTSMain extends GameApplication
 	private int mouseX;
 	private int mouseY;
 	
-	private static Node[][] nodeMap = new Node[20][20];
+	private static Node[][] nodeMap = new Node[21][21];
 
 
 	//returns nodeMap
@@ -49,6 +49,7 @@ public class RTSMain extends GameApplication
 	{
 		return nodeMap;
 	}
+	
 	
 	@Override
 	/**Initializes settings*/
@@ -71,6 +72,7 @@ public class RTSMain extends GameApplication
         onBtnDown(MouseButton.PRIMARY,() -> System.out.println( unitEntitys[mouseX][mouseY]));
     	
         onBtnDown(MouseButton.SECONDARY,() -> System.out.println( mouseX +" "+   mouseY));
+        
 	}
 	
 
