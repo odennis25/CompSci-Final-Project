@@ -1,6 +1,8 @@
 package map;
 
 
+import com.almasb.fxgl.entity.Entity;
+
 import units.Unit;
 import units.UnitType;
 
