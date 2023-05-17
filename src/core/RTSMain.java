@@ -20,7 +20,7 @@ import map.TerrainType;
 import map.UnitMap;
 import units.Unit;
 import units.UnitType;
-
+import map.Terrain;
 import map.TerrainMap;
 
 import javafx.scene.image.Image;
@@ -34,10 +34,11 @@ public class RTSMain extends GameApplication
 	private TerrainMap terrainMap= new TerrainMap(21, 21);
 	private UnitMap uMap = new UnitMap(21,21);
 	
-	private Entity[][] unitEntitys= new Entity[21][21];
-	private ArrayList<Entity> terrainEntitys= new ArrayList<Entity>();
+	private Entity[][] unitEntities= new Entity[21][21];
+	private Entity[][] terrainEntities= new Entity[21][21];
+	
 	private Camera camera;
-
+	private ArrayList<Entity> selected=new ArrayList<Entity>() ;
 	private int mouseX;
 	private int mouseY;
 	
@@ -69,10 +70,17 @@ public class RTSMain extends GameApplication
 		onKey(KeyCode.W, () -> camera.moveUp());
         onKey(KeyCode.S, () -> camera.moveDown());
         
-        onBtnDown(MouseButton.PRIMARY,() -> System.out.println( unitEntitys[mouseX][mouseY]));
+        onKey(KeyCode.TAB,()-> selected.clear());
+      
+        
+        onBtnDown(MouseButton.PRIMARY,() -> selected.add(unitEntities[mouseX][mouseY]) );
     	
+<<<<<<< HEAD
         onBtnDown(MouseButton.SECONDARY,() -> System.out.println( mouseX +" "+   mouseY));
         
+=======
+        onBtnDown(MouseButton.SECONDARY,() -> moveSelected(selected,mouseX*blockSize, mouseY*blockSize));
+>>>>>>> 7c3f62363d0396428c0592e509996afe5f949d06
 	}
 	
 
@@ -98,16 +106,16 @@ public class RTSMain extends GameApplication
 		Input input = getInput();
 		frame++;
 		if(frame!=12) {
+			
 			mouseX=(int)(input.getMouseXWorld()/blockSize+camera.getx());
 			mouseY=(int)(input.getMouseYWorld()/blockSize+camera.gety());
 		}
 		else
-			
 			frame=0;
 		
 			
-			moveTerrain(camera.getDX(),camera.getDY());//moves the camera
-			moveUnit(camera.getDX(),camera.getDY());//moves the camera
+			moveTerrainMap(camera.getDX(),camera.getDY());//moves the camera
+			moveUnitMap(camera.getDX(),camera.getDY());//moves the camera
 			camera.setDX(0);//sets the change in  x to zero
 			camera.setDY(0);//sets the change in  x to zero
 			
@@ -115,35 +123,63 @@ public class RTSMain extends GameApplication
 			
 		
 	}
-
+	
+	
+	
+	private void moveSelected(ArrayList<Entity> selected,int x, int y) {//work in progress
+		
+		for(int i=0; i<selected.size();i++) {
+			if(selected.get(i).getType()!=UnitType.NONE) {
+			
+			selected.get(i).setPosition(x, y);
+			
+			
+			
+			
+			
+			//			System.out.println((int)selected.get(i).getX()/blockSize+" "+(int)selected.get(i).getY()/blockSize);
+			
+			
+			
+			
+			}
+		}
+		
+		
+		
+		
+	}
 	/**iterates through the terrain entity's list moving each entity on the panel, moving the entire map*/
-	private void moveTerrain(double dx, double dy) 
+	private void moveTerrainMap(double dx, double dy) 
 	{
 		
 		
-		for(int i=0; i<terrainEntitys.size();i++) {
-			terrainEntitys.get(i).setPosition(
-					terrainEntitys.get(i).getX() - (dx * blockSize ),
-					terrainEntitys.get(i).getY() - (dy * blockSize )
-				);//need better solution
+		for(int i=0; i<terrainEntities.length;i++) {
+			
+			for(int j=0; j<terrainEntities[i].length;j++)
+				terrainEntities[i][j].setPosition(
+						terrainEntities[i][j].getX() - (dx * blockSize),
+						terrainEntities[i][j].getY() - (dy * blockSize)
+					
+				);
 		
 		}
   	
 		
 	}
 	/**iterates through the unit entity's list moving each entity on the panel, moving the entire map*/
-	private void moveUnit(double dx, double dy) 
+	private void moveUnitMap(double dx, double dy) 
 	{
 		
 		
-		for(int i=0; i<unitEntitys.length;i++) {
+		for(int i=0; i<unitEntities.length;i++) {
 			
-			for(int j=0; j<unitEntitys[i].length;j++)
-			unitEntitys[i][j].setPosition(
-					unitEntitys[i][j].getX() - (dx * blockSize),
-					unitEntitys[i][j].getY() - (dy * blockSize)
+			for(int j=0; j<unitEntities[i].length;j++)
+				unitEntities[i][j].setPosition(
+						unitEntities[i][j].getX() - (dx * blockSize),
+						unitEntities[i][j].getY() - (dy * blockSize)
+					
 				);
-
 			
 		}
   	
@@ -159,25 +195,25 @@ public class RTSMain extends GameApplication
 	{
 		
 		
-		for(int i=0; i<terrainMap.getMap().size(); i++) 
+		for(int i=0; i<terrainMap.getMap().length; i++) 
 		{
         	
-        	for(int j = 0; j<terrainMap.getMap().get(i).size();j++ ) 
+        	for(int j = 0; j<terrainMap.getMap()[i].length;j++ ) 
         	{
-        		TerrainType terrain=terrainMap.getMap().get(i).get(j).getType();
+        		TerrainType terrain=terrainMap.getMap()[i][j].getTType();
         		switch(terrain) 
         		{
 				
 					
 				case CLIFF:
-					terrainEntitys.add(spawn("cliff",(i+dx)*blockSize,(j+dy)*blockSize));
+					terrainEntities[i][j]=spawn("cliff",(i+dx)*blockSize,(j+dy)*blockSize);
 					break;
 				case GROUND:
-					terrainEntitys.add(spawn("ground",(i+dx)*blockSize,(j+dy)*blockSize));
+					terrainEntities[i][j]=spawn("ground",(i+dx)*blockSize,(j+dy)*blockSize);
 			
 					break;
 				case WATER:
-					terrainEntitys.add(spawn("water",(i+dx)*blockSize,(j+dy)*blockSize));
+					terrainEntities[i][j]=spawn("water",(i+dx)*blockSize,(j+dy)*blockSize);
 					break;
 				default:
 					break;
@@ -197,18 +233,20 @@ public class RTSMain extends GameApplication
         	
         	for(int j = 0; j<uMap.getUMap()[i].length;j++ ) 
         	{
-        		if(uMap.getUMap()[i][j]!=null) 
+        		//if(uMap.getUMap()[i][j]!=null) 
         		{
+        		
+        			
         		UnitType unitType =uMap.getUMap()[i][j].getUType();
         		
         		switch(unitType) 
         			{
 				case INFANTRY:
-					unitEntitys[i][j]=(spawn("infantry",(i+dx)*blockSize,(j+dy)*blockSize));
+					unitEntities[i][j]=spawn("infantry",(i+dx)*blockSize,(j+dy)*blockSize);
 					break;
 
 				case NONE:
-					unitEntitys[i][j]=(spawn("none",(i+dx)*blockSize,(j+dy)*blockSize));
+					unitEntities[i][j]=spawn("none",(i+dx)*blockSize,(j+dy)*blockSize);
 					break;
         		
         			}

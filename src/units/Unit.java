@@ -12,7 +12,7 @@ public class Unit extends Entity {
 	private boolean selected;
 	
 	public Unit(UnitType type,int x,int y,int hp) {
-	
+		super();
 		this.type=type;
 		
 	}
@@ -39,8 +39,8 @@ public class Unit extends Entity {
 	}
 	
 	
-	public void setSelected() {
-		selected=true;
+	public void setSelected(boolean b) {
+		selected=b;
 	}
 	
 	
