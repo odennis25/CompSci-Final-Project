@@ -29,13 +29,13 @@ import static com.almasb.fxgl.dsl.FXGL.*;
 
 public class RTSMain extends GameApplication 
 {
-	
+	private static int mapSize=50;
 	private static int blockSize=50;//the amount of space each entity will take up
-	private TerrainMap terrainMap= new TerrainMap(21, 21);
-	private UnitMap uMap = new UnitMap(21,21);
+	private TerrainMap terrainMap= new TerrainMap(mapSize, mapSize);
+	private UnitMap uMap = new UnitMap(mapSize,mapSize);
 	
-	private Entity[][] unitEntities= new Entity[21][21];
-	private Entity[][] terrainEntities= new Entity[21][21];
+	private Entity[][] unitEntities= new Entity[mapSize][mapSize];
+	private Entity[][] terrainEntities= new Entity[mapSize][mapSize];
 	
 	private Camera camera;
 	private ArrayList<Entity> selected=new ArrayList<Entity>() ;
@@ -75,12 +75,9 @@ public class RTSMain extends GameApplication
         
         onBtnDown(MouseButton.PRIMARY,() -> selected.add(unitEntities[mouseX][mouseY]) );
     	
-<<<<<<< HEAD
-        onBtnDown(MouseButton.SECONDARY,() -> System.out.println( mouseX +" "+   mouseY));
-        
-=======
-        onBtnDown(MouseButton.SECONDARY,() -> moveSelected(selected,mouseX*blockSize, mouseY*blockSize));
->>>>>>> 7c3f62363d0396428c0592e509996afe5f949d06
+
+        onBtnDown(MouseButton.SECONDARY,() -> moveSelected(selected,mouseX, mouseY));
+
 	}
 	
 
@@ -129,18 +126,17 @@ public class RTSMain extends GameApplication
 	private void moveSelected(ArrayList<Entity> selected,int x, int y) {//work in progress
 		
 		for(int i=0; i<selected.size();i++) {
+			int susx=(int) (selected.get(i).getX()/(blockSize)+camera.getx());
+			int susy=(int) (selected.get(i).getY()/(blockSize)+camera.gety());
+			
 			if(selected.get(i).getType()!=UnitType.NONE) {
 			
-			selected.get(i).setPosition(x, y);
+			Entity temp=unitEntities[x][y];
+			unitEntities[x][y] = unitEntities[susx][susy];
+			unitEntities[susx][susy]=temp;
 			
 			
-			
-			
-			
-			//			System.out.println((int)selected.get(i).getX()/blockSize+" "+(int)selected.get(i).getY()/blockSize);
-			
-			
-			
+			selected.get(i).setPosition((x-camera.getx())*blockSize,((y-camera.gety())*blockSize));//Y cord does not work
 			
 			}
 		}
