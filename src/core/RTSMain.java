@@ -42,9 +42,16 @@ public class RTSMain extends GameApplication
 	private int mouseX;
 	private int mouseY;
 	
+	private static Node[][] nodeMap = new Node[21][21];
+
+
+	//returns nodeMap
+	public static Node[][] getNMap()
+	{
+		return nodeMap;
+	}
 	
-
-
+	
 	@Override
 	/**Initializes settings*/
 	protected void initSettings(GameSettings settings) 
@@ -68,7 +75,9 @@ public class RTSMain extends GameApplication
         
         onBtnDown(MouseButton.PRIMARY,() -> selected.add(unitEntities[mouseX][mouseY]) );
     	
+
         onBtnDown(MouseButton.SECONDARY,() -> moveSelected(selected,mouseX, mouseY));
+
 	}
 	
 

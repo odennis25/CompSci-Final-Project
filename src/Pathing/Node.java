@@ -4,6 +4,10 @@ import java.util.ArrayList;
 
 public class Node implements Comparable<Node>
 {
+	//x+y coords for each node
+	private static int x;
+	private static int y;
+	
 	//id for each node
 	private int idCounter = 0;
 	public int id;
@@ -22,8 +26,10 @@ public class Node implements Comparable<Node>
 	public double h;
 	
 	//
-	Node(double h, int id)
+	Node(double h, int id, int x, int y)
 	{
+		this.x = x;
+		this.y = y;
 		this.h=h;
 		this.id=id;
 		idCounter++;
@@ -63,5 +69,18 @@ public class Node implements Comparable<Node>
 		}
 	}
 	
-
+	public static int getX()
+	{
+		return x;
+	}
+	
+	public static int getY()
+	{
+		return y;
+	}
+	
+	public String toString()
+	{
+		return "" + x + " " + y + " " + id + " " + h; 
+	}
 }
