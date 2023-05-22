@@ -73,10 +73,10 @@ public class AStar
 		
 		while(n.parent != null)
 		{
-			ids.add(n.id);
+			ids.add(n.getId());
 			n=n.parent;
 		}
-		ids.add(n.id);
+		ids.add(n.getId());
 		Collections.reverse(ids);
 		
 		for(int id:ids)
