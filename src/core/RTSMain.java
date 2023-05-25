@@ -77,6 +77,9 @@ public class RTSMain extends GameApplication
         
         onBtnDown(MouseButton.PRIMARY,() -> selected.add(unitEntities[mouseX][mouseY]) );
     	
+        onBtnDown(MouseButton.SECONDARY,() -> System.out.println( mouseX +" "+   mouseY));
+        
+        onBtnDown(MouseButton.SECONDARY,() -> moveSelected(selected,mouseX*blockSize, mouseY*blockSize));
 
         onBtnDown(MouseButton.SECONDARY,() -> moveSelected(selected,mouseX, mouseY));
 
