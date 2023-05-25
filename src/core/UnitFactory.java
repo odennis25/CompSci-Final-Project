@@ -6,12 +6,16 @@ import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.EntityFactory;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.Spawns;
+import com.almasb.fxgl.entity.components.CollidableComponent;
+import com.almasb.fxgl.entity.components.ViewComponent;
 import com.almasb.fxgl.texture.Texture;
 
 import javafx.scene.image.Image;
+import javafx.scene.shape.Circle;
 import units.Unit;
 import units.UnitType;
-
+import com.almasb.fxgl.physics.BoundingShape;
+import com.almasb.fxgl.physics.HitBox;
 public class UnitFactory implements EntityFactory{
 
 	
@@ -20,10 +24,11 @@ public class UnitFactory implements EntityFactory{
 	public Entity infantry(SpawnData data) 
 	{
 	   Image image = new Image("/resources/soulja.png");//need to make this url universal
-		
-	    return  entityBuilder(data)
+	   
+	   return  entityBuilder(data)
 	            .type(UnitType.INFANTRY)
 	            .view(new Texture(image))
+	            .bbox(new HitBox(BoundingShape.circle(150)))
 	            .build();
 	}
 	

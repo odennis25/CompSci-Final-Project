@@ -12,6 +12,8 @@ import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.GameWorld;
 import com.almasb.fxgl.input.Input;
 import com.almasb.fxgl.input.UserAction;
+import com.almasb.fxgl.physics.CollisionHandler;
+import com.almasb.fxgl.physics.box2d.collision.shapes.Shape;
 
 import javafx.scene.Node;
 import javafx.scene.input.KeyCode;
@@ -79,6 +81,11 @@ public class RTSMain extends GameApplication
         onBtnDown(MouseButton.SECONDARY,() -> moveSelected(selected,mouseX, mouseY));
 
 	}
+	@Override
+	protected void initUI() 
+	{
+	    
+	}
 	
 
 	/**Initializes game world*/
@@ -96,9 +103,7 @@ public class RTSMain extends GameApplication
 	int frame=0;
 	int temp=1;
 	//runs at speed tpf
-	
-	
-	
+
 	protected void onUpdate(double tpf) {
 		Input input = getInput();
 		frame++;
@@ -108,9 +113,37 @@ public class RTSMain extends GameApplication
 			mouseY=(int)(input.getMouseYWorld()/blockSize+camera.gety());
 		}
 		else
+		{	
 			frame=0;
-		
 			
+			
+			for(int i = 0;i<unitEntities.length;i++)
+				{
+					for(int j = 0;j<unitEntities[0].length;j++)
+					{
+						Unit[][] map = uMap.getUMap();
+						if(map[i][j].getUType() == UnitType.INFANTRY)
+						{
+							for(int a = 0;i<unitEntities.length;i++)
+							{
+								for(int b = 0;j<unitEntities[0].length;j++)
+								{
+									if(unitEntities[i][j].isColliding(unitEntities[a][b]))
+										{
+											Damage.dealDam(1,(Unit) unitEntities[i][j]);
+											Damage.dealDam(1,(Unit) unitEntities[a][b]);
+											System.out.println("goober");
+										}
+								}
+							}
+						}
+					}
+				}
+		}
+		
+		
+		
+		
 			moveTerrainMap(camera.getDX(),camera.getDY());//moves the camera
 			moveUnitMap(camera.getDX(),camera.getDY());//moves the camera
 			camera.setDX(0);//sets the change in  x to zero
