@@ -62,12 +62,12 @@ public class AStar
 	}
 	
 	//prints the path AStar chooses
-	public static void printPath(Node target)
+	public static ArrayList<Integer> printPath(Node target)
 	{
 		Node n = target;
 		
 		if(n==null)
-			return;
+			return null;
 		
 		ArrayList<Integer> ids = new ArrayList<>();
 		
@@ -84,6 +84,7 @@ public class AStar
 			System.out.println(id+" ");
 		}
 		System.out.println();
+		return ids;
 		
 	}
 	
