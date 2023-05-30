@@ -18,6 +18,7 @@ import com.almasb.fxgl.physics.box2d.collision.shapes.Shape;
 import javafx.scene.Node;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
+import javafx.scene.shape.Rectangle;
 import map.TerrainType;
 import map.UnitMap;
 import units.Unit;
@@ -87,8 +88,9 @@ public class RTSMain extends GameApplication
 	@Override
 	protected void initUI() 
 	{
-	    
+	    Rectangle rect = new Rectangle();
 	}
+	    		
 	
 
 	/**Initializes game world*/
