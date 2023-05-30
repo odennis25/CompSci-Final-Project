@@ -13,7 +13,7 @@ import com.almasb.fxgl.entity.GameWorld;
 import com.almasb.fxgl.input.Input;
 import com.almasb.fxgl.input.UserAction;
 
-import javafx.scene.Node;
+import Pathing.NodeMaker;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import map.TerrainType;
@@ -22,7 +22,8 @@ import units.Unit;
 import units.UnitType;
 import map.Terrain;
 import map.TerrainMap;
-
+import Pathing.AStar;
+import Pathing.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import static com.almasb.fxgl.dsl.FXGL.*;
@@ -42,9 +43,10 @@ public class RTSMain extends GameApplication
 	private int mouseX;
 	private int mouseY;
 	
-	private static Node[][] nodeMap = new Node[21][21];
-
-
+	
+	private static Node[][] nodeMap = NodeMaker.nodeMaker(new Node[mapSize][mapSize]);
+	
+	
 	//returns nodeMap
 	public static Node[][] getNMap()
 	{
@@ -134,9 +136,26 @@ public class RTSMain extends GameApplication
 			
 			if(selected.get(i).getType()!=UnitType.NONE) {
 			
-			Entity temp=unitEntities[x][y];
-			unitEntities[x][y] = unitEntities[susx][susy];
-			unitEntities[susx][susy]=temp;
+				
+				//Use a loop to get each node's x and y and make the fellers move there :)
+			//finds the target Node for AStar
+			Node targetNode =  new Node();
+			for(int r = 0; r<nodeMap.length; r++)
+			{
+				for(int c = 0; c<nodeMap.length; c++)
+				{
+					if(x==nodeMap[r][c].getX()&&y==nodeMap[r][c].getY())
+					{
+						targetNode = nodeMap[r][c];
+					}
+						
+				}
+			}
+			
+			
+				Entity temp=unitEntities[x][y];
+				unitEntities[x][y] = unitEntities[susx][susy];
+				unitEntities[susx][susy]=temp;
 			
 			
 			selected.get(i).setPosition((x-camera.getx())*blockSize,((y-camera.gety())*blockSize));//Y cord does not work

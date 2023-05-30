@@ -3,7 +3,7 @@ package Pathing;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class AStar 
+public class AStar //WHEN YOU DO PATHING CALL BOTH ASTAR AND PRINT PATH TO RECIEVE THE ARRAY OF NODE IDS
 {
 	//the path-finding math that i'm not entirely sure how it works
 	public static Node aStar(Node start, Node target)
@@ -19,6 +19,7 @@ public class AStar
 		//
 		//
 		//
+		
 		
 		while(!open.isEmpty())
 		{
