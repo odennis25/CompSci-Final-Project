@@ -29,23 +29,26 @@ import static com.almasb.fxgl.dsl.FXGL.*;
 
 public class RTSMain extends GameApplication 
 {
-	private static int mapSize=50;
+	private static int mapSize=21;
 	private static int blockSize=50;//the amount of space each entity will take up
 	private TerrainMap terrainMap= new TerrainMap(mapSize, mapSize);
 	private UnitMap uMap = new UnitMap(mapSize,mapSize);
-	
 	private Entity[][] unitEntities= new Entity[mapSize][mapSize];
 	private Entity[][] terrainEntities= new Entity[mapSize][mapSize];
 	
 	private Camera camera;
+	
 	private ArrayList<Entity> selected=new ArrayList<Entity>() ;
-	private int mouseX;
-	private int mouseY;
 	
 	private static Node[][] nodeMap = new Node[21][21];
+	
+	private int mouseX;
+	private int mouseY;
+	private int frame=0;
+	
 
 
-	//returns nodeMap
+	/**returns nodeMap*/
 	public static Node[][] getNMap()
 	{
 		return nodeMap;
@@ -58,13 +61,13 @@ public class RTSMain extends GameApplication
 	{
 		camera= new Camera(0,0);
 		settings.setWidth(800);
-        settings.setHeight(600);
+        settings.setHeight(800);
 	}
 	
 	@Override
 	/**Initializes inputs*/
 	protected void initInput() {
-		Input input = getInput();
+		
 		onKey(KeyCode.A, () -> camera.moveLeft());
 		onKey(KeyCode.D, () -> camera.moveRight());
 		onKey(KeyCode.W, () -> camera.moveUp());
@@ -72,12 +75,10 @@ public class RTSMain extends GameApplication
         
         onKey(KeyCode.TAB,()-> selected.clear());
       
-        
         onBtnDown(MouseButton.PRIMARY,() -> selected.add(unitEntities[mouseX][mouseY]) );
-    	
-
+ 
         onBtnDown(MouseButton.SECONDARY,() -> moveSelected(selected,mouseX, mouseY));
-
+        onKeyDown(KeyCode.H,() -> System.out.println(unitEntities[mouseX][mouseY]));
 	}
 	
 
@@ -93,12 +94,8 @@ public class RTSMain extends GameApplication
 	}
 
 	
-	int frame=0;
-	int temp=1;
-	//runs at speed tpf
 	
-	
-	
+	/**runs at speed tpf*/
 	protected void onUpdate(double tpf) {
 		Input input = getInput();
 		frame++;
@@ -121,30 +118,80 @@ public class RTSMain extends GameApplication
 		
 	}
 	
-	
-	
+	/**moves units in array list selected to the x and y cord */
 	private void moveSelected(ArrayList<Entity> selected,int x, int y) {//work in progress
 		
+		int dx=0;
+		int dy=0;
 		for(int i=0; i<selected.size();i++) {
+			
+			
+			
 			int susx=(int) (selected.get(i).getX()/(blockSize)+camera.getx());
 			int susy=(int) (selected.get(i).getY()/(blockSize)+camera.gety());
+			boolean moved=false;
+			
+			
+			
 			
 			if(selected.get(i).getType()!=UnitType.NONE) {
 			
-			Entity temp=unitEntities[x][y];
-			unitEntities[x][y] = unitEntities[susx][susy];
+			
+				
+			while(!moved) {//loops untill the unit moves to a valid position
+			
+			if(x+dx==21||y+dy==21||x+dx==-1||y+dy==-1) {//checks if out of bounds
+					moved=true;}
+				
+			else if(unitEntities[x+dx][y+dy]==unitEntities[susx][susy]) {//checks if the unit has not moved
+					moved=true;
+				}
+				
+			
+			
+			else if(unitEntities[x+dx][y+dy].getType()!=UnitType.NONE) {//checks if the space is already occupied if so changes the dx and dy	
+				dx+=1;
+				dy+=1;
+					}	
+			
+			
+			
+			
+			
+			else {	//moves the entity to the correct spot after all checks are made
+			Entity temp=unitEntities[x+dx][y+dy];
+			unitEntities[x+dx][y+dy] = unitEntities[susx][susy];
 			unitEntities[susx][susy]=temp;
+			selected.get(i).setPosition((x-camera.getx()+dx)*blockSize,((y-camera.gety()+dy)*blockSize));
+			moved=true;
 			
 			
-			selected.get(i).setPosition((x-camera.getx())*blockSize,((y-camera.gety())*blockSize));//Y cord does not work
+			System.out.println((x+dx)+" "+ (y+dy)+" array cord");
+			System.out.println((x-camera.getx()+dx)+" "+(y-camera.gety()+dy)+" map cords");
+			
+			System.out.println("next character");
+			}
+			}
 			
 			}
+			moved=false;
+			dx=0;
+			dy=0;
 		}
 		
 		
 		
+		System.out.println("next Move");
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println();
+		System.out.println();
 		
 	}
+	
 	/**iterates through the terrain entity's list moving each entity on the panel, moving the entire map*/
 	private void moveTerrainMap(double dx, double dy) 
 	{
@@ -163,6 +210,7 @@ public class RTSMain extends GameApplication
   	
 		
 	}
+	
 	/**iterates through the unit entity's list moving each entity on the panel, moving the entire map*/
 	private void moveUnitMap(double dx, double dy) 
 	{
@@ -229,7 +277,7 @@ public class RTSMain extends GameApplication
         	
         	for(int j = 0; j<uMap.getUMap()[i].length;j++ ) 
         	{
-        		//if(uMap.getUMap()[i][j]!=null) 
+        		if(uMap.getUMap()[i][j]!=null) 
         		{
         		
         			
@@ -243,6 +291,16 @@ public class RTSMain extends GameApplication
 
 				case NONE:
 					unitEntities[i][j]=spawn("none",(i+dx)*blockSize,(j+dy)*blockSize);
+					break;
+				case ENEMYINFANTRY:
+					unitEntities[i][j]=spawn("enemyInfantry",(i+dx)*blockSize,(j+dy)*blockSize);
+					break;
+				
+				case FACTORY:
+					unitEntities[i][j]=spawn("factory",(i+dx)*blockSize,(j+dy)*blockSize);
+					break;
+				
+				default:
 					break;
         		
         			}
@@ -259,6 +317,8 @@ public static int getBlockSize()
 	{
 		return blockSize;
 	}
+
+	/**sets block size*/ 
 public static void setBlockSize(double b) {
 	blockSize=(int) b;
 }
