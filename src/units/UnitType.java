@@ -1,5 +1,5 @@
 package units;
 
 public enum UnitType {
-INFANTRY, NONE
+INFANTRY,FACTORY,ENEMYINFANTRY,NONE
 }

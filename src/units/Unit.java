@@ -1,6 +1,7 @@
 package units;
 
 import com.almasb.fxgl.entity.Entity;
+import com.almasb.fxgl.entity.SpawnData;
 
 import map.UnitMap;
 
@@ -16,7 +17,11 @@ public class Unit extends Entity {
 		this.type=type;
 		
 	}
-		
+	
+	
+	
+	
+	
 	
 	public UnitType getUType() {
 		return type;
