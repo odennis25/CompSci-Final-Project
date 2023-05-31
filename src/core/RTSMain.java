@@ -35,33 +35,36 @@ public class RTSMain extends GameApplication
 	private TerrainMap terrainMap= new TerrainMap(mapSize, mapSize);
 	private UnitMap uMap = new UnitMap(mapSize,mapSize);
 	private Entity[][] unitEntities= new Entity[mapSize][mapSize];
-	private Entity[][] terrainEntities= new Entity[mapSize][mapSize];
+	private static Entity[][] terrainEntities= new Entity[mapSize][mapSize];
 	
 	private Camera camera;
 	
 	private ArrayList<Entity> selected=new ArrayList<Entity>() ;
-	
-	private static Node[][] nodeMap = new Node[21][21];
-	
+		
 	private int mouseX;
 	private int mouseY;
 	private int frame=0;
 	
-<<<<<<< HEAD
-	
-	private static Node[][] nodeMap = NodeMaker.nodeMaker(new Node[mapSize][mapSize]);
+	private static Node[][] nodeMap = new Node[mapSize][mapSize];
 	
 	
 	//returns nodeMap
-=======
 
 
 	/**returns nodeMap*/
->>>>>>> b5cac6a86fd220e06ff26986f6712ae4a6482b6b
 	public static Node[][] getNMap()
 	{
 		return nodeMap;
 	}
+	public static int getMapSize()
+	{
+		return mapSize;
+	}
+	public static Entity[][] getTerrainMap()
+	{
+		return terrainEntities;
+	}
+	
 	
 	
 	@Override
@@ -99,7 +102,8 @@ public class RTSMain extends GameApplication
 		getGameWorld().addEntityFactory(new UnitFactory());
 		renderTerrain(0,0);
 		renderUnits(0,0);   
-		
+        nodeMap = NodeMaker.nodeMaker(new Node[mapSize][mapSize]);
+
 	}
 
 	
@@ -145,29 +149,6 @@ public class RTSMain extends GameApplication
 			
 			if(selected.get(i).getType()!=UnitType.NONE) {
 			
-<<<<<<< HEAD
-				
-				//Use a loop to get each node's x and y and make the fellers move there :)
-			//finds the target Node for AStar
-			Node targetNode =  new Node();
-			for(int r = 0; r<nodeMap.length; r++)
-			{
-				for(int c = 0; c<nodeMap.length; c++)
-				{
-					if(x==nodeMap[r][c].getX()&&y==nodeMap[r][c].getY())
-					{
-						targetNode = nodeMap[r][c];
-					}
-						
-				}
-			}
-			
-			
-				Entity temp=unitEntities[x][y];
-				unitEntities[x][y] = unitEntities[susx][susy];
-				unitEntities[susx][susy]=temp;
-=======
-			
 				
 			while(!moved) {//loops untill the unit moves to a valid position
 			
@@ -189,14 +170,17 @@ public class RTSMain extends GameApplication
 			
 			
 			
-			else {	//moves the entity to the correct spot after all checks are made
-			Entity temp=unitEntities[x+dx][y+dy];
-			unitEntities[x+dx][y+dy] = unitEntities[susx][susy];
-			unitEntities[susx][susy]=temp;
-			selected.get(i).setPosition((x-camera.getx()+dx)*blockSize,((y-camera.gety()+dy)*blockSize));
-			moved=true;
+			else {
+				//moves the entity to the correct spot after all checks are made
+				//use both the aStar method and then call printPath to get the array of id's
+					Entity temp2=unitEntities[y+dx][x+dy];
+					unitEntities[x+dx][y+dy] = unitEntities[susx][susy];
+					unitEntities[susx][susy]=temp2;
+					selected.get(i).setPosition((x-camera.getx()+dx)*blockSize,((y-camera.gety()+dy)*blockSize));
+					moved=true;
+				
+		
 			
->>>>>>> b5cac6a86fd220e06ff26986f6712ae4a6482b6b
 			
 			System.out.println((x+dx)+" "+ (y+dy)+" array cord");
 			System.out.println((x-camera.getx()+dx)+" "+(y-camera.gety()+dy)+" map cords");
