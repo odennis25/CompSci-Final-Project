@@ -23,15 +23,13 @@ public class UnitFactory implements EntityFactory{
 	@Spawns("infantry")
 	public Entity infantry(SpawnData data) 
 	{
-<<<<<<< HEAD
 	   Image image = new Image("/resources/soulja.png");//need to make this url universal
 	   
-	   return  entityBuilder(data)
-=======
-	   Image image = new Image("/resources/soulja.png");
+	   
+	   
 		
 	    return  entityBuilder(data)
->>>>>>> b5cac6a86fd220e06ff26986f6712ae4a6482b6b
+
 	            .type(UnitType.INFANTRY)
 	            .view(new Texture(image))
 	            .bbox(new HitBox(BoundingShape.circle(150)))
@@ -66,6 +64,16 @@ public class UnitFactory implements EntityFactory{
 		
 	    return  entityBuilder(data)
 	            .type(UnitType.FACTORY)
+	            .build();
+	}
+	@Spawns ("button")
+	public Entity button(SpawnData data) 
+	{
+		Image image = new Image("/resources/soulja.png");
+		
+	    return  entityBuilder(data)
+	            .type(UnitType.BUTTON)
+	            .view(new Texture(image))
 	            .build();
 	}
 }

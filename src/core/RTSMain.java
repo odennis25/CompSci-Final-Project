@@ -86,7 +86,7 @@ public class RTSMain extends GameApplication
 	@Override
 	protected void initUI() 
 	{
-	    Rectangle rect = new Rectangle();
+		
 	}
 	    		
 	
@@ -97,21 +97,18 @@ public class RTSMain extends GameApplication
 		
 		getGameWorld().addEntityFactory(new TerrainFactory());
 		getGameWorld().addEntityFactory(new UnitFactory());
+		getGameWorld().spawn("button", 700, 50);
+		Rectangle rect = new Rectangle(800,100);
+		
 		renderTerrain(0,0);
 		renderUnits(0,0);   
 		
 	}
-
-	
-<<<<<<< HEAD
-	int frame=0;
 	int temp=1;
 	//runs at speed tpf
 
-=======
 	
 	/**runs at speed tpf*/
->>>>>>> b5cac6a86fd220e06ff26986f6712ae4a6482b6b
 	protected void onUpdate(double tpf) {
 		Input input = getInput();
 		frame++;
