@@ -3,6 +3,10 @@ package Pathing;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import com.almasb.fxgl.entity.Entity;
+
+import core.RTSMain;
+
 public class AStar //WHEN YOU DO PATHING CALL BOTH ASTAR AND PRINT PATH TO RECIEVE THE ARRAY OF NODE IDS
 {
 	//the path-finding math that i'm not entirely sure how it works
@@ -15,10 +19,17 @@ public class AStar //WHEN YOU DO PATHING CALL BOTH ASTAR AND PRINT PATH TO RECIE
 		open.add(start);
 		
 		//reserved for checking for buildings/tiles you cant cross
-		//
-		//
-		//
-		//
+		Entity[][] tempMap = RTSMain.getTerrainMap();
+		
+		for(int i = 0; i<RTSMain.getMapSize(); i++)
+		{
+			for(int j = 0; j<RTSMain.getMapSize(); j++)
+			{
+			}
+		}
+		
+		
+		
 		
 		
 		while(!open.isEmpty())
