@@ -82,6 +82,9 @@ public class RTSMain extends GameApplication
 
         onBtnDown(MouseButton.SECONDARY,() -> moveSelected(selected,mouseX, mouseY));
         onKeyDown(KeyCode.H,() -> System.out.println(unitEntities[mouseX][mouseY]));
+        
+        
+        
 	}
 	@Override
 	protected void initUI() 
@@ -168,51 +171,60 @@ public class RTSMain extends GameApplication
 			
 			
 			
-			int susx=(int) (selected.get(i).getX()/(blockSize)+camera.getx());
-			int susy=(int) (selected.get(i).getY()/(blockSize)+camera.gety());
+			int susx= (int) Math.round(selected.get(i).getX()/(blockSize)+camera.getx()); 
+			int susy=(int)  Math.round(selected.get(i).getY()/(blockSize)+camera.gety());
 			boolean moved=false;
 			
 			
 			
 			
-			if(selected.get(i).getType()!=UnitType.NONE) {
+			if(selected.get(i).getType()!=UnitType.NONE) 
+			{
 			
 			
 				
-			while(!moved) {//loops untill the unit moves to a valid position
+			while(!moved) 
+			{//loops untill the unit moves to a valid position
+				
+			if(unitEntities[x+dx][y+dy]==unitEntities[susx][susy]) {//checks if the unit has not moved
+					
+					break;
+				}
+			
+			
+			
+			
+			while(unitEntities[x+dx][y+dy].getType()!=UnitType.NONE) {//checks if the space is already occupied if so changes the dx and dy	
+				dx+=1;
+			
+					}	
+		
+		
+			
 			
 			if(x+dx==21||y+dy==21||x+dx==-1||y+dy==-1) {//checks if out of bounds
-					moved=true;}
 				
-			else if(unitEntities[x+dx][y+dy]==unitEntities[susx][susy]) {//checks if the unit has not moved
-					moved=true;
-				}
-				
-			
-			
-			else if(unitEntities[x+dx][y+dy].getType()!=UnitType.NONE) {//checks if the space is already occupied if so changes the dx and dy	
-				dx+=1;
-				dy+=1;
-					}	
+				break;
+		}
+				//moves the entity to the correct spot after all checks are made
 			
 			
 			
+			System.out.println(dx);
 			
-			
-			else {	//moves the entity to the correct spot after all checks are made
 			Entity temp=unitEntities[x+dx][y+dy];
 			unitEntities[x+dx][y+dy] = unitEntities[susx][susy];
 			unitEntities[susx][susy]=temp;
+
 			selected.get(i).setPosition((x-camera.getx()+dx)*blockSize,((y-camera.gety()+dy)*blockSize));
+
 			moved=true;
 			
-			
-			System.out.println((x+dx)+" "+ (y+dy)+" array cord");
-			System.out.println((x-camera.getx()+dx)+" "+(y-camera.gety()+dy)+" map cords");
-			
-			System.out.println("next character");
 			}
-			}
+			
+			
+			
+			
 			
 			}
 			moved=false;
@@ -224,12 +236,8 @@ public class RTSMain extends GameApplication
 		
 		System.out.println("next Move");
 		System.out.println();
-		System.out.println();
-		System.out.println();
-		System.out.println();
-		System.out.println();
-		System.out.println();
-		System.out.println();
+	
+	
 		
 	}
 	
