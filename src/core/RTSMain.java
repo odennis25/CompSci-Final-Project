@@ -91,6 +91,9 @@ public class RTSMain extends GameApplication
 
         onBtnDown(MouseButton.SECONDARY,() -> moveSelected(selected,mouseX, mouseY));
         onKeyDown(KeyCode.H,() -> System.out.println(unitEntities[mouseX][mouseY]));
+        
+        
+        
 	}
 	
 
@@ -134,77 +137,71 @@ public class RTSMain extends GameApplication
 	/**moves units in array list selected to the x and y cord */
 	private void moveSelected(ArrayList<Entity> selected,int x, int y) {//work in progress
 		
+		
 		int dx=0;
 		int dy=0;
 		for(int i=0; i<selected.size();i++) {
 			
 			
 			
-			int susx=(int) (selected.get(i).getX()/(blockSize)+camera.getx());
-			int susy=(int) (selected.get(i).getY()/(blockSize)+camera.gety());
+			int susx= (int) Math.round(selected.get(i).getX()/(blockSize)+camera.getx()); 
+			int susy=(int)  Math.round(selected.get(i).getY()/(blockSize)+camera.gety());
 			boolean moved=false;
 			
 			
 			
 			
-			if(selected.get(i).getType()!=UnitType.NONE) {
+			if(selected.get(i).getType()!=UnitType.NONE) 
+			{
 			
 				
-			while(!moved) {//loops untill the unit moves to a valid position
-			
-			if(x+dx==21||y+dy==21||x+dx==-1||y+dy==-1) {//checks if out of bounds
-					moved=true;}
+				while(!moved) 
+				{//loops untill the unit moves to a valid position
 				
-			else if(unitEntities[x+dx][y+dy]==unitEntities[susx][susy]) {//checks if the unit has not moved
-					moved=true;
-				}
-				
+					if(unitEntities[x+dx][y+dy]==unitEntities[susx][susy]) {//checks if the unit has not moved
+						break;
+					}
 			
 			
-			else if(unitEntities[x+dx][y+dy].getType()!=UnitType.NONE) {//checks if the space is already occupied if so changes the dx and dy	
-				dx+=1;
-				dy+=1;
+			
+			
+				while(unitEntities[x+dx][y+dy].getType()!=UnitType.NONE) {//checks if the space is already occupied if so changes the dx and dy	
+					dx+=1;
 					}	
-			
-			
-			
-			
-			
-			else {
-				//moves the entity to the correct spot after all checks are made
-				//use both the aStar method and then call printPath to get the array of id's
-					Entity temp2=unitEntities[y+dx][x+dy];
-					unitEntities[x+dx][y+dy] = unitEntities[susx][susy];
-					unitEntities[susx][susy]=temp2;
-					selected.get(i).setPosition((x-camera.getx()+dx)*blockSize,((y-camera.gety()+dy)*blockSize));
-					moved=true;
-				
+		
 		
 			
 			
-			System.out.println((x+dx)+" "+ (y+dy)+" array cord");
-			System.out.println((x-camera.getx()+dx)+" "+(y-camera.gety()+dy)+" map cords");
+				if(x+dx==21||y+dy==21||x+dx==-1||y+dy==-1) {//checks if out of bounds
+					break;
+					}
+				//moves the entity to the correct spot after all checks are made
 			
-			System.out.println("next character");
-			}
-			}
+			
+			
+			
+			else 
+			{
+				//moves the entity to the correct spot after all checks are made
+				//use both the aStar method and then call printPath to get the array of id's
+				Entity temp2=unitEntities[y+dx][x+dy];
+				unitEntities[x+dx][y+dy] = unitEntities[susx][susy];
+				unitEntities[susx][susy]=temp2;
+				selected.get(i).setPosition((x-camera.getx()+dx)*blockSize,((y-camera.gety()+dy)*blockSize));
+				moved=true;
 			
 			}
 			moved=false;
 			dx=0;
 			dy=0;
+		
 		}
-		
-		
+			
 		
 		System.out.println("next Move");
 		System.out.println();
-		System.out.println();
-		System.out.println();
-		System.out.println();
-		System.out.println();
-		System.out.println();
-		System.out.println();
+	
+			}}
 		
 	}
 	
