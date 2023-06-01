@@ -12,10 +12,18 @@ import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.GameWorld;
 import com.almasb.fxgl.input.Input;
 import com.almasb.fxgl.input.UserAction;
+import com.almasb.fxgl.physics.CollisionHandler;
+import com.almasb.fxgl.physics.box2d.collision.shapes.Shape;
 
+<<<<<<< HEAD
 import Pathing.NodeMaker;
+=======
+import javafx.scene.Node;
+import javafx.scene.control.Button;
+>>>>>>> c1690fed76bcb2819a9b9d32a42c3bd62885618f
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
+import javafx.scene.shape.Rectangle;
 import map.TerrainType;
 import map.UnitMap;
 import units.Unit;
@@ -95,6 +103,13 @@ public class RTSMain extends GameApplication
         
         
 	}
+	@Override
+	protected void initUI() 
+	{
+		
+	}
+	
+ 		
 	
 
 	/**Initializes game world*/
@@ -103,13 +118,18 @@ public class RTSMain extends GameApplication
 		
 		getGameWorld().addEntityFactory(new TerrainFactory());
 		getGameWorld().addEntityFactory(new UnitFactory());
+		getGameWorld().addEntityFactory(new UIFactory());
+		getGameWorld().spawn("button", 700, 50);
+		Rectangle rect = new Rectangle(800,100);
+		
 		renderTerrain(0,0);
 		renderUnits(0,0);   
         nodeMap = NodeMaker.nodeMaker(new Node[mapSize][mapSize]);
 
 	}
+	int temp=1;
+	//runs at speed tpf
 
-	
 	
 	/**runs at speed tpf*/
 	protected void onUpdate(double tpf) {
@@ -121,9 +141,37 @@ public class RTSMain extends GameApplication
 			mouseY=(int)(input.getMouseYWorld()/blockSize+camera.gety());
 		}
 		else
+		{	
 			frame=0;
-		
 			
+			
+			for(int i = 0;i<unitEntities.length;i++)
+				{
+					for(int j = 0;j<unitEntities[0].length;j++)
+					{
+						Unit[][] map = uMap.getUMap();
+						if(map[i][j].getUType() == UnitType.INFANTRY)
+						{
+							for(int a = 0;i<unitEntities.length;i++)
+							{
+								for(int b = 0;j<unitEntities[0].length;j++)
+								{
+									if(unitEntities[i][j].isColliding(unitEntities[a][b]))
+										{
+											Damage.dealDam(1,(Unit) unitEntities[i][j]);
+											Damage.dealDam(1,(Unit) unitEntities[a][b]);
+											System.out.println("goober");
+										}
+								}
+							}
+						}
+					}
+				}
+		}
+		
+		
+		
+		
 			moveTerrainMap(camera.getDX(),camera.getDY());//moves the camera
 			moveUnitMap(camera.getDX(),camera.getDY());//moves the camera
 			camera.setDX(0);//sets the change in  x to zero
