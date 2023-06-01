@@ -16,6 +16,7 @@ import com.almasb.fxgl.physics.CollisionHandler;
 import com.almasb.fxgl.physics.box2d.collision.shapes.Shape;
 
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.shape.Rectangle;
@@ -91,7 +92,8 @@ public class RTSMain extends GameApplication
 	{
 		
 	}
-	    		
+	
+ 		
 	
 
 	/**Initializes game world*/
@@ -100,6 +102,7 @@ public class RTSMain extends GameApplication
 		
 		getGameWorld().addEntityFactory(new TerrainFactory());
 		getGameWorld().addEntityFactory(new UnitFactory());
+		getGameWorld().addEntityFactory(new UIFactory());
 		getGameWorld().spawn("button", 700, 50);
 		Rectangle rect = new Rectangle(800,100);
 		

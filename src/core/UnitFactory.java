@@ -66,14 +66,5 @@ public class UnitFactory implements EntityFactory{
 	            .type(UnitType.FACTORY)
 	            .build();
 	}
-	@Spawns ("button")
-	public Entity button(SpawnData data) 
-	{
-		Image image = new Image("/resources/soulja.png");
-		
-	    return  entityBuilder(data)
-	            .type(UnitType.BUTTON)
-	            .view(new Texture(image))
-	            .build();
-	}
+	
 }

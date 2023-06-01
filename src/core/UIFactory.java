@@ -23,7 +23,6 @@ public class UIFactory implements EntityFactory
 		Image image = new Image("/resources/soulja.png");
 		
 	    return  entityBuilder(data)
-	            .type(UnitType.BUTTON)
 	            .view(new Texture(image))
 	            .build();
 	}
