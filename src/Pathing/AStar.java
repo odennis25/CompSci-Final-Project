@@ -81,24 +81,32 @@ public class AStar //WHEN YOU DO PATHING CALL BOTH ASTAR AND PRINT PATH TO RECIE
 		if(n==null)
 			return null;
 		
-		ArrayList<Integer> ids = new ArrayList<>();
+		ArrayList<Integer> coordsList = new ArrayList<>();
 		
 		while(n.parent != null)
 		{
-			ids.add(n.getId());
+			coordsList.add(n.getX()/RTSMain.getBlockSize()-1);
+			coordsList.add(n.getY()/RTSMain.getBlockSize()-1);
 			n=n.parent;
 		}
-		ids.add(n.getId());
-		Collections.reverse(ids);
+		coordsList.add(n.getX()/RTSMain.getBlockSize()-1);
+		coordsList.add(n.getY()/RTSMain.getBlockSize()-1);
+		Collections.reverse(coordsList);
 		
-		for(int id:ids)
+		for(int coords:coordsList)
 		{
-			System.out.println(id+" ");
+			System.out.println(coords+" ");
 		}
 		System.out.println();
-		return ids;
+		return coordsList;
 		
 	}
+public static void main(String[] args)
+{
+	Node[][] nodeList = NodeMaker.nodeMaker(new Node[21][21]);
+	aStar(nodeList[0][0],nodeList[20][20]);
+	ArrayList<Integer> intList = printPath(nodeList[20][20]);
 	
+}
 
 }
