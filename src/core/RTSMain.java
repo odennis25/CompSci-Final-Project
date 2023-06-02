@@ -15,8 +15,12 @@ import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.physics.CollisionHandler;
 import com.almasb.fxgl.physics.box2d.collision.shapes.Shape;
 
+<<<<<<< HEAD
+import Pathing.NodeMaker;
+=======
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+>>>>>>> c1690fed76bcb2819a9b9d32a42c3bd62885618f
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.shape.Rectangle;
@@ -26,7 +30,8 @@ import units.Unit;
 import units.UnitType;
 import map.Terrain;
 import map.TerrainMap;
-
+import Pathing.AStar;
+import Pathing.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import static com.almasb.fxgl.dsl.FXGL.*;
@@ -38,18 +43,20 @@ public class RTSMain extends GameApplication
 	private TerrainMap terrainMap= new TerrainMap(mapSize, mapSize);
 	private UnitMap uMap = new UnitMap(mapSize,mapSize);
 	private Entity[][] unitEntities= new Entity[mapSize][mapSize];
-	private Entity[][] terrainEntities= new Entity[mapSize][mapSize];
+	private static Entity[][] terrainEntities= new Entity[mapSize][mapSize];
 	
 	private Camera camera;
 	
 	private ArrayList<Entity> selected=new ArrayList<Entity>() ;
-	
-	private static Node[][] nodeMap = new Node[21][21];
-	
+		
 	private int mouseX;
 	private int mouseY;
 	private int frame=0;
 	
+	private static Node[][] nodeMap = new Node[mapSize][mapSize];
+	
+	
+	//returns nodeMap
 
 
 	/**returns nodeMap*/
@@ -57,6 +64,15 @@ public class RTSMain extends GameApplication
 	{
 		return nodeMap;
 	}
+	public static int getMapSize()
+	{
+		return mapSize;
+	}
+	public static Entity[][] getTerrainMap()
+	{
+		return terrainEntities;
+	}
+	
 	
 	
 	@Override
@@ -111,7 +127,8 @@ public class RTSMain extends GameApplication
 		
 		renderTerrain(0,0);
 		renderUnits(0,0);   
-		
+        nodeMap = NodeMaker.nodeMaker(new Node[mapSize][mapSize]);
+
 	}
 	int temp=1;
 	//runs at speed tpf
@@ -171,6 +188,7 @@ public class RTSMain extends GameApplication
 	/**moves units in array list selected to the x and y cord */
 	private void moveSelected(ArrayList<Entity> selected,int x, int y) {//work in progress
 		
+		
 		int dx=0;
 		int dy=0;
 		for(int i=0; i<selected.size();i++) {
@@ -187,63 +205,54 @@ public class RTSMain extends GameApplication
 			if(selected.get(i).getType()!=UnitType.NONE) 
 			{
 			
-			
 				
-			while(!moved) 
-			{//loops untill the unit moves to a valid position
+				while(!moved) 
+				{//loops untill the unit moves to a valid position
 				
-			if(unitEntities[x+dx][y+dy]==unitEntities[susx][susy]) {//checks if the unit has not moved
-					
-					break;
-				}
+					if(unitEntities[x+dx][y+dy]==unitEntities[susx][susy]) {//checks if the unit has not moved
+						break;
+					}
 			
 			
 			
 			
-			while(unitEntities[x+dx][y+dy].getType()!=UnitType.NONE) {//checks if the space is already occupied if so changes the dx and dy	
-				dx+=1;
-			
+				while(unitEntities[x+dx][y+dy].getType()!=UnitType.NONE) {//checks if the space is already occupied if so changes the dx and dy	
+					dx+=1;
 					}	
 		
 		
 			
 			
-			if(x+dx==21||y+dy==21||x+dx==-1||y+dy==-1) {//checks if out of bounds
-				
-				break;
-		}
+				if(x+dx==21||y+dy==21||x+dx==-1||y+dy==-1) {//checks if out of bounds
+					break;
+					}
 				//moves the entity to the correct spot after all checks are made
 			
 			
 			
-			System.out.println(dx);
 			
-			Entity temp=unitEntities[x+dx][y+dy];
-			unitEntities[x+dx][y+dy] = unitEntities[susx][susy];
-			unitEntities[susx][susy]=temp;
-
-			selected.get(i).setPosition((x-camera.getx()+dx)*blockSize,((y-camera.gety()+dy)*blockSize));
-
-			moved=true;
-			
-			}
-			
-			
-			
-			
+			else 
+			{
+				//moves the entity to the correct spot after all checks are made
+				//use both the aStar method and then call printPath to get the array of id's
+				Entity temp2=unitEntities[y+dx][x+dy];
+				unitEntities[x+dx][y+dy] = unitEntities[susx][susy];
+				unitEntities[susx][susy]=temp2;
+				selected.get(i).setPosition((x-camera.getx()+dx)*blockSize,((y-camera.gety()+dy)*blockSize));
+				moved=true;
 			
 			}
 			moved=false;
 			dx=0;
 			dy=0;
+		
 		}
-		
-		
+			
 		
 		System.out.println("next Move");
 		System.out.println();
 	
-	
+			}}
 		
 	}
 	

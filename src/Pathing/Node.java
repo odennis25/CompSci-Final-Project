@@ -5,8 +5,8 @@ import java.util.ArrayList;
 public class Node implements Comparable<Node>
 {
 	//x+y coords for each node
-	private int x;
-	private int y;
+	public int x;
+	public int y;
 	
 	//id for each node
 	private int id;
@@ -31,6 +31,14 @@ public class Node implements Comparable<Node>
 		this.y = y;
 		this.h=h;
 		this.id=id;
+		this.neighbors = new ArrayList<>();
+	}
+	public Node()
+	{
+		this.x = -1;
+		this.y = -1;
+		this.h=0;
+		this.id=-1;
 		this.neighbors = new ArrayList<>();
 	}
 	
