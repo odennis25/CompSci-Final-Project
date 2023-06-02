@@ -90,7 +90,11 @@ public class RTSMain extends GameApplication
 	@Override
 	protected void initUI() 
 	{
-		
+		Rectangle rect = new Rectangle(600,100);
+	    rect.setTranslateX(200); 
+	    rect.setTranslateY(700); 
+
+	    getGameScene().addUINode(rect);
 	}
 	
  		
@@ -102,9 +106,8 @@ public class RTSMain extends GameApplication
 		
 		getGameWorld().addEntityFactory(new TerrainFactory());
 		getGameWorld().addEntityFactory(new UnitFactory());
-		getGameWorld().addEntityFactory(new UIFactory());
-		getGameWorld().spawn("button", 700, 50);
-		Rectangle rect = new Rectangle(800,100);
+		getGameWorld().spawn("infantry",700,600);
+		
 		
 		renderTerrain(0,0);
 		renderUnits(0,0);   
