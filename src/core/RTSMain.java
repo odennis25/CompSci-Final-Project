@@ -15,12 +15,8 @@ import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.physics.CollisionHandler;
 import com.almasb.fxgl.physics.box2d.collision.shapes.Shape;
 
-<<<<<<< HEAD
 import Pathing.NodeMaker;
-=======
-import javafx.scene.Node;
 import javafx.scene.control.Button;
->>>>>>> c1690fed76bcb2819a9b9d32a42c3bd62885618f
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.shape.Rectangle;
