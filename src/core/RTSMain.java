@@ -14,13 +14,12 @@ import com.almasb.fxgl.input.Input;
 import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.physics.CollisionHandler;
 import com.almasb.fxgl.physics.box2d.collision.shapes.Shape;
+import com.almasb.fxgl.texture.Texture;
 
-<<<<<<< HEAD
 import Pathing.NodeMaker;
-=======
-import javafx.scene.Node;
+
 import javafx.scene.control.Button;
->>>>>>> c1690fed76bcb2819a9b9d32a42c3bd62885618f
+
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.shape.Rectangle;
@@ -52,6 +51,7 @@ public class RTSMain extends GameApplication
 	private int mouseX;
 	private int mouseY;
 	private int frame=0;
+	private String buildID;
 	
 	private static Node[][] nodeMap = new Node[mapSize][mapSize];
 	
@@ -95,6 +95,8 @@ public class RTSMain extends GameApplication
         
         onKey(KeyCode.TAB,()-> selected.clear());
       
+       
+        
         onBtnDown(MouseButton.PRIMARY,() -> selected.add(unitEntities[mouseX][mouseY]) );
 
         onBtnDown(MouseButton.SECONDARY,() -> moveSelected(selected,mouseX, mouseY));
@@ -106,11 +108,21 @@ public class RTSMain extends GameApplication
 	@Override
 	protected void initUI() 
 	{
-		Rectangle rect = new Rectangle(600,100);
-	    rect.setTranslateX(200); 
+		Rectangle rect = new Rectangle(400,100);
+	    rect.setTranslateX(400); 
 	    rect.setTranslateY(700); 
 
 	    getGameScene().addUINode(rect);
+	  
+	    Image image = new Image("/resources/soulja.png");
+	  Texture tex = new Texture(image);
+	    tex.setTranslateX(750);
+	    tex.setTranslateY(700);
+	    getGameScene().addUINode(tex);
+	    //Button btn = getUIFactory().newButton("hi");
+	    //btn.setOnAction(e -> System.out.println("hello"));
+	    
+	    
 	}
 	
  		
@@ -142,6 +154,7 @@ public class RTSMain extends GameApplication
 			
 			mouseX=(int)(input.getMouseXWorld()/blockSize+camera.getx());
 			mouseY=(int)(input.getMouseYWorld()/blockSize+camera.gety());
+			
 		}
 		else
 		{	
