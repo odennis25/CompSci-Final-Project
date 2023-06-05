@@ -138,7 +138,7 @@ public class RTSMain extends GameApplication
 	/**Initializes game world*/
 	protected void initGame() 
 	{
-		play("RTS1_Hollowrock.wav");
+		//play("RTS1_Hollowrock.wav");
 		getGameWorld().addEntityFactory(new TerrainFactory());
 		getGameWorld().addEntityFactory(new UnitFactory());
 		getGameWorld().spawn("infantry",700,600);
@@ -325,6 +325,9 @@ public class RTSMain extends GameApplication
 			for(int c = 0; c<mapSize; c++)
 			{
 				int tempInt = (int) (Math.random()*10+1);
+				
+				
+				
 				if(tempInt==1)
 				{
 					terrain[r][c] = false;
@@ -338,18 +341,14 @@ public class RTSMain extends GameApplication
 					System.out.print("[true] ");
 				}
 			}
-			System.out.println();
+			System.out.println();	
+			
+
 		}
-		//spawns player's main base
-		for(int  r = 0; r<mapSize; r++)
-		{
-			for(int c = 0; c<mapSize; c++)
-			{
-				int row = (int)(Math.random()*mapSize);
-				int column = (int)(Math.random()*mapSize);
-				if()
-			}
-		}
+	
+
+		
+		
 		
 
 	}
@@ -385,7 +384,6 @@ public class RTSMain extends GameApplication
 				case FACTORY:
 					unitEntities[i][j]=spawn("factory",(i+dx)*blockSize,(j+dy)*blockSize);
 					break;
-				
 				default:
 					break;
         		
@@ -393,6 +391,8 @@ public class RTSMain extends GameApplication
         		}
         	}
 		}
+		//spawns the main base in the lower right hand quarter
+		unitEntities[(mapSize/4)*3][(mapSize/4)*3]=spawn("mainBase",((mapSize/4)*3+dx)*blockSize,((mapSize/4)*3+dy)*blockSize);
 	}
 	
 
@@ -462,5 +462,6 @@ public void buttonMaker(String str)
 	{
 		
 		launch(args);
+		
 	}
 }

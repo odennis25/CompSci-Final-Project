@@ -15,12 +15,14 @@ public class AStar //WHEN YOU DO PATHING CALL BOTH ASTAR AND PRINT PATH TO RECIE
 		ArrayList<Node> closed = new ArrayList<>();//list of closed/checked nodes
 		ArrayList<Node> open = new ArrayList<>();//list of open/to be checked node
 		
+		Node[][] tempNMap = RTSMain.getNMap();
+		
 		start.f = start.g + start.calcHeur(target);
 		open.add(start);
 		
 		//reserved for checking for buildings/tiles you cant cross
 		Boolean[][] tempMap = RTSMain.getTerrainMap();
-		Node[][] tempNMap = RTSMain.getNMap();
+		
 		for(int i = 0; i<RTSMain.getMapSize(); i++)
 		{
 			for(int j = 0; j<RTSMain.getMapSize(); j++)
@@ -89,28 +91,30 @@ public class AStar //WHEN YOU DO PATHING CALL BOTH ASTAR AND PRINT PATH TO RECIE
 		
 		while(n.parent != null)
 		{
-			coordsList.add(n.getX()/RTSMain.getBlockSize()-1);
-			coordsList.add(n.getY()/RTSMain.getBlockSize()-1);
+			//column num
+			coordsList.add(n.getId()%RTSMain.getMapSize()-1);
+			//row num
+			coordsList.add(((n.getId()-(n.getId()%RTSMain.getMapSize()))/RTSMain.getMapSize()));
 			n=n.parent;
 		}
-		coordsList.add(n.getX()/RTSMain.getBlockSize()-1);
-		coordsList.add(n.getY()/RTSMain.getBlockSize()-1);
-		Collections.reverse(coordsList);
+		//column num
+		coordsList.add(n.getId()%RTSMain.getMapSize()-1);
+		//row num
+		coordsList.add(((n.getId()-(n.getId()%RTSMain.getMapSize()))/RTSMain.getMapSize()));
 		
-		for(int coords:coordsList)
-		{
-			System.out.println(coords+" ");
-		}
-		System.out.println();
+		Collections.reverse(coordsList);
+		System.out.println(coordsList);
+		
 		return coordsList;
 		
 	}
-//public static void main(String[] args)
-//{
-//	Node[][] nodeList = NodeMaker.nodeMaker(new Node[21][21]);
-//	aStar(nodeList[0][0],nodeList[20][20]);
-//	ArrayList<Integer> intList = printPath(nodeList[20][20]);
-//	
-//}
+public static void main(String[] args)
+{
+	Node[][] nodeList = NodeMaker.nodeMaker(new Node[21][21]);
+	aStar(nodeList[2][3],nodeList[7][8]);
+	ArrayList<Integer> intList = printPath(nodeList[7][8]);
+	System.out.println(intList);
+	
+}
 
 }
