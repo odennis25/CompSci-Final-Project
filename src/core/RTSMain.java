@@ -189,58 +189,32 @@ public class RTSMain extends GameApplication
 	
 	private void moveSelected(ArrayList<Entity> selected, int x, int y) {
 		
+	
+			
 		for(int i=0; i<selected.size(); i++) {
-		
+			
 			AStar.aStar(nodeMap[(int) Math.round(selected.get(i).getX()/blockSize)][(int) Math.round(selected.get(i).getY()/blockSize)],nodeMap[x][y] );
 			ArrayList<Integer> ids = AStar.printPath(nodeMap[x][y]);
 			
 			
+			for(int j=1; j<ids.size();j+=2) {
+				move(selected.get(i),ids.get(j-1),ids.get(j));
+				System.out.println(ids.get(j-1)+" "+ids.get(j));
 			
-			System.out.println((int) Math.round(selected.get(i).getX()/blockSize)+" " + (int) Math.round(selected.get(i).getY()/blockSize));
-		
-			System.out.println(x+" "+ y);
-			for(Integer x1:ids) {
-				System.out.println(x1);
+			
+			
+			}
+				
 				
 			}
+			
+			//use both the aStar method and then call printPath to get the array of id's
 		
+			
+			
+			
 		}
-		
 	
-		
-//		int c=0;//counter
-//		int t=0;
-//		for(int i=0; i<selected.size(); i++) {
-//			
-//			AStar.aStar(nodeMap[(int) Math.round(selected.get(i).getX()/blockSize)][(int) Math.round(selected.get(i).getY()/blockSize)],nodeMap[x][y] );
-//			ArrayList<Integer> ids = AStar.printPath(nodeMap[x][y]);
-//			c=ids.size()-1;
-//			
-//			for(int j=ids.size()-1; j>=0;j--) {
-//			
-//			for(int k =0; k<2; k++) {
-//				
-//				if(k==1) {
-//					
-//					while(t<1000000000) {
-//						t++;
-//					}
-//					move(selected.get(i),ids.get(c+1),ids.get(c));
-//					System.out.println(ids.get(c));
-//				}
-//				c--;
-//			}
-//				
-//				
-//			}
-//			c=ids.size()-1;
-//			//use both the aStar method and then call printPath to get the array of id's
-//		
-//			
-//			
-//			
-//		}
-	}
 	private boolean checkMove() {
 		return moveTried;
 	}
@@ -265,7 +239,7 @@ public class RTSMain extends GameApplication
 			
 			if(e.getType()!=UnitType.NONE) 
 			{
-			
+				
 				
 				while(!moved) 
 				{//loops untill the unit moves to a valid position
