@@ -14,6 +14,7 @@ public Terrain(TerrainType type) {
 	this.type=type;
 }
 	
+
 public TerrainType getTType() {
 	return type;
 };
