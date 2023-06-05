@@ -1,32 +1,34 @@
 package map;
 
 import java.util.ArrayList;
+
+import com.almasb.fxgl.entity.Entity;
+
 import map.TerrainType;
+import units.Unit;
+import units.UnitType;
 public class TerrainMap {
 	private int width;
 	private int height;
-	private ArrayList<ArrayList<Terrain>> map;
+	private Terrain[][] map;
 	
-	public TerrainMap(int width,int height) 
+	public TerrainMap(int width,int height) {
+	map =new Terrain[width][height];
+	for(int i=0; i<width;i++) 
 	{
-		//fills the map with water--unfinished--
-		map = new ArrayList<ArrayList<Terrain>>();
-		for(int i=0; i<width;i++) 
+		
+		for(int j=0; j<height; j++) 
 		{
-			map.add(i,new ArrayList<Terrain>());
-			for(int j=0; j<height; j++) 
-			{
-				
-				map.get(i).add(j, new Terrain(TerrainType.GROUND));
-				
-			}
+			
+			map[i][j]= new Terrain(TerrainType.GROUND);
 			
 		}
 		
 	}
-
-	public ArrayList<ArrayList<Terrain>> getMap() {
-			return map;
+	}
+	
+	public Terrain[][] getMap() {
+			return  map;
 		
 	}
 	

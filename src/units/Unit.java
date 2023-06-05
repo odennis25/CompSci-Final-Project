@@ -1,6 +1,7 @@
 package units;
 
 import com.almasb.fxgl.entity.Entity;
+import com.almasb.fxgl.entity.SpawnData;
 
 import map.UnitMap;
 
@@ -12,11 +13,15 @@ public class Unit extends Entity {
 	private boolean selected;
 	
 	public Unit(UnitType type,int x,int y,int hp) {
-	
+		super();
 		this.type=type;
 		
 	}
-		
+	
+	
+	
+	
+	
 	
 	public UnitType getUType() {
 		return type;
@@ -39,8 +44,8 @@ public class Unit extends Entity {
 	}
 	
 	
-	public void setSelected() {
-		selected=true;
+	public void setSelected(boolean b) {
+		selected=b;
 	}
 	
 	

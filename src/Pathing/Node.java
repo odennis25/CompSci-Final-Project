@@ -4,9 +4,12 @@ import java.util.ArrayList;
 
 public class Node implements Comparable<Node>
 {
+	//x+y coords for each node
+	public int x;
+	public int y;
+	
 	//id for each node
-	private int idCounter = 0;
-	public int id;
+	private int id;
 	
 	//parent
 	public Node parent = null;
@@ -22,11 +25,20 @@ public class Node implements Comparable<Node>
 	public double h;
 	
 	//
-	Node(double h, int id)
+	Node(double h, int id, int x, int y)
 	{
+		this.x = x;
+		this.y = y;
 		this.h=h;
 		this.id=id;
-		idCounter++;
+		this.neighbors = new ArrayList<>();
+	}
+	public Node()
+	{
+		this.x = -1;
+		this.y = -1;
+		this.h=0;
+		this.id=-1;
 		this.neighbors = new ArrayList<>();
 	}
 	
@@ -63,5 +75,23 @@ public class Node implements Comparable<Node>
 		}
 	}
 	
-
+	public int getX()
+	{
+		return x;
+	}
+	
+	public int getY()
+	{
+		return y;
+	}
+	
+	public int getId()
+	{
+		return id;
+	}
+	
+	public String toString()
+	{
+		return "" + x + " " + y + " " + id + " " + h; 
+	}
 }

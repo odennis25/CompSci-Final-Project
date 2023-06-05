@@ -15,6 +15,7 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
+import map.Terrain;
 import map.TerrainType;
 import units.UnitType;
 
@@ -28,7 +29,7 @@ public class TerrainFactory implements EntityFactory
 	{
 	    Image image = new Image("resources/grass.png");//need to make this url universal
 		
-	    return entityBuilder(data)
+	    return  entityBuilder(data)
 	            .type(TerrainType.GROUND)
 	            .view(new Texture(image))
 	            .build();
@@ -47,7 +48,7 @@ public class TerrainFactory implements EntityFactory
 	@Spawns("cliff")
 	public Entity cliff(SpawnData data) 
 	{
-	    Image image = new Image("cliff.png");//need to make this url universal
+	    Image image = new Image("resources/UnitPlaceHolder.png");//need to make this url universal
 		
 	    return entityBuilder(data)
 	            .type(TerrainType.WATER)

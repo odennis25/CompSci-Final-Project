@@ -1,6 +1,8 @@
 package map;
 
 
+import com.almasb.fxgl.entity.Entity;
+
 import units.Unit;
 import units.UnitType;
 
@@ -24,8 +26,15 @@ public class UnitMap {
 			}
 			
 		}
-		map[9][9]= new Unit(UnitType.INFANTRY,9,9,100);
+		map[1][0]= new Unit(UnitType.INFANTRY,1,0,100);
+		map[1][1]= new Unit(UnitType.INFANTRY,1,1,100);
+		map[1][2]= new Unit(UnitType.INFANTRY,1,2,100);
+		map[1][3]= new Unit(UnitType.INFANTRY,1,3,100);
+		map[1][4]= new Unit(UnitType.INFANTRY,1,4,100);
 		map[1][5]= new Unit(UnitType.INFANTRY,1,5,100);
+		map[1][6]= new Unit(UnitType.INFANTRY,1,6,100);
+		map[1][7]= new Unit(UnitType.INFANTRY,1,7,100);
+	
 	}
 
 	public Unit[][] getUMap() {
@@ -41,13 +50,19 @@ public class UnitMap {
 		return width;
 				}
 	
-	
+	public int length() {
+		return map.length;
+	}
 	
 	public Unit[][] setUMap(int row, int column, Unit unit ) {
 		
-		map[row][column]= (unit);
+		map[row][column]= unit;
 		
 		return map;
 		
+	}
+
+	public Unit get(int x, int y) {
+		return map[x][y];
 	}
 }
