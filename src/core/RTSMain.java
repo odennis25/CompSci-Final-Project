@@ -296,55 +296,39 @@ public class RTSMain extends GameApplication
 	/**iterates through the terrain Map and spawns entity's with the terrains texture*/
 	private void renderTerrain(int dx, int dy) 
 	{
-		//makes the true/false map list
+		//makes the true/false map list and renders the map with mountains and grass
 		for(int r = 0; r<mapSize; r++)
 		{
 			for(int c = 0; c<mapSize; c++)
 			{
-				int tempInt = (int) (Math.random()*3+1);
+				int tempInt = (int) (Math.random()*10+1);
 				if(tempInt==1)
 				{
 					terrain[r][c] = false;
-					terrainMap.getMap()[r][c].setType("cliff");
+					terrainEntities[r][c]=spawn("cliff",(r+dx)*blockSize,(c+dy)*blockSize);
 					System.out.print("{false} ");
 				}
 				else
 				{
 					terrain[r][c] = true;
-					terrainMap.getMap()[r][c].setType("ground");
+					terrainEntities[r][c]=spawn("ground",(r+dx)*blockSize,(c+dy)*blockSize);
 					System.out.print("[true] ");
 				}
 			}
 			System.out.println();
 		}
-		
-		
-		for(int i=0; i<terrainMap.getMap().length; i++) 
+		//spawns player's main base
+		for(int  r = 0; r<mapSize; r++)
 		{
-        	
-        	for(int j = 0; j<terrainMap.getMap()[i].length;j++ ) 
-        	{
-        		TerrainType terrain=terrainMap.getMap()[i][j].getTType();
-        		switch(terrain) 
-        		{
-        		
-				case CLIFF:
-					terrainEntities[i][j]=spawn("cliff",(i+dx)*blockSize,(j+dy)*blockSize);
-					break;
-				case GROUND:
-					terrainEntities[i][j]=spawn("ground",(i+dx)*blockSize,(j+dy)*blockSize);
-			
-					break;
-				case WATER:
-					terrainEntities[i][j]=spawn("water",(i+dx)*blockSize,(j+dy)*blockSize);
-					break;
-				default:
-					break;
-        		
-        		}
-        		
-        	}
+			for(int c = 0; c<mapSize; c++)
+			{
+				int row = (int)(Math.random()*mapSize);
+				int column = (int)(Math.random()*mapSize);
+				if()
+			}
 		}
+		
+
 	}
 
 	/**iterates through the unitMap and spawns entity's with the unit's texture*/ 
