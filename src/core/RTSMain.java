@@ -40,6 +40,7 @@ public class RTSMain extends GameApplication
 	private UnitMap uMap = new UnitMap(mapSize,mapSize);
 	private Entity[][] unitEntities= new Entity[mapSize][mapSize];
 	private static Entity[][] terrainEntities= new Entity[mapSize][mapSize];
+	private static Boolean[][] terrain = new Boolean[mapSize][mapSize];
 	
 	private Camera camera;
 	
@@ -64,9 +65,9 @@ public class RTSMain extends GameApplication
 	{
 		return mapSize;
 	}
-	public static Entity[][] getTerrainMap()
+	public static Boolean[][] getTerrainMap()
 	{
-		return terrainEntities;
+		return terrain;
 	}
 	
 	
@@ -294,6 +295,27 @@ public class RTSMain extends GameApplication
 	/**iterates through the terrain Map and spawns entity's with the terrains texture*/
 	private void renderTerrain(int dx, int dy) 
 	{
+		//makes the true/false map list
+		for(int r = 0; r<mapSize; r++)
+		{
+			for(int c = 0; c<mapSize; c++)
+			{
+				int tempInt = (int) (Math.random()*3+1);
+				if(tempInt==1)
+				{
+					terrain[r][c] = false;
+					terrainMap.getMap()[r][c].setType("cliff");
+					System.out.print("{false} ");
+				}
+				else
+				{
+					terrain[r][c] = true;
+					terrainMap.getMap()[r][c].setType("ground");
+					System.out.print("[true] ");
+				}
+			}
+			System.out.println();
+		}
 		
 		
 		for(int i=0; i<terrainMap.getMap().length; i++) 
@@ -304,8 +326,7 @@ public class RTSMain extends GameApplication
         		TerrainType terrain=terrainMap.getMap()[i][j].getTType();
         		switch(terrain) 
         		{
-				
-					
+        		
 				case CLIFF:
 					terrainEntities[i][j]=spawn("cliff",(i+dx)*blockSize,(j+dy)*blockSize);
 					break;

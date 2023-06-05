@@ -19,15 +19,15 @@ public class AStar //WHEN YOU DO PATHING CALL BOTH ASTAR AND PRINT PATH TO RECIE
 		open.add(start);
 		
 		//reserved for checking for buildings/tiles you cant cross
-		Entity[][] tempMap = RTSMain.getTerrainMap();
-		
+		Boolean[][] tempMap = RTSMain.getTerrainMap();
+		Node[][] tempNMap = RTSMain.getNMap();
 		for(int i = 0; i<RTSMain.getMapSize(); i++)
 		{
 			for(int j = 0; j<RTSMain.getMapSize(); j++)
 			{
-				if(tempMap[i][j]).getOccupied())
+				if(!tempMap[i][j])
 				{
-					
+					closed.add(tempNMap[i][j]);
 				}
 			}
 		}
