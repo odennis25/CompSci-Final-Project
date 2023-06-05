@@ -67,5 +67,17 @@ public class UnitFactory implements EntityFactory{
 	            .view(new Texture(image))
 	            .build();
 	}
+	@Spawns ("mainBase")
+	public Entity mainBase(SpawnData data) 
+	{
+		Image image = new Image("/resources/water.png");
+		
+	    return  entityBuilder(data)
+	            .type(UnitType.MAINBASE)
+	            .view(new Texture(image))
+	            .build();
+	}
+
+	
 	
 }
