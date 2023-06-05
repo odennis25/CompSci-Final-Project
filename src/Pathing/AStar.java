@@ -23,16 +23,16 @@ public class AStar //WHEN YOU DO PATHING CALL BOTH ASTAR AND PRINT PATH TO RECIE
 		//reserved for checking for buildings/tiles you cant cross
 		Boolean[][] tempMap = RTSMain.getTerrainMap();
 		
-		for(int i = 0; i<RTSMain.getMapSize(); i++)
-		{
-			for(int j = 0; j<RTSMain.getMapSize(); j++)
-			{
-				if(!tempMap[i][j])
-				{
-					closed.add(tempNMap[i][j]);
-				}
-			}
-		}
+//		for(int i = 0; i<RTSMain.getMapSize(); i++)
+//		{
+//			for(int j = 0; j<RTSMain.getMapSize(); j++)
+//			{
+//				if(!tempMap[i][j])
+//				{
+//					closed.add(tempNMap[i][j]);
+//				}
+//			}
+//		}
 		
 		
 		
