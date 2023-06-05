@@ -28,4 +28,6 @@ public boolean getOccupied(){
 public void setType(TerrainType type) {
 		this.type=type;
 	}
+
+
 }

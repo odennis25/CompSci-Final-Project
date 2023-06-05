@@ -149,6 +149,18 @@ public class NodeMaker
 		return temp;
 	}
 
+public static void main(String[] args)
+{
+	Node[][] temp = nodeMaker(RTSMain.getNMap());
+	AStar.aStar(temp[0][0], temp[4][5]);
+	ArrayList<Integer> ids = AStar.printPath(temp[4][5]);
+	for(int id:ids)
+		{
+			System.out.println(id+" ");
+		}
+		System.out.println();
+}
+
 
 
 }
