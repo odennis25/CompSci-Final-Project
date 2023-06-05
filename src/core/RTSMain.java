@@ -103,7 +103,11 @@ public class RTSMain extends GameApplication
 	@Override
 	protected void initUI() 
 	{
-		
+		Rectangle rect = new Rectangle(600,100);
+	    rect.setTranslateX(200); 
+	    rect.setTranslateY(700); 
+
+	    getGameScene().addUINode(rect);
 	}
 	
  		
@@ -112,12 +116,11 @@ public class RTSMain extends GameApplication
 	/**Initializes game world*/
 	protected void initGame() 
 	{
-		
+		play("RTS1_Hollowrock.wav");
 		getGameWorld().addEntityFactory(new TerrainFactory());
 		getGameWorld().addEntityFactory(new UnitFactory());
-		getGameWorld().addEntityFactory(new UIFactory());
-		getGameWorld().spawn("button", 700, 50);
-		Rectangle rect = new Rectangle(800,100);
+		getGameWorld().spawn("infantry",700,600);
+		
 		
 		renderTerrain(0,0);
 		renderUnits(0,0);   
@@ -223,10 +226,9 @@ public class RTSMain extends GameApplication
 				//moves the entity to the correct spot after all checks are made
 			
 			
+
 			
 			
-			else 
-			{
 				//moves the entity to the correct spot after all checks are made
 				//use both the aStar method and then call printPath to get the array of id's
 				Entity temp2=unitEntities[y+dx][x+dy];
@@ -235,7 +237,7 @@ public class RTSMain extends GameApplication
 				selected.get(i).setPosition((x-camera.getx()+dx)*blockSize,((y-camera.gety()+dy)*blockSize));
 				moved=true;
 			
-			}
+				}
 			moved=false;
 			dx=0;
 			dy=0;
@@ -243,10 +245,9 @@ public class RTSMain extends GameApplication
 		}
 			
 		
-		System.out.println("next Move");
-		System.out.println();
 	
-			}}
+			}
+			
 		
 	}
 	
