@@ -6,7 +6,6 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="D:/A/fxgl-17.3-uber.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/FXGL"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/fxgl"/>
 	<classpathentry kind="output" path="bin"/>

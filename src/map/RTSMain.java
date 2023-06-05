@@ -205,19 +205,26 @@ public class RTSMain extends GameApplication
 		
 	}
 	
-private void move(Entity e,int x, int y) {//work in progress
+	/**moves units in array list selected to the x and y cord */
+	private void moveSelected(ArrayList<Entity> selected,int x, int y) {//work in progress
+		
 		
 		int dx=0;
 		int dy=0;
-		
-		int susx= (int) Math.round(e.getX()/(blockSize)+camera.getx()); 
-		int susy=(int)  Math.round(e.getY()/(blockSize)+camera.gety());
-		boolean moved=false;
+		for(int i=0; i<selected.size();i++) {
 			
 			
-			if(e.getType()!=UnitType.NONE) 
+			
+			int susx= (int) Math.round(selected.get(i).getX()/(blockSize)+camera.getx()); 
+			int susy=(int)  Math.round(selected.get(i).getY()/(blockSize)+camera.gety());
+			boolean moved=false;
+			
+			
+			
+			
+			if(selected.get(i).getType()!=UnitType.NONE) 
 			{
-				
+			
 				
 				while(!moved) 
 				{//loops until the unit moves to a valid position
@@ -226,22 +233,33 @@ private void move(Entity e,int x, int y) {//work in progress
 						break;
 					}
 			
+			
+			
+			
 				while(unitEntities[x+dx][y+dy].getType()!=UnitType.NONE) {//checks if the space is already occupied if so changes the dx and dy	
 					dx+=1;
 					}	
 		
+		
+			
+			
 				if(x+dx==21||y+dy==21||x+dx==-1||y+dy==-1) {//checks if out of bounds
 					break;
 					}
-				
+				//moves the entity to the correct spot after all checks are made
+			
+			
+
+			
 			
 				//moves the entity to the correct spot after all checks are made
+				//use both the aStar method and then call printPath to get the array of id's
 				Entity temp2=unitEntities[y+dx][x+dy];
 				unitEntities[x+dx][y+dy] = unitEntities[susx][susy];
 				unitEntities[susx][susy]=temp2;
-				e.setPosition((x-camera.getx()+dx)*blockSize,((y-camera.gety()+dy)*blockSize));
+				selected.get(i).setPosition((x-camera.getx()+dx)*blockSize,((y-camera.gety()+dy)*blockSize));
 				moved=true;
-				
+			
 				}
 			moved=false;
 			dx=0;
@@ -252,38 +270,9 @@ private void move(Entity e,int x, int y) {//work in progress
 		
 	
 			}
-
-	
-	
-	
-	/**moves units in array list selected to the x and y cord */
-	private void moveSelected(ArrayList<Entity> selected, int x, int y) {
+			
 		
-		
-		
-		for(int i=0; i<selected.size(); i++) {
-			
-			AStar.aStar(nodeMap[(int) Math.round(selected.get(i).getX()/blockSize)][(int) Math.round(selected.get(i).getY()/blockSize)],nodeMap[x][y] );
-			ArrayList<Integer> ids = AStar.printPath(nodeMap[x][y]);
-			
-			
-			for(int j=1; j<ids.size();j+=2) {
-				move(selected.get(i),ids.get(j-1),ids.get(j));
-				System.out.println(ids.get(j-1)+" "+ids.get(j));
-			
-			
-			
-			}
-				
-				
-			}
-			
-			//use both the aStar method and then call printPath to get the array of id's
-		
-			
-		System.out.println("pp");
-			
-		}
+	}
 	
 	/**iterates through the terrain entity's list moving each entity on the panel, moving the entire map*/
 	private void moveTerrainMap(double dx, double dy) 
@@ -343,16 +332,16 @@ private void move(Entity e,int x, int y) {//work in progress
 				{
 					terrain[r][c] = false;
 					terrainEntities[r][c]=spawn("cliff",(r+dx)*blockSize,(c+dy)*blockSize);
-					
+					System.out.print("{false} ");
 				}
 				else
 				{
 					terrain[r][c] = true;
 					terrainEntities[r][c]=spawn("ground",(r+dx)*blockSize,(c+dy)*blockSize);
-					
+					System.out.print("[true] ");
 				}
 			}
-			
+			System.out.println();	
 			
 
 		}
@@ -468,9 +457,8 @@ public void buttonMaker(String str)
 	System.out.println(buildID);
 }
 	
-	
-/**starts the game application*/ 
-public static void main(String[] args)
+	/**starts the game application*/ 
+	public static void main(String[] args)
 	{
 		
 		launch(args);
