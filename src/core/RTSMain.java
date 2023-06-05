@@ -55,6 +55,8 @@ public class RTSMain extends GameApplication
 		
 	private int mouseX;
 	private int mouseY;
+	private int m1;
+	private int m2;
 	private int frame=0;
 	private String buildID;
 	
@@ -138,7 +140,8 @@ public class RTSMain extends GameApplication
 	/**Initializes game world*/
 	protected void initGame() 
 	{
-		play("RTS1_Hollowrock.wav");
+		//play("RTS1_Hollowrock.wav");
+		
 		getGameWorld().addEntityFactory(new TerrainFactory());
 		getGameWorld().addEntityFactory(new UnitFactory());
 		getGameWorld().spawn("infantry",700,600);
@@ -159,15 +162,19 @@ public class RTSMain extends GameApplication
 		frame++;
 		if(frame!=12) {
 			
-			mouseX=(int)(input.getMouseXWorld()/blockSize+camera.getx());
-			mouseY=(int)(input.getMouseYWorld()/blockSize+camera.gety());
+			mouseX=(int)(input.getMouseXWorld()/blockSize + camera.getx());
+			mouseY=(int)(input.getMouseYWorld()/blockSize + camera.gety());
+//			m1=(int)(input.getMouseXWorld()+camera.getx());
+//			m2=(int)(input.getMouseYWorld()+camera.gety());
+			//System.out.println(mouseX + " " + mouseY);
+		
 			
 		}
 		else
 		{	
 			frame=0;
 			
-			
+			//checks if INFANTRY can see eachother. NOT DONE YET
 			for(int i = 0;i<unitEntities.length;i++)
 				{
 					for(int j = 0;j<unitEntities[0].length;j++)
@@ -347,7 +354,7 @@ public class RTSMain extends GameApplication
 			{
 				int row = (int)(Math.random()*mapSize);
 				int column = (int)(Math.random()*mapSize);
-				if()
+				
 			}
 		}
 		
@@ -413,7 +420,61 @@ public void onLeftClick()
 {
 	if(buildID == "factory")
 	{
-		unitEntities[mouseX/blockSize][mouseY/blockSize]=spawn("factory",mouseX*blockSize,mouseY*blockSize);
+		unitEntities[mouseX][mouseY]=spawn("factory",(mouseX)*blockSize,(mouseY)*blockSize);
+//		if(m1 < 100)
+//		{
+//			int m11 = m1;
+//			if(m11 < 50)
+//			{
+//				m1 = m1 - m11;
+//			}
+//			else
+//				m1 = m1 +(50-m11);
+//			System.out.println(m1);
+//		}
+//		if(m1 < 1000 & m1 > 99)
+//		{
+//			int m11 = m1 % 100;
+//			if(m11 < 50)
+//			{
+//				m1 = m1 - m11;
+//			}
+//			else
+//				m1 = m1 +(50-m11);
+//			System.out.println(m1);
+//			
+//		}		
+//		if(m2 < 100)
+//		{
+//			int m22 = m2;
+//			if(m22 < 50)
+//			{
+//				m2 = m2 - m22;
+//			}
+//			else
+//				m2 = m2 +(50-m22);
+//			System.out.println(m2);
+//		}
+//		if(m2 < 1000 & m2 > 99)
+//		{
+//			int m22 = m2 % 100;
+//			if(m22 < 50)
+//			{
+//				m2 = m2 - m22;
+//			}
+//			else
+//				m2 = m2 +(50-m22);
+//			System.out.println(m2);
+//			
+//		}		
+	//}
+		
+		
+		
+		
+		
+		
+		
 		
 		buildID = "";
 	}
