@@ -25,6 +25,10 @@ public class AStar //WHEN YOU DO PATHING CALL BOTH ASTAR AND PRINT PATH TO RECIE
 		{
 			for(int j = 0; j<RTSMain.getMapSize(); j++)
 			{
+				if(tempMap[i][j]).getOccupied())
+				{
+					
+				}
 			}
 		}
 		
@@ -101,12 +105,12 @@ public class AStar //WHEN YOU DO PATHING CALL BOTH ASTAR AND PRINT PATH TO RECIE
 		return coordsList;
 		
 	}
-public static void main(String[] args)
-{
-	Node[][] nodeList = NodeMaker.nodeMaker(new Node[21][21]);
-	aStar(nodeList[0][0],nodeList[20][20]);
-	ArrayList<Integer> intList = printPath(nodeList[20][20]);
-	
-}
+//public static void main(String[] args)
+//{
+//	Node[][] nodeList = NodeMaker.nodeMaker(new Node[21][21]);
+//	aStar(nodeList[0][0],nodeList[20][20]);
+//	ArrayList<Integer> intList = printPath(nodeList[20][20]);
+//	
+//}
 
 }

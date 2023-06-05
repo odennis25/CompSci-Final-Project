@@ -60,10 +60,11 @@ public class UnitFactory implements EntityFactory{
 	@Spawns ("factory")
 	public Entity factory(SpawnData data) 
 	{
-	    
+		Image image = new Image("/resources/factory.png");
 		
 	    return  entityBuilder(data)
 	            .type(UnitType.FACTORY)
+	            .view(new Texture(image))
 	            .build();
 	}
 	

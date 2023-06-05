@@ -16,7 +16,10 @@ import com.almasb.fxgl.physics.CollisionHandler;
 import com.almasb.fxgl.physics.box2d.collision.shapes.Shape;
 import com.almasb.fxgl.texture.Texture;
 
-import Pathing.NodeMaker;
+//import Pathing.NodeMaker;
+
+
+import javafx.scene.control.Button;
 
 import javafx.scene.control.Button;
 
@@ -31,6 +34,7 @@ import map.Terrain;
 import map.TerrainMap;
 import Pathing.AStar;
 import Pathing.Node;
+import Pathing.NodeMaker;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import static com.almasb.fxgl.dsl.FXGL.*;
@@ -97,7 +101,7 @@ public class RTSMain extends GameApplication
       
        
         
-        onBtnDown(MouseButton.PRIMARY,() -> selected.add(unitEntities[mouseX][mouseY]) );
+        onBtnDown(MouseButton.PRIMARY,() -> onLeftClick());
 
         onBtnDown(MouseButton.SECONDARY,() -> moveSelected(selected,mouseX, mouseY));
         onKeyDown(KeyCode.H,() -> System.out.println(unitEntities[mouseX][mouseY]));
@@ -108,19 +112,21 @@ public class RTSMain extends GameApplication
 	@Override
 	protected void initUI() 
 	{
+		//makes backround for button area. opacity is set to 0 for some reason idk why
 		Rectangle rect = new Rectangle(400,100);
 	    rect.setTranslateX(400); 
-	    rect.setTranslateY(700); 
-
+	    rect.setTranslateY(700);
 	    getGameScene().addUINode(rect);
-	  
-	    Image image = new Image("/resources/soulja.png");
-	  Texture tex = new Texture(image);
-	    tex.setTranslateX(750);
-	    tex.setTranslateY(700);
+	    
+
+	    //puts image of factory on screen
+	  Texture tex = makeImageForUI("factory");
 	    getGameScene().addUINode(tex);
-	    //Button btn = getUIFactory().newButton("hi");
-	    //btn.setOnAction(e -> System.out.println("hello"));
+	    // makes button to build factory
+	    Button factorybtn = makeButtonForUI("factory");
+	    getGameScene().addUINode(factorybtn);
+
+	    
 	    
 	    
 	}
@@ -220,7 +226,7 @@ public class RTSMain extends GameApplication
 			
 				
 				while(!moved) 
-				{//loops untill the unit moves to a valid position
+				{//loops until the unit moves to a valid position
 				
 					if(unitEntities[x+dx][y+dy]==unitEntities[susx][susy]) {//checks if the unit has not moved
 						break;
@@ -398,6 +404,54 @@ public static int getBlockSize()
 	/**sets block size*/ 
 public static void setBlockSize(double b) {
 	blockSize=(int) b;
+}
+//called when leftclick happens
+public void onLeftClick()
+{
+	if(buildID == "factory")
+	{
+		unitEntities[mouseX/blockSize][mouseY/blockSize]=spawn("factory",mouseX*blockSize,mouseY*blockSize);
+		
+		buildID = "";
+	}
+	else {
+		selected.add(unitEntities[mouseX][mouseY]);
+		
+	}
+}
+public Button makeButtonForUI(String str)
+{
+	Button factorybtn = new Button("");
+    if(str == "factory")
+    	factorybtn.setOnAction(e -> buttonMaker("factory"));
+    factorybtn.setTranslateX(750); 
+    factorybtn.setTranslateY(700); 
+    factorybtn.setPrefWidth(50);
+    factorybtn.setPrefHeight(50);
+    factorybtn.setOpacity(0);
+    return factorybtn;
+}
+public Texture makeImageForUI(String str)
+{
+	Image image = new Image("/resources/UnitPlaceHolder.png");  
+	if(str == "factory")
+	{
+		image = new Image("/resources/factory.png");
+	}
+	Texture tex = new Texture(image);
+	    tex.setTranslateX(750);
+	    tex.setTranslateY(700);
+	    return tex;
+}
+	//stuff that factory button does when clicked
+public void buttonMaker(String str)
+{
+	if(str == "factory")
+	{
+		buildID = "factory";
+	}
+	selected.clear();
+	System.out.println(buildID);
 }
 	
 	/**starts the game application*/ 
