@@ -319,6 +319,19 @@ public class RTSMain extends GameApplication
 	/**iterates through the terrain Map and spawns entity's with the terrains texture*/
 	private void renderTerrain(int dx, int dy) 
 	{
+		//spawns player's main base
+		for(int  r = 0; r<mapSize; r++)
+		{
+			for(int c = 0; c<mapSize; c++)
+			{
+				int row = (int)(Math.random()*mapSize);
+				int column = (int)(Math.random()*mapSize);
+				if(terrain[r][c])
+					unitEntities[r][c]=spawn("mainBase",(r+dx)*blockSize,(c+dy)*blockSize);
+				terrain[r][c] = null;
+
+			}
+		}
 		//makes the true/false map list and renders the map with mountains and grass
 		for(int r = 0; r<mapSize; r++)
 		{
@@ -340,16 +353,7 @@ public class RTSMain extends GameApplication
 			}
 			System.out.println();
 		}
-		//spawns player's main base
-		for(int  r = 0; r<mapSize; r++)
-		{
-			for(int c = 0; c<mapSize; c++)
-			{
-				int row = (int)(Math.random()*mapSize);
-				int column = (int)(Math.random()*mapSize);
-				if()
-			}
-		}
+		
 		
 
 	}

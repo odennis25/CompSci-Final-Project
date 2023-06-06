@@ -21,16 +21,16 @@ public class AStar //WHEN YOU DO PATHING CALL BOTH ASTAR AND PRINT PATH TO RECIE
 		//reserved for checking for buildings/tiles you cant cross
 		Boolean[][] tempMap = RTSMain.getTerrainMap();
 		Node[][] tempNMap = RTSMain.getNMap();
-		for(int i = 0; i<RTSMain.getMapSize(); i++)
-		{
-			for(int j = 0; j<RTSMain.getMapSize(); j++)
-			{
-				if(!tempMap[i][j])
-				{
-					closed.add(tempNMap[i][j]);
-				}
-			}
-		}
+//		for(int i = 0; i<RTSMain.getMapSize(); i++)
+//		{
+//			for(int j = 0; j<RTSMain.getMapSize(); j++)
+//			{
+//				if(!tempMap[i][j])
+//				{
+//					closed.add(tempNMap[i][j]);
+//				}
+//			}
+//		}
 		
 		
 		
@@ -89,12 +89,12 @@ public class AStar //WHEN YOU DO PATHING CALL BOTH ASTAR AND PRINT PATH TO RECIE
 		
 		while(n.parent != null)
 		{
-			coordsList.add(n.getX()/RTSMain.getBlockSize()-1);
 			coordsList.add(n.getY()/RTSMain.getBlockSize()-1);
+			coordsList.add(n.getX()/RTSMain.getBlockSize()-1);
 			n=n.parent;
 		}
-		coordsList.add(n.getX()/RTSMain.getBlockSize()-1);
 		coordsList.add(n.getY()/RTSMain.getBlockSize()-1);
+		coordsList.add(n.getX()/RTSMain.getBlockSize()-1);
 		Collections.reverse(coordsList);
 		
 		for(int coords:coordsList)
@@ -105,12 +105,12 @@ public class AStar //WHEN YOU DO PATHING CALL BOTH ASTAR AND PRINT PATH TO RECIE
 		return coordsList;
 		
 	}
-//public static void main(String[] args)
-//{
-//	Node[][] nodeList = NodeMaker.nodeMaker(new Node[21][21]);
-//	aStar(nodeList[0][0],nodeList[20][20]);
-//	ArrayList<Integer> intList = printPath(nodeList[20][20]);
-//	
-//}
+public static void main(String[] args)
+{
+	Node[][] nodeList = NodeMaker.nodeMaker(new Node[21][21]);
+	aStar(nodeList[0][0],nodeList[12][10]);
+	ArrayList<Integer> intList = printPath(nodeList[12][10]);
+	
+}
 
 }
