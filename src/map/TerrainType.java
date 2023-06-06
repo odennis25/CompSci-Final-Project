@@ -1,5 +1,5 @@
 package map;
 
-public enum TerrainType {
+public enum TerrainType{
 GROUND,WATER,CLIFF,
 }

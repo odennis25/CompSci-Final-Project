@@ -9,17 +9,24 @@ import core.RTSMain;
 
 public class AStar //WHEN YOU DO PATHING CALL BOTH ASTAR AND PRINT PATH TO RECIEVE THE ARRAY OF NODE IDS
 {
+	private static ArrayList<Integer> coordsList = new ArrayList<>();
+	private static ArrayList<Node> closed = new ArrayList<>();//list of closed/checked nodes
+	private static ArrayList<Node> open = new ArrayList<>();//list of open/to be checked node
+	private static Node target = new Node();
+	private static Node start =  new Node();
 	//the path-finding math that i'm not entirely sure how it works
-	public static Node aStar(Node start, Node target)
+	public static Node aStar(Node newStart, Node newTarget)
 	{
-		ArrayList<Node> closed = new ArrayList<>();//list of closed/checked nodes
-		ArrayList<Node> open = new ArrayList<>();//list of open/to be checked node
+		target = newTarget;
+		start = newStart;
 		
 		Node[][] tempNMap = RTSMain.getNMap();
 		
 		start.f = start.g + start.calcHeur(target);
 		open.add(start);
 		
+		
+
 		//reserved for checking for buildings/tiles you cant cross
 		Boolean[][] tempMap = RTSMain.getTerrainMap();
 		
@@ -75,45 +82,70 @@ public class AStar //WHEN YOU DO PATHING CALL BOTH ASTAR AND PRINT PATH TO RECIE
 			open.remove(n);
 			closed.add(n);
 		}
-		
+		reset();
 		return null;
 	}
 	
 	//prints the path AStar chooses
-	public static ArrayList<Integer> printPath(Node target)
+	public static ArrayList<Integer> printPath(Node newStart,Node newTarget)
 	{
+		coordsList = new ArrayList<Integer>();
+		
+		aStar(newStart, newTarget);
+		
 		Node n = target;
 		
 		if(n==null)
 			return null;
 		
-		ArrayList<Integer> coordsList = new ArrayList<>();
 		
 		while(n.parent != null)
 		{
 			//column num
-			coordsList.add(n.getId()%RTSMain.getMapSize()-1);
+			if(n.getId()%RTSMain.getMapSize()-1!=-1)
+				coordsList.add(n.getId()%RTSMain.getMapSize()-1);
+			else
+				coordsList.add(0);
 			//row num
 			coordsList.add(((n.getId()-(n.getId()%RTSMain.getMapSize()))/RTSMain.getMapSize()));
 			n=n.parent;
+			
+			System.out.println("sup");
 		}
+		
+		
+		
 		//column num
-		coordsList.add(n.getId()%RTSMain.getMapSize()-1);
+		if(n.getId()%RTSMain.getMapSize()-1==0)
+			coordsList.add(n.getId()%RTSMain.getMapSize()-1);
+		else
+			coordsList.add(0);
 		//row num
 		coordsList.add(((n.getId()-(n.getId()%RTSMain.getMapSize()))/RTSMain.getMapSize()));
 		
 		Collections.reverse(coordsList);
-		System.out.println(coordsList);
 		
 		return coordsList;
+	}
+	
+	public static void reset()
+	{
+		closed = null;
+		open = null;
+		coordsList = null;
+		target = null;
+		start = null;
 		
 	}
 public static void main(String[] args)
 {
 	Node[][] nodeList = NodeMaker.nodeMaker(new Node[21][21]);
-	aStar(nodeList[2][3],nodeList[7][8]);
-	ArrayList<Integer> intList = printPath(nodeList[7][8]);
+	
+	ArrayList<Integer> intList = printPath(nodeList[19][20],nodeList[7][8]);
 	System.out.println(intList);
+
+	ArrayList<Integer> intList2 = printPath(nodeList[10][12],nodeList[4][9]);
+	System.out.println(intList2);
 	
 }
 
