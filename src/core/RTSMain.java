@@ -100,7 +100,7 @@ public class RTSMain extends GameApplication
 		onKey(KeyCode.W, () -> camera.moveUp());
         onKey(KeyCode.S, () -> camera.moveDown());
         
-        onKey(KeyCode.TAB,()-> selected.clear());
+        onKey(KeyCode.Z,()-> selected.clear());
       
        
         
@@ -108,7 +108,7 @@ public class RTSMain extends GameApplication
 
         onBtnDown(MouseButton.SECONDARY,() -> moveSelected(selected,mouseX, mouseY));
         onKeyDown(KeyCode.H,() -> System.out.println(unitEntities[mouseX][mouseY]));
-        
+        onKeyDown(KeyCode.X,() -> System.out.println(selected));
         
         
 	}
@@ -268,10 +268,10 @@ private void move(Entity e,int x, int y) {//work in progress
 		
 		for(int i=0; i<selected.size(); i++) {
 			
-			AStar.aStar(nodeMap[(int) Math.round(selected.get(i).getX()/blockSize)][(int) Math.round(selected.get(i).getY()/blockSize)],nodeMap[x][y] );
 			
 			
-			ArrayList<Integer> ids = AStar.printPath(nodeMap[x][y]);
+			
+			ArrayList<Integer> ids = AStar.printPath(nodeMap[(int) Math.round(selected.get(i).getX()/blockSize)][(int) Math.round(selected.get(i).getY()/blockSize)],nodeMap[x][y]);
 			
 			
 			for(int j=1; j<ids.size();j+=2) {
@@ -332,19 +332,7 @@ private void move(Entity e,int x, int y) {//work in progress
 	/**iterates through the terrain Map and spawns entity's with the terrains texture*/
 	private void renderTerrain(int dx, int dy) 
 	{
-		//spawns player's main base
-		for(int  r = 0; r<mapSize; r++)
-		{
-			for(int c = 0; c<mapSize; c++)
-			{
-				int row = (int)(Math.random()*mapSize);
-				int column = (int)(Math.random()*mapSize);
-				if(terrain[r][c])
-					unitEntities[r][c]=spawn("mainBase",(r+dx)*blockSize,(c+dy)*blockSize);
-				terrain[r][c] = null;
 
-			}
-		}
 		//makes the true/false map list and renders the map with mountains and grass
 		for(int r = 0; r<mapSize; r++)
 		{
@@ -366,11 +354,8 @@ private void move(Entity e,int x, int y) {//work in progress
 					terrainEntities[r][c]=spawn("ground",(r+dx)*blockSize,(c+dy)*blockSize);
 					
 				}
-			}
-<<<<<<< HEAD
-			System.out.println();
 		}
-=======
+
 
 
 			
@@ -381,7 +366,7 @@ private void move(Entity e,int x, int y) {//work in progress
 	
 
 		
->>>>>>> 49cc3c900cae8270a75a93c630fdb5f4f8304351
+
 		
 		
 
