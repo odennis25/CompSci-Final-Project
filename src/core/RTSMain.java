@@ -281,7 +281,7 @@ private void move(Entity e,int x, int y) {//work in progress
 			//use both the aStar method and then call printPath to get the array of id's
 		
 			
-		System.out.println("pp");
+			
 			
 		}
 	
