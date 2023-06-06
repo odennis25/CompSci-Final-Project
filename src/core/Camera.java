@@ -44,11 +44,11 @@ public class Camera {
 		
 		
 		
-		public void setDX(double num) {
+		public void setDX(int num) {
 			dX=num;
 		}
 		
-		public void setDY(double num) {
+		public void setDY(int num) {
 			dY=num;
 		}
 		

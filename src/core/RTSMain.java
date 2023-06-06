@@ -55,6 +55,8 @@ public class RTSMain extends GameApplication
 		
 	private int mouseX;
 	private int mouseY;
+	private int m1;
+	private int m2;
 	private int frame=0;
 	private String buildID;
 	
@@ -138,7 +140,8 @@ public class RTSMain extends GameApplication
 	/**Initializes game world*/
 	protected void initGame() 
 	{
-		play("RTS1_Hollowrock.wav");
+		//play("RTS1_Hollowrock.wav");
+
 		getGameWorld().addEntityFactory(new TerrainFactory());
 		getGameWorld().addEntityFactory(new UnitFactory());
 		getGameWorld().spawn("infantry",700,600);
@@ -159,15 +162,17 @@ public class RTSMain extends GameApplication
 		frame++;
 		if(frame!=12) {
 			
-			mouseX=(int)(input.getMouseXWorld()/blockSize+camera.getx());
-			mouseY=(int)(input.getMouseYWorld()/blockSize+camera.gety());
+			mouseX=(int)(input.getMouseXWorld()/blockSize + camera.getx());
+			mouseY=(int)(input.getMouseYWorld()/blockSize + camera.gety());
+
+		
 			
 		}
 		else
 		{	
 			frame=0;
 			
-			
+			//checks if INFANTRY can see eachother. NOT DONE YET
 			for(int i = 0;i<unitEntities.length;i++)
 				{
 					for(int j = 0;j<unitEntities[0].length;j++)
@@ -205,26 +210,19 @@ public class RTSMain extends GameApplication
 		
 	}
 	
-	/**moves units in array list selected to the x and y cord */
-	private void moveSelected(ArrayList<Entity> selected,int x, int y) {//work in progress
-		
+private void move(Entity e,int x, int y) {//work in progress
 		
 		int dx=0;
 		int dy=0;
-		for(int i=0; i<selected.size();i++) {
+		
+		int susx= (int) Math.round(e.getX()/(blockSize)+camera.getx()); 
+		int susy=(int)  Math.round(e.getY()/(blockSize)+camera.gety());
+		boolean moved=false;
 			
 			
-			
-			int susx= (int) Math.round(selected.get(i).getX()/(blockSize)+camera.getx()); 
-			int susy=(int)  Math.round(selected.get(i).getY()/(blockSize)+camera.gety());
-			boolean moved=false;
-			
-			
-			
-			
-			if(selected.get(i).getType()!=UnitType.NONE) 
+			if(e.getType()!=UnitType.NONE) 
 			{
-			
+				
 				
 				while(!moved) 
 				{//loops until the unit moves to a valid position
@@ -233,45 +231,60 @@ public class RTSMain extends GameApplication
 						break;
 					}
 			
-			
-			
-			
 				while(unitEntities[x+dx][y+dy].getType()!=UnitType.NONE) {//checks if the space is already occupied if so changes the dx and dy	
 					dx+=1;
 					}	
 		
-		
-			
-			
 				if(x+dx==21||y+dy==21||x+dx==-1||y+dy==-1) {//checks if out of bounds
 					break;
 					}
+				
+				
 				//moves the entity to the correct spot after all checks are made
-			
-			
-
-			
-			
-				//moves the entity to the correct spot after all checks are made
-				//use both the aStar method and then call printPath to get the array of id's
 				Entity temp2=unitEntities[y+dx][x+dy];
 				unitEntities[x+dx][y+dy] = unitEntities[susx][susy];
 				unitEntities[susx][susy]=temp2;
-				selected.get(i).setPosition((x-camera.getx()+dx)*blockSize,((y-camera.gety()+dy)*blockSize));
+				e.setPosition((x-camera.getx()+dx)*blockSize,((y-camera.gety()+dy)*blockSize));
 				moved=true;
-			
+				
 				}
 			moved=false;
 			dx=0;
 			dy=0;
-		
+			
 		}
 			
 		
 	
 			}
-			
+
+	
+	
+	
+	/**moves units in array list selected to the x and y cord */
+	private void moveSelected(ArrayList<Entity> selected, int x, int y) {
 		
+		
+		
+		for(int i=0; i<selected.size(); i++) {
+			
+			AStar.aStar(nodeMap[(int) Math.round(selected.get(i).getX()/blockSize)][(int) Math.round(selected.get(i).getY()/blockSize)],nodeMap[x][y] );
+			
+			
+			ArrayList<Integer> ids = AStar.printPath(nodeMap[x][y]);
+			
+			
+			for(int j=1; j<ids.size();j+=2) {
+				move(selected.get(i),ids.get(j-1),ids.get(j));
+				System.out.println(ids.get(j-1)+" "+ids.get(j));
+				
+			
+			
+			}
+				
+		
+			}
+			
 	}
 	
 	/**iterates through the terrain entity's list moving each entity on the panel, moving the entire map*/
@@ -338,21 +351,37 @@ public class RTSMain extends GameApplication
 			for(int c = 0; c<mapSize; c++)
 			{
 				int tempInt = (int) (Math.random()*10+1);
+				
+				
+				
 				if(tempInt==1)
 				{
 					terrain[r][c] = false;
 					terrainEntities[r][c]=spawn("cliff",(r+dx)*blockSize,(c+dy)*blockSize);
-					System.out.print("{false} ");
+					
 				}
 				else
 				{
 					terrain[r][c] = true;
 					terrainEntities[r][c]=spawn("ground",(r+dx)*blockSize,(c+dy)*blockSize);
-					System.out.print("[true] ");
+					
 				}
 			}
+<<<<<<< HEAD
 			System.out.println();
 		}
+=======
+
+
+			
+
+			
+
+		}
+	
+
+		
+>>>>>>> 49cc3c900cae8270a75a93c630fdb5f4f8304351
 		
 		
 
@@ -389,7 +418,6 @@ public class RTSMain extends GameApplication
 				case FACTORY:
 					unitEntities[i][j]=spawn("factory",(i+dx)*blockSize,(j+dy)*blockSize);
 					break;
-				
 				default:
 					break;
         		
@@ -397,6 +425,8 @@ public class RTSMain extends GameApplication
         		}
         	}
 		}
+		//spawns the main base in the lower right hand quarter
+		unitEntities[(mapSize/4)*3][(mapSize/4)*3]=spawn("mainBase",((mapSize/4)*3+dx)*blockSize,((mapSize/4)*3+dy)*blockSize);
 	}
 	
 
@@ -417,7 +447,10 @@ public void onLeftClick()
 {
 	if(buildID == "factory")
 	{
-		unitEntities[mouseX/blockSize][mouseY/blockSize]=spawn("factory",mouseX*blockSize,mouseY*blockSize);
+		unitEntities[(int)Math.round(mouseX+camera.getDX())][(int)Math.round(mouseY+camera.getDY())].removeFromWorld();
+				
+		unitEntities[(int)Math.round(mouseX+camera.getDX())][(int)Math.round(mouseY+camera.getDY())]=spawn("factory",(mouseX+camera.getDX())*blockSize,(mouseY+camera.getDY())*blockSize);
+
 		
 		buildID = "";
 	}
@@ -461,10 +494,12 @@ public void buttonMaker(String str)
 	System.out.println(buildID);
 }
 	
-	/**starts the game application*/ 
-	public static void main(String[] args)
+	
+/**starts the game application*/ 
+public static void main(String[] args)
 	{
 		
 		launch(args);
+		
 	}
 }
