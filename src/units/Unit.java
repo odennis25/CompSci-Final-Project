@@ -18,11 +18,6 @@ public class Unit extends Entity {
 		
 	}
 	
-	
-	
-	
-	
-	
 	public UnitType getUType() {
 		return type;
 	}

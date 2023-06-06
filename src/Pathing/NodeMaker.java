@@ -20,13 +20,13 @@ public class NodeMaker
 			{
 				
 				temp[i][j] = new Node(1,idCount,(RTSMain.getNMap().length*50)-(50*i),(RTSMain.getNMap().length*50)-(50*j));
-				System.out.print("[" + temp[i][j].getId() + "] ");
+				//System.out.print("[" + temp[i][j].getId() + "] ");
 				idCount++;
 			}
-			System.out.println();
+			//System.out.println();
 		}
 		
-		System.out.println(temp[10][12]);
+		//System.out.println(temp[10][12]);
 		
 		
 		
@@ -41,7 +41,7 @@ public class NodeMaker
 					temp[i][j].getId()%RTSMain.getNMap().length==0||
 					(temp[i][j].getId()-1)%RTSMain.getNMap().length==0)
 				{
-					System.out.print("{" + temp[i][j].getId() + "} ");
+					//System.out.print("{" + temp[i][j].getId() + "} ");
 					//checks if bottom left/right corner
 					if(temp[i][j].getId()==temp[RTSMain.getNMap().length-1][0].getId()||temp[i][j].getId()==temp[RTSMain.getNMap().length-1][RTSMain.getNMap().length-1].getId())
 					{
@@ -129,7 +129,7 @@ public class NodeMaker
 				else
 				{
 					//adds the edges to  non-border  nodes
-					System.out.print("[" + temp[i][j].getId() + "] ");
+					//System.out.print("[" + temp[i][j].getId() + "] ");
 					//up and bottom nodes
 					temp[i][j].addBranch(1, temp[i-1][j]);
 					temp[i][j].addBranch(1, temp[i+1][j]);
@@ -143,11 +143,12 @@ public class NodeMaker
 					temp[i][j].addBranch(1, temp[i-1][j-1]);
 				}
 			}
-			System.out.println();
+			//System.out.println();
 		}
 			
 		return temp;
 	}
+
 public static void main(String[] args)
 {
 	Node[][] temp = nodeMaker(RTSMain.getNMap());
@@ -159,6 +160,7 @@ public static void main(String[] args)
 		}
 		System.out.println();
 }
+
 
 
 }

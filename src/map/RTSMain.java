@@ -55,8 +55,6 @@ public class RTSMain extends GameApplication
 		
 	private int mouseX;
 	private int mouseY;
-	private int m1;
-	private int m2;
 	private int frame=0;
 	private String buildID;
 	
@@ -141,7 +139,6 @@ public class RTSMain extends GameApplication
 	protected void initGame() 
 	{
 		//play("RTS1_Hollowrock.wav");
-
 		getGameWorld().addEntityFactory(new TerrainFactory());
 		getGameWorld().addEntityFactory(new UnitFactory());
 		getGameWorld().spawn("infantry",700,600);
@@ -162,19 +159,15 @@ public class RTSMain extends GameApplication
 		frame++;
 		if(frame!=12) {
 			
-			mouseX=(int)(input.getMouseXWorld()/blockSize + camera.getx());
-			mouseY=(int)(input.getMouseYWorld()/blockSize + camera.gety());
-//			m1=(int)(input.getMouseXWorld()+camera.getx());
-//			m2=(int)(input.getMouseYWorld()+camera.gety());
-			//System.out.println(mouseX + " " + mouseY);
-		
+			mouseX=(int)(input.getMouseXWorld()/blockSize+camera.getx());
+			mouseY=(int)(input.getMouseYWorld()/blockSize+camera.gety());
 			
 		}
 		else
 		{	
 			frame=0;
 			
-			//checks if INFANTRY can see eachother. NOT DONE YET
+			
 			for(int i = 0;i<unitEntities.length;i++)
 				{
 					for(int j = 0;j<unitEntities[0].length;j++)
@@ -212,19 +205,26 @@ public class RTSMain extends GameApplication
 		
 	}
 	
-private void move(Entity e,int x, int y) {//work in progress
+	/**moves units in array list selected to the x and y cord */
+	private void moveSelected(ArrayList<Entity> selected,int x, int y) {//work in progress
+		
 		
 		int dx=0;
 		int dy=0;
-		
-		int susx= (int) Math.round(e.getX()/(blockSize)+camera.getx()); 
-		int susy=(int)  Math.round(e.getY()/(blockSize)+camera.gety());
-		boolean moved=false;
+		for(int i=0; i<selected.size();i++) {
 			
 			
-			if(e.getType()!=UnitType.NONE) 
+			
+			int susx= (int) Math.round(selected.get(i).getX()/(blockSize)+camera.getx()); 
+			int susy=(int)  Math.round(selected.get(i).getY()/(blockSize)+camera.gety());
+			boolean moved=false;
+			
+			
+			
+			
+			if(selected.get(i).getType()!=UnitType.NONE) 
 			{
-				
+			
 				
 				while(!moved) 
 				{//loops until the unit moves to a valid position
@@ -233,22 +233,33 @@ private void move(Entity e,int x, int y) {//work in progress
 						break;
 					}
 			
+			
+			
+			
 				while(unitEntities[x+dx][y+dy].getType()!=UnitType.NONE) {//checks if the space is already occupied if so changes the dx and dy	
 					dx+=1;
 					}	
 		
+		
+			
+			
 				if(x+dx==21||y+dy==21||x+dx==-1||y+dy==-1) {//checks if out of bounds
 					break;
 					}
-				
+				//moves the entity to the correct spot after all checks are made
+			
+			
+
+			
 			
 				//moves the entity to the correct spot after all checks are made
+				//use both the aStar method and then call printPath to get the array of id's
 				Entity temp2=unitEntities[y+dx][x+dy];
 				unitEntities[x+dx][y+dy] = unitEntities[susx][susy];
 				unitEntities[susx][susy]=temp2;
-				e.setPosition((x-camera.getx()+dx)*blockSize,((y-camera.gety()+dy)*blockSize));
+				selected.get(i).setPosition((x-camera.getx()+dx)*blockSize,((y-camera.gety()+dy)*blockSize));
 				moved=true;
-				
+			
 				}
 			moved=false;
 			dx=0;
@@ -259,38 +270,9 @@ private void move(Entity e,int x, int y) {//work in progress
 		
 	
 			}
-
-	
-	
-	
-	/**moves units in array list selected to the x and y cord */
-	private void moveSelected(ArrayList<Entity> selected, int x, int y) {
+			
 		
-		
-		
-		for(int i=0; i<selected.size(); i++) {
-			
-			AStar.aStar(nodeMap[(int) Math.round(selected.get(i).getX()/blockSize)][(int) Math.round(selected.get(i).getY()/blockSize)],nodeMap[x][y] );
-			ArrayList<Integer> ids = AStar.printPath(nodeMap[x][y]);
-			
-			
-			for(int j=1; j<ids.size();j+=2) {
-				move(selected.get(i),ids.get(j-1),ids.get(j));
-				System.out.println(ids.get(j-1)+" "+ids.get(j));
-			
-			
-			
-			}
-				
-				
-			}
-			
-			//use both the aStar method and then call printPath to get the array of id's
-		
-			
-		System.out.println("pp");
-			
-		}
+	}
 	
 	/**iterates through the terrain entity's list moving each entity on the panel, moving the entire map*/
 	private void moveTerrainMap(double dx, double dy) 
@@ -350,32 +332,16 @@ private void move(Entity e,int x, int y) {//work in progress
 				{
 					terrain[r][c] = false;
 					terrainEntities[r][c]=spawn("cliff",(r+dx)*blockSize,(c+dy)*blockSize);
-					
+					System.out.print("{false} ");
 				}
 				else
 				{
 					terrain[r][c] = true;
 					terrainEntities[r][c]=spawn("ground",(r+dx)*blockSize,(c+dy)*blockSize);
-					
+					System.out.print("[true] ");
 				}
 			}
-<<<<<<< HEAD
-
-			System.out.println();
-		}
-		//spawns player's main base
-		for(int  r = 0; r<mapSize; r++)
-		{
-			for(int c = 0; c<mapSize; c++)
-			{
-				int row = (int)(Math.random()*mapSize);
-				int column = (int)(Math.random()*mapSize);
-				
-			}
 			System.out.println();	
-=======
-			
->>>>>>> 6c73b1d716adc24e15074399964cd2466eddbd01
 			
 
 		}
@@ -447,61 +413,7 @@ public void onLeftClick()
 {
 	if(buildID == "factory")
 	{
-		unitEntities[mouseX][mouseY]=spawn("factory",(mouseX)*blockSize,(mouseY)*blockSize);
-//		if(m1 < 100)
-//		{
-//			int m11 = m1;
-//			if(m11 < 50)
-//			{
-//				m1 = m1 - m11;
-//			}
-//			else
-//				m1 = m1 +(50-m11);
-//			System.out.println(m1);
-//		}
-//		if(m1 < 1000 & m1 > 99)
-//		{
-//			int m11 = m1 % 100;
-//			if(m11 < 50)
-//			{
-//				m1 = m1 - m11;
-//			}
-//			else
-//				m1 = m1 +(50-m11);
-//			System.out.println(m1);
-//			
-//		}		
-//		if(m2 < 100)
-//		{
-//			int m22 = m2;
-//			if(m22 < 50)
-//			{
-//				m2 = m2 - m22;
-//			}
-//			else
-//				m2 = m2 +(50-m22);
-//			System.out.println(m2);
-//		}
-//		if(m2 < 1000 & m2 > 99)
-//		{
-//			int m22 = m2 % 100;
-//			if(m22 < 50)
-//			{
-//				m2 = m2 - m22;
-//			}
-//			else
-//				m2 = m2 +(50-m22);
-//			System.out.println(m2);
-//			
-//		}		
-	//}
-		
-		
-		
-		
-		
-		
-		
+		unitEntities[mouseX/blockSize][mouseY/blockSize]=spawn("factory",mouseX*blockSize,mouseY*blockSize);
 		
 		buildID = "";
 	}
@@ -545,9 +457,8 @@ public void buttonMaker(String str)
 	System.out.println(buildID);
 }
 	
-	
-/**starts the game application*/ 
-public static void main(String[] args)
+	/**starts the game application*/ 
+	public static void main(String[] args)
 	{
 		
 		launch(args);
