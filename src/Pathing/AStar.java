@@ -96,7 +96,12 @@ public class AStar //WHEN YOU DO PATHING CALL BOTH ASTAR AND PRINT PATH TO RECIE
 			//row num
 			coordsList.add(((n.getId()-(n.getId()%RTSMain.getMapSize()))/RTSMain.getMapSize()));
 			n=n.parent;
+			
+			System.out.println("sup");
 		}
+		
+		
+		
 		//column num
 		coordsList.add(n.getId()%RTSMain.getMapSize()-1);
 		//row num

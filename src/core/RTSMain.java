@@ -164,9 +164,7 @@ public class RTSMain extends GameApplication
 			
 			mouseX=(int)(input.getMouseXWorld()/blockSize + camera.getx());
 			mouseY=(int)(input.getMouseYWorld()/blockSize + camera.gety());
-//			m1=(int)(input.getMouseXWorld()+camera.getx());
-//			m2=(int)(input.getMouseYWorld()+camera.gety());
-			//System.out.println(mouseX + " " + mouseY);
+
 		
 			
 		}
@@ -241,7 +239,7 @@ private void move(Entity e,int x, int y) {//work in progress
 					break;
 					}
 				
-			
+				
 				//moves the entity to the correct spot after all checks are made
 				Entity temp2=unitEntities[y+dx][x+dy];
 				unitEntities[x+dx][y+dy] = unitEntities[susx][susy];
@@ -253,7 +251,7 @@ private void move(Entity e,int x, int y) {//work in progress
 			moved=false;
 			dx=0;
 			dy=0;
-		
+			
 		}
 			
 		
@@ -271,26 +269,23 @@ private void move(Entity e,int x, int y) {//work in progress
 		for(int i=0; i<selected.size(); i++) {
 			
 			AStar.aStar(nodeMap[(int) Math.round(selected.get(i).getX()/blockSize)][(int) Math.round(selected.get(i).getY()/blockSize)],nodeMap[x][y] );
+			
+			
 			ArrayList<Integer> ids = AStar.printPath(nodeMap[x][y]);
 			
 			
 			for(int j=1; j<ids.size();j+=2) {
 				move(selected.get(i),ids.get(j-1),ids.get(j));
 				System.out.println(ids.get(j-1)+" "+ids.get(j));
-			
+				
 			
 			
 			}
 				
-				
-			}
-			
-			//use both the aStar method and then call printPath to get the array of id's
 		
+			}
 			
-			
-			
-		}
+	}
 	
 	/**iterates through the terrain entity's list moving each entity on the panel, moving the entire map*/
 	private void moveTerrainMap(double dx, double dy) 
@@ -359,23 +354,10 @@ private void move(Entity e,int x, int y) {//work in progress
 					
 				}
 			}
-<<<<<<< HEAD
 
-			System.out.println();
-		}
-		//spawns player's main base
-		for(int  r = 0; r<mapSize; r++)
-		{
-			for(int c = 0; c<mapSize; c++)
-			{
-				int row = (int)(Math.random()*mapSize);
-				int column = (int)(Math.random()*mapSize);
-				
-			}
-			System.out.println();	
-=======
+
 			
->>>>>>> 6c73b1d716adc24e15074399964cd2466eddbd01
+
 			
 
 		}
@@ -447,61 +429,10 @@ public void onLeftClick()
 {
 	if(buildID == "factory")
 	{
-		unitEntities[mouseX][mouseY]=spawn("factory",(mouseX)*blockSize,(mouseY)*blockSize);
-//		if(m1 < 100)
-//		{
-//			int m11 = m1;
-//			if(m11 < 50)
-//			{
-//				m1 = m1 - m11;
-//			}
-//			else
-//				m1 = m1 +(50-m11);
-//			System.out.println(m1);
-//		}
-//		if(m1 < 1000 & m1 > 99)
-//		{
-//			int m11 = m1 % 100;
-//			if(m11 < 50)
-//			{
-//				m1 = m1 - m11;
-//			}
-//			else
-//				m1 = m1 +(50-m11);
-//			System.out.println(m1);
-//			
-//		}		
-//		if(m2 < 100)
-//		{
-//			int m22 = m2;
-//			if(m22 < 50)
-//			{
-//				m2 = m2 - m22;
-//			}
-//			else
-//				m2 = m2 +(50-m22);
-//			System.out.println(m2);
-//		}
-//		if(m2 < 1000 & m2 > 99)
-//		{
-//			int m22 = m2 % 100;
-//			if(m22 < 50)
-//			{
-//				m2 = m2 - m22;
-//			}
-//			else
-//				m2 = m2 +(50-m22);
-//			System.out.println(m2);
-//			
-//		}		
-	//}
-		
-		
-		
-		
-		
-		
-		
+		unitEntities[(int)Math.round(mouseX+camera.getDX())][(int)Math.round(mouseY+camera.getDY())].removeFromWorld();
+				
+		unitEntities[(int)Math.round(mouseX+camera.getDX())][(int)Math.round(mouseY+camera.getDY())]=spawn("factory",(mouseX+camera.getDX())*blockSize,(mouseY+camera.getDY())*blockSize);
+
 		
 		buildID = "";
 	}
