@@ -7,42 +7,48 @@ import com.almasb.fxgl.entity.Entity;
 
 import core.RTSMain;
 
-public class AStar //WHEN YOU DO PATHING CALL BOTH ASTAR AND PRINT PATH TO RECIEVE THE ARRAY OF NODE IDS
+public class AStar 
 {
+	private static ArrayList<Integer> coordsList = new ArrayList<>();
+	private static ArrayList<Node> closed = new ArrayList<>();//list of closed/checked nodes
+	private static ArrayList<Node> open = new ArrayList<>();//list of open/to be checked node
+//	private static Node target = new Node();
+//	private static Node start =  new Node();
 	//the path-finding math that i'm not entirely sure how it works
-	public static Node aStar(Node start, Node target)
-	{
-		ArrayList<Node> closed = new ArrayList<>();//list of closed/checked nodes
-		ArrayList<Node> open = new ArrayList<>();//list of open/to be checked node
+	public static Node aStar(Node newStart, Node newTarget)
+	{		
+		
+		System.out.println(newStart + " " + newTarget);
+
 		
 		Node[][] tempNMap = RTSMain.getNMap();
 		
-		start.f = start.g + start.calcHeur(target);
-		open.add(start);
+		newStart.f = newStart.g + newStart.calcHeur(newTarget);
+		open.add(newStart);
 		
+		
+
 		//reserved for checking for buildings/tiles you cant cross
 		Boolean[][] tempMap = RTSMain.getTerrainMap();
 		
-		for(int i = 0; i<RTSMain.getMapSize(); i++)
-		{
-			for(int j = 0; j<RTSMain.getMapSize(); j++)
-			{
-				if(!tempMap[i][j])
-				{
-					closed.add(tempNMap[i][j]);
-				}
-			}
-		}
-		
-		
-		
-		
-		
+//		for(int i = 0; i<RTSMain.getMapSize(); i++)
+//		{
+//			for(int j = 0; j<RTSMain.getMapSize(); j++)
+//			{
+//				if(!tempMap[i][j])
+//				{
+//					closed.add(tempNMap[i][j]);
+//				}
+//			}
+//		}
+
 		while(!open.isEmpty())
 		{
 			Node n = open.get(0);
-			if(n == target)
+			if(n == newTarget)
+			{
 				return n;
+			}
 			
 			for(Node.Edge edge:n.neighbors)
 			{
@@ -53,7 +59,7 @@ public class AStar //WHEN YOU DO PATHING CALL BOTH ASTAR AND PRINT PATH TO RECIE
 				{
 					m.parent = n;
 					m.g = totalCost;
-					m.f = m.g + m.calcHeur(target);
+					m.f = m.g + m.calcHeur(newTarget);
 					open.add(m);
 				}
 				else
@@ -62,7 +68,7 @@ public class AStar //WHEN YOU DO PATHING CALL BOTH ASTAR AND PRINT PATH TO RECIE
 					{
 						m.parent = n;
 						m.g = totalCost;
-						m.f = m.g + m.calcHeur(target);
+						m.f = m.g + m.calcHeur(newTarget);
 						
 						if(closed.contains(m))
 						{
@@ -75,26 +81,33 @@ public class AStar //WHEN YOU DO PATHING CALL BOTH ASTAR AND PRINT PATH TO RECIE
 			open.remove(n);
 			closed.add(n);
 		}
-		
+		open.clear();
+		closed.clear();
 		return null;
 	}
 	
 	//prints the path AStar chooses
-	public static ArrayList<Integer> printPath(Node target)
+	
+	public static ArrayList<Integer> printPath(Node newStart,Node newTarget)
 	{
-		Node n = target;
+		aStar(newStart, newTarget);
+		System.out.println(newStart + " " + newTarget);
+		coordsList = new ArrayList<Integer>();
+		
+		Node n = newTarget;
 		
 		if(n==null)
 			return null;
 		
-		ArrayList<Integer> coordsList = new ArrayList<>();
-		
 		while(n.parent != null)
 		{
 			//column num
-			coordsList.add(n.getId()%RTSMain.getMapSize()-1);
+			if(n.getColumn()>0)
+				coordsList.add(n.getColumn());
+			else
+				coordsList.add(0);
 			//row num
-			coordsList.add(((n.getId()-(n.getId()%RTSMain.getMapSize()))/RTSMain.getMapSize()));
+			coordsList.add(n.getRow());
 			n=n.parent;
 			
 			System.out.println("sup");
@@ -103,23 +116,34 @@ public class AStar //WHEN YOU DO PATHING CALL BOTH ASTAR AND PRINT PATH TO RECIE
 		
 		
 		//column num
-		coordsList.add(n.getId()%RTSMain.getMapSize()-1);
+		if(n.getId()%RTSMain.getMapSize()-1>0)
+			coordsList.add(n.getColumn());
+		else
+			coordsList.add(0);
 		//row num
-		coordsList.add(((n.getId()-(n.getId()%RTSMain.getMapSize()))/RTSMain.getMapSize()));
+		coordsList.add(n.getRow());
 		
 		Collections.reverse(coordsList);
-		System.out.println(coordsList);
 		
 		return coordsList;
-		
 	}
+//	public static void resetTargets()
+//	{
+//		target = null;
+//		start = null;
+//	}
 public static void main(String[] args)
 {
 	Node[][] nodeList = NodeMaker.nodeMaker(new Node[21][21]);
-	aStar(nodeList[2][3],nodeList[7][8]);
-	ArrayList<Integer> intList = printPath(nodeList[7][8]);
-	System.out.println(intList);
 	
+	ArrayList<Integer> intList = printPath(nodeList[18][19],nodeList[7][8]);
+	System.out.println(intList);
+
+	ArrayList<Integer> intList2 = printPath(nodeList[10][12],nodeList[4][9]);
+	System.out.println(intList2);
+	
+	ArrayList<Integer> intList3 = printPath(nodeList[4][9],nodeList[10][15]);
+	System.out.println(intList3);
 }
 
 }

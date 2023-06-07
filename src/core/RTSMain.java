@@ -101,7 +101,7 @@ public class RTSMain extends GameApplication
 		onKey(KeyCode.W, () -> camera.moveUp());
         onKey(KeyCode.S, () -> camera.moveDown());
         
-        onKey(KeyCode.TAB,()-> selected.clear());
+        onKey(KeyCode.Z,()-> selected.clear());
       
        
         
@@ -109,7 +109,7 @@ public class RTSMain extends GameApplication
 
         onBtnDown(MouseButton.SECONDARY,() -> moveSelected(selected,mouseX, mouseY));
         onKeyDown(KeyCode.H,() -> System.out.println(unitEntities[mouseX][mouseY]));
-        
+        onKeyDown(KeyCode.X,() -> System.out.println(selected));
         
         
 	}
@@ -271,10 +271,10 @@ private void move(Entity e,int x, int y) {//work in progress
 		
 		for(int i=0; i<selected.size(); i++) {
 			
-			AStar.aStar(nodeMap[(int) Math.round(selected.get(i).getX()/blockSize)][(int) Math.round(selected.get(i).getY()/blockSize)],nodeMap[x][y] );
 			
 			
-			ArrayList<Integer> ids = AStar.printPath(nodeMap[x][y]);
+			
+			ArrayList<Integer> ids = AStar.printPath(nodeMap[(int) Math.round(selected.get(i).getX()/blockSize)][(int) Math.round(selected.get(i).getY()/blockSize)],nodeMap[x][y]);
 			
 			
 			for(int j=1; j<ids.size();j+=2) {
@@ -334,6 +334,7 @@ private void move(Entity e,int x, int y) {//work in progress
 	/**iterates through the terrain Map and spawns entity's with the terrains texture*/
 	private void renderTerrain(int dx, int dy) 
 	{
+
 		//makes the true/false map list and renders the map with mountains and grass
 		for(int r = 0; r<mapSize; r++)
 		{
@@ -355,7 +356,8 @@ private void move(Entity e,int x, int y) {//work in progress
 					terrainEntities[r][c]=spawn("ground",(r+dx)*blockSize,(c+dy)*blockSize);
 					
 				}
-			}
+		}
+
 
 
 			
@@ -366,6 +368,7 @@ private void move(Entity e,int x, int y) {//work in progress
 	
 
 		
+
 		
 		
 

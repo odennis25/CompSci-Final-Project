@@ -2,6 +2,8 @@ package Pathing;
 
 import java.util.ArrayList;
 
+import core.RTSMain;
+
 public class Node implements Comparable<Node>
 {
 	//x+y coords for each node
@@ -89,9 +91,19 @@ public class Node implements Comparable<Node>
 	{
 		return id;
 	}
+	public int getRow()
+	{
+		return ((this.getId()-(this.getId()%RTSMain.getMapSize()))/RTSMain.getMapSize());
+	}
+	public int getColumn()
+	{
+		return (this.getId()%RTSMain.getMapSize()-1);
+	}
+	
 	
 	public String toString()
 	{
-		return "" + x + " " + y + " " + id + " " + h; 
+		String temp = " " + ((this.getId()-(this.getId()%RTSMain.getMapSize()))/RTSMain.getMapSize()) + " " + (this.getId()%RTSMain.getMapSize()-1);
+		return id + " " + temp; 
 	}
 }
