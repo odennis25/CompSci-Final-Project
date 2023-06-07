@@ -55,9 +55,10 @@ public class RTSMain extends GameApplication
 		
 	private int mouseX;
 	private int mouseY;
-	private int m1;
-	private int m2;
+	private int mouseX1;
+	private int mouseY1;
 	private int frame=0;
+	private int count;
 	private String buildID;
 	
 	private static Node[][] nodeMap = new Node[mapSize][mapSize];
@@ -95,7 +96,7 @@ public class RTSMain extends GameApplication
 	/**Initializes inputs*/
 	protected void initInput() {
 		
-		onKey(KeyCode.A, () -> camera.moveLeft());
+		onKey(KeyCode.A, () -> moveLeft());
 		onKey(KeyCode.D, () -> camera.moveRight());
 		onKey(KeyCode.W, () -> camera.moveUp());
         onKey(KeyCode.S, () -> camera.moveDown());
@@ -164,6 +165,8 @@ public class RTSMain extends GameApplication
 			
 			mouseX=(int)(input.getMouseXWorld()/blockSize + camera.getx());
 			mouseY=(int)(input.getMouseYWorld()/blockSize + camera.gety());
+			mouseX1=(int)(input.getMouseXWorld()/blockSize);
+			mouseY1=(int)(input.getMouseYWorld()/blockSize);
 
 		
 			
@@ -290,7 +293,6 @@ private void move(Entity e,int x, int y) {//work in progress
 	/**iterates through the terrain entity's list moving each entity on the panel, moving the entire map*/
 	private void moveTerrainMap(double dx, double dy) 
 	{
-		
 		
 		for(int i=0; i<terrainEntities.length;i++) {
 			
@@ -431,8 +433,8 @@ public void onLeftClick()
 	{
 		unitEntities[(int)Math.round(mouseX+camera.getDX())][(int)Math.round(mouseY+camera.getDY())].removeFromWorld();
 				
-		unitEntities[(int)Math.round(mouseX+camera.getDX())][(int)Math.round(mouseY+camera.getDY())]=spawn("factory",(mouseX+camera.getDX())*blockSize,(mouseY+camera.getDY())*blockSize);
-
+		//unitEntities[(int)Math.round(mouseX+camera.getDX())][(int)Math.round(mouseY+camera.getDY())]=spawn("factory",(mouseX+camera.getDX())*blockSize,(mouseY+camera.getDY())*blockSize);
+		unitEntities[(int)Math.round(mouseX+camera.getDX())][(int)Math.round(mouseY+camera.getDY())]=spawn("factory",(mouseX1)*blockSize,(mouseY1)*blockSize);
 		
 		buildID = "";
 	}
@@ -474,6 +476,18 @@ public void buttonMaker(String str)
 	}
 	selected.clear();
 	System.out.println(buildID);
+}
+public void moveLeft()
+{
+	if(count != 50)
+		count ++;
+	else
+	{
+		count = 0;
+	}
+	camera.moveLeft();
+	System.out.println(count);
+	
 }
 	
 	
