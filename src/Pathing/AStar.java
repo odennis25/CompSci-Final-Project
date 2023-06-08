@@ -66,10 +66,10 @@ public class AStar
         ArrayList<Node> path = findPath(startNode, goalNode);
         if (path != null) 
         {
-            System.out.println("Path found:");
+          
             for (Node node : path) 
             {
-                System.out.println(node);
+                
             }
         } 
         else 
@@ -85,7 +85,7 @@ public class AStar
         node.g = Double.MAX_VALUE;
     }
     //reconstructs the path made by A*
-    private static ArrayList<Node> reconstructPath(Node node) 
+    public static ArrayList<Node> reconstructPath(Node node) 
     {
         ArrayList<Node> path = new ArrayList<>();
 

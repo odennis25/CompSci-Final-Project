@@ -5,6 +5,7 @@ import static com.almasb.fxgl.dsl.FXGL.getGameWorld;
 import static com.almasb.fxgl.dsl.FXGL.spawn;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
@@ -51,7 +52,7 @@ public class RTSMain extends GameApplication
 	private static Boolean[][] terrain = new Boolean[mapSize][mapSize];
 	private boolean movetime=false;
 	private Camera camera;
-	private ArrayList<ArrayList<Integer>> cords= new ArrayList<ArrayList<Integer>>();
+	private ArrayList<ArrayList<Node>> cords= new ArrayList<ArrayList<Node>>();
 	private ArrayList<Entity> selected=new ArrayList<Entity>() ;
 		
 	private int mouseX;
@@ -158,11 +159,14 @@ public class RTSMain extends GameApplication
 
 	
 	/**runs at speed tpf*/
+	
+	
+	
 	protected void onUpdate(double tpf) {
 		Input input = getInput();
 		frame++;
 		if(frame%12!=0) {
-			movetime=false;
+			
 			mouseX=(int)(input.getMouseXWorld()/blockSize + camera.getx());
 			mouseY=(int)(input.getMouseYWorld()/blockSize + camera.gety());
 
@@ -172,6 +176,11 @@ public class RTSMain extends GameApplication
 		else
 		{	
 			
+			if(frame%20==0) 
+			{
+				
+				moveHelper();
+			}
 			
 			
 			//checks if INFANTRY can see eachother. NOT DONE YET
@@ -200,10 +209,6 @@ public class RTSMain extends GameApplication
 				}
 		}
 
-		
-		
-		
-		
 		
 		moveMap(camera.getDX(),camera.getDY());//moves the camera
 			
@@ -253,7 +258,6 @@ private void move(Entity e,int x, int y) {//work in progress
 				unitEntities[x+dx][y+dy] = unitEntities[currentx][currenty];
 				unitEntities[currentx][currenty]=temp2;
 				e.setPosition((int)Math.round(x-camera.getx()+dx)*blockSize,((int)Math.round(y-camera.gety()+dy)*blockSize));
-				
 				System.out.println((int)Math.round(x-camera.getx()+dx)+","+ (int)Math.round(y-camera.gety()+dy));
 				
 				
@@ -271,6 +275,32 @@ private void move(Entity e,int x, int y) {//work in progress
 
 			}
 
+private void moveHelper() {
+	
+	
+	if(!cords.isEmpty()) {
+		if(!cords.get(0).isEmpty()) {		
+	for(int k=0; k<selected.size();k++) {
+				
+			
+				
+				move(selected.get(k),cords.get(0).get(0).getRow(),cords.get(0).get(0).getColumn());
+				cords.get(0).remove(0);
+				
+				}
+				}
+			
+			
+			
+	if(cords.get(0).isEmpty()) {
+		cords.remove(0);
+	}
+}
+		}
+		
+		
+	
+	
 
 
 	
@@ -282,14 +312,10 @@ private void moveSelected(int x, int y) {
 
 		 AStar.printPath(nodeMap[(int) Math.round(selected.get(i).getX()/blockSize)][(int) Math.round(selected.get(i).getY()/blockSize)],nodeMap[x][y]);
 		 ArrayList<Node> ids = AStar.reconstructPath(nodeMap[x][y]);
-	
-		
-		for(int j=0; j<ids.size();j++) {
-		
-			move(selected.get(i),ids.get(j).getRow(),ids.get(j).getColumn());
-			
-			
-		}
+	System.out.println("sus");
+		 cords.add(ids);
+		 
+	movetime=true;
 			
 	
 		}
@@ -317,12 +343,7 @@ private void moveSelected(int x, int y) {
 	}
 	
 	/**iterates through the unit entity's list moving each entity on the panel, moving the entire map*/
-	
 
-	
-	
-	
-	
 	/**iterates through the terrain Map and spawns entity's with the terrains texture*/
 	private void renderTerrain(int dx, int dy) 
 	{
