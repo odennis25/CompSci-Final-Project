@@ -7,14 +7,14 @@ import core.RTSMain;
 public class Node implements Comparable<Node>
 {
 	//x+y coords for each node
-	private int x;
-	private int y;
+	public int x;
+	public int y;
 	
 	//id for each node
 	private int id;
 	
 	//parent
-	Node parent = null;
+	public Node parent = null;
 	
 	//list of nodes bordering current node
 	public ArrayList<Edge> neighbors;
