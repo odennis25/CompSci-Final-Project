@@ -6,6 +6,7 @@ import java.util.PriorityQueue;
 
 public class AStar 
 {
+
     public static ArrayList<Node> findPath(Node startNode, Node goalNode) 
     {
         PriorityQueue<Node> openSet = new PriorityQueue<>();
