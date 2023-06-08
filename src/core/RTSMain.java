@@ -26,6 +26,7 @@ import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.shape.Rectangle;
+import javafx.util.Duration;
 import map.TerrainType;
 import map.UnitMap;
 import units.Unit;
@@ -48,9 +49,9 @@ public class RTSMain extends GameApplication
 	private Entity[][] unitEntities= new Entity[mapSize][mapSize];
 	private static Entity[][] terrainEntities= new Entity[mapSize][mapSize];
 	private static Boolean[][] terrain = new Boolean[mapSize][mapSize];
-	
+	private boolean movetime=false;
 	private Camera camera;
-	
+	private ArrayList<ArrayList<Integer>> cords= new ArrayList<ArrayList<Integer>>();
 	private ArrayList<Entity> selected=new ArrayList<Entity>() ;
 		
 	private int mouseX;
@@ -95,18 +96,18 @@ public class RTSMain extends GameApplication
 	/**Initializes inputs*/
 	protected void initInput() {
 		
-		onKey(KeyCode.A, () -> camera.moveLeft());
-		onKey(KeyCode.D, () -> camera.moveRight());
-		onKey(KeyCode.W, () -> camera.moveUp());
-        onKey(KeyCode.S, () -> camera.moveDown());
-        
+//		onKey(KeyCode.A, () -> camera.moveLeft());
+//		onKey(KeyCode.D, () -> camera.moveRight());
+//		onKey(KeyCode.W, () -> camera.moveUp());
+//        onKey(KeyCode.S, () -> camera.moveDown());
+//        
         onKey(KeyCode.Z,()-> selected.clear());
       
        
         
         onBtnDown(MouseButton.PRIMARY,() -> onLeftClick());
 
-        onBtnDown(MouseButton.SECONDARY,() -> moveSelected(selected,mouseX, mouseY));
+        onBtnDown(MouseButton.SECONDARY,() -> moveSelected(mouseX, mouseY));
         onKeyDown(KeyCode.H,() -> System.out.println(unitEntities[mouseX][mouseY]));
         onKeyDown(KeyCode.X,() -> System.out.println(selected));
         
@@ -160,17 +161,19 @@ public class RTSMain extends GameApplication
 	protected void onUpdate(double tpf) {
 		Input input = getInput();
 		frame++;
-		if(frame!=12) {
-			
+		if(frame%12!=0) {
+			movetime=false;
 			mouseX=(int)(input.getMouseXWorld()/blockSize + camera.getx());
 			mouseY=(int)(input.getMouseYWorld()/blockSize + camera.gety());
 
-		
+		//System.out.println(mouseX+" "+ mouseY);
 			
 		}
 		else
 		{	
-			frame=0;
+			if (frame%25!=0) {
+				moveReal();
+			}
 			
 			//checks if INFANTRY can see eachother. NOT DONE YET
 //			for(int i = 0;i<unitEntities.length;i++)
@@ -200,10 +203,10 @@ public class RTSMain extends GameApplication
 		
 		
 		
-			moveTerrainMap(camera.getDX(),camera.getDY());//moves the camera
-			moveUnitMap(camera.getDX(),camera.getDY());//moves the camera
+			moveMap(camera.getDX(),camera.getDY());//moves the camera
+			
 			camera.setDX(0);//sets the change in  x to zero
-			camera.setDY(0);//sets the change in  x to zero
+			camera.setDY(0);//sets the change in  y to zero
 			
 			
 			
@@ -220,8 +223,8 @@ private void move(Entity e,int x, int y) {//work in progress
 		boolean moved=false;
 			
 			
-			if(e.getType()!=UnitType.NONE) 
-			{
+			//if(e.getType()!=UnitType.NONE) 
+			//{
 				
 				
 				while(!moved) 
@@ -229,9 +232,9 @@ private void move(Entity e,int x, int y) {//work in progress
 				
 					
 			
-				//while(unitEntities[x+dx][y+dy].getType()!=UnitType.NONE) {//checks if the space is already occupied if so changes the dx and dy	
-					//dx+=1;
-					//}	
+			while(unitEntities[x+dx][y+dy].getType()!=UnitType.NONE) {//checks if the space is already occupied if so changes the dx and dy	
+					dx+=1;
+					}	
 		
 				if(x+dx==21||y+dy==21||x+dx==-1||y+dy==-1) {//checks if out of bounds
 					System.out.println("error 2");
@@ -241,17 +244,15 @@ private void move(Entity e,int x, int y) {//work in progress
 				
 				//moves the entity to the correct spot after all checks are made
 				Entity temp2=unitEntities[y+dx][x+dy];
-				
-				
-				
 				unitEntities[x+dx][y+dy] = unitEntities[currentx][currenty];
-				
-				;
 				unitEntities[currentx][currenty]=temp2;
+				e.setPosition((int)Math.round(x-camera.getx()+dx)*blockSize,((int)Math.round(y-camera.gety()+dy)*blockSize));
 				
-				e.setPosition((x-camera.getx()+dx)*blockSize,((y-camera.gety()+dy)*blockSize));
+				System.out.println((int)Math.round(x-camera.getx()+dx)+","+ (int)Math.round(y-camera.gety()+dy));
 				
-				System.out.println((x-camera.getx()+dx)+" "+ (y-camera.gety()+dy) );
+				
+				
+				//System.out.println((int)Math.round(x-camera.getx()+dx)+" "+ (int)Math.round(y-camera.gety()+dy) );
 				moved=true;
 				
 				}
@@ -259,29 +260,32 @@ private void move(Entity e,int x, int y) {//work in progress
 			dx=0;
 			dy=0;
 			
-		}
-			
-		
-	
+		//}
+
 			}
 
+
+
+
+
+private void moveReal() {
 	
 	
+}
 	
 	/**moves units in array list selected to the x and y cord */
-	private void moveSelected(ArrayList<Entity> selected, int x, int y) {
-		
-		
+	private void moveSelected(int x, int y) {
+		cords.clear();
 		
 		for(int i=0; i<selected.size(); i++) {
-			
 			ArrayList<Integer> ids = AStar.printPath(nodeMap[(int) Math.round(selected.get(i).getX()/blockSize)][(int) Math.round(selected.get(i).getY()/blockSize)],nodeMap[x][y]);
+			
+			cords.add(ids);
+			
 			for(int j=ids.size()-2; j>0;j-=2) {
+			
 				move(selected.get(i),ids.get(j+1),ids.get(j));
-				//System.out.println(ids.get(j)+" "+ids.get(j-1));
-				
-			
-			
+				System.out.println(ids.get(j+1)+" "+ids.get(j));
 			}
 				
 		
@@ -290,42 +294,27 @@ private void move(Entity e,int x, int y) {//work in progress
 	}
 	
 	/**iterates through the terrain entity's list moving each entity on the panel, moving the entire map*/
-	private void moveTerrainMap(double dx, double dy) 
+	private void moveMap(double dx, double dy) 
 	{
 		
 		
 		for(int i=0; i<terrainEntities.length;i++) {
 			
-			for(int j=0; j<terrainEntities[i].length;j++)
+			for(int j=0; j<terrainEntities[i].length;j++) {
+				
 				terrainEntities[i][j].setPosition(
 						terrainEntities[i][j].getX() - (dx * blockSize),
-						terrainEntities[i][j].getY() - (dy * blockSize)
-					
-				);
-		
-		}
-  	
-		
+						terrainEntities[i][j].getY() - (dy * blockSize));
+				
+				unitEntities[i][j].setPosition(
+					unitEntities[i][j].getX() - (dx * blockSize),
+					unitEntities[i][j].getY() - (dy * blockSize));
+			}
+			}
 	}
 	
 	/**iterates through the unit entity's list moving each entity on the panel, moving the entire map*/
-	private void moveUnitMap(double dx, double dy) 
-	{
-		
-		
-		for(int i=0; i<unitEntities.length;i++) {
-			
-			for(int j=0; j<unitEntities[i].length;j++)
-				unitEntities[i][j].setPosition(
-						unitEntities[i][j].getX() - (dx * blockSize),
-						unitEntities[i][j].getY() - (dy * blockSize)
-					
-				);
-			
-		}
-  	
-		
-	}
+	
 
 	
 	
@@ -340,7 +329,7 @@ private void move(Entity e,int x, int y) {//work in progress
 		{
 			for(int c = 0; c<mapSize; c++)
 			{
-				int tempInt = (int) (Math.random()*10+1);
+				int tempInt = 0;//(int) (Math.random()*10+1);
 				
 				
 				

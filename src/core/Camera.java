@@ -21,26 +21,26 @@ public class Camera {
 		
 		public void moveUp() {
 			
-			dY -= 0.1;
-			y-=0.1;	}	
+			dY -= 1;
+			y-=1;	}	
 			
 		
 		public void moveDown() {
-			dY += 0.1;
-			y+=0.1;
+			dY += 1;
+			y+=1;
 		}
 		
 		public void moveLeft() {
 			
 			
-			dX -= 0.1;	
-			x-=0.1;}
+			dX -= 1;	
+			x-=1;}
 			
 		
 		public void moveRight() {
 			
-			dX += 0.1;	
-			x+=0.1;}
+			dX += 1;	
+			x+=1;}
 		
 		
 		
