@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
+import com.almasb.fxgl.dsl.components.HealthIntComponent;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.GameWorld;
 import com.almasb.fxgl.input.Input;
@@ -15,6 +16,7 @@ import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.physics.CollisionHandler;
 import com.almasb.fxgl.physics.box2d.collision.shapes.Shape;
 import com.almasb.fxgl.texture.Texture;
+import com.almasb.fxgl.time.TimerAction;
 
 import javafx.geometry.Point2D;
 
@@ -64,6 +66,8 @@ public class RTSMain extends GameApplication
 	private int count;
 	private Point2D point;
 	private String buildID;
+	private Entity currentEnemy = null;
+	
 	
 	private static Node[][] nodeMap = new Node[mapSize][mapSize];
 	
@@ -135,12 +139,36 @@ public class RTSMain extends GameApplication
 	    // makes button to build factory
 	    Button factorybtn = makeButtonForUI("factory");
 	    getGameScene().addUINode(factorybtn);
-	    
-	    
 
-	    
-	    
-	    
+	}
+	protected void initPhysics() {
+		//adds collision handler for infantry and enemy infantry types
+	    getPhysicsWorld().addCollisionHandler(new CollisionHandler(UnitType.INFANTRY, UnitType.ENEMYINFANTRY) {
+	       
+	    	
+	    	@Override
+	        protected void onCollision(Entity infantry, Entity enemyInfantry) {
+	        	
+	        		
+	        		
+	        		//TimerAction timerAction = getGameTimer().runAtInterval(() -> {
+	        		var hp= enemyInfantry.getComponent(HealthIntComponent.class);
+	        		hp.damage(1);
+	        		System.out.println("goober");
+	                if (hp.getValue() == 0) {
+	                    enemyInfantry.removeFromWorld();
+	                    
+	                    
+	                    
+	                    
+	                }
+	        	//}, Duration.seconds(1));
+	        	
+	        	
+	        	
+	        	
+	        }
+	    });
 	}
 	
  		
@@ -159,7 +187,7 @@ public class RTSMain extends GameApplication
 		renderTerrain(0,0);
 		renderUnits(0,0);   
         nodeMap = NodeMaker.nodeMaker(new Node[mapSize][mapSize]);
-
+        
 	}
 	int temp=1;
 	//runs at speed tpf
@@ -184,33 +212,6 @@ public class RTSMain extends GameApplication
 		{	
 			frame=0;
 			
-			//checks if INFANTRY can see eachother. NOT DONE YET
-			for(int i = 0;i<unitEntities.length;i++)
-				{
-					for(int j = 0;j<unitEntities[0].length;j++)
-					{
-
-						if(unitEntities[i][j].getType() == UnitType.ENEMYINFANTRY)
-
-						{
-							for(int a = 0;i<unitEntities.length;i++)
-							{
-								for(int b = 0;j<unitEntities[0].length;j++)
-								{
-									if(unitEntities[i][j].isColliding(unitEntities[a][b]))
-										{
-
-
-											Damage.dealDam(1,(Unit) unitEntities[i][j]);
-
-											Damage.dealDam(1,(Unit) unitEntities[a][b]);
-											System.out.println("goober");
-										}
-								}
-							}
-						}
-					}
-				}
 		}
 		
 		
