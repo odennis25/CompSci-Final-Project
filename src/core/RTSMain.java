@@ -53,9 +53,9 @@ public class RTSMain extends GameApplication
 	private Entity[][] unitEntities= new Entity[mapSize][mapSize];
 	private static Entity[][] terrainEntities= new Entity[mapSize][mapSize];
 	private static Boolean[][] terrain = new Boolean[mapSize][mapSize];
-	
+	private boolean movetime=false;
 	private Camera camera;
-	
+	private ArrayList<ArrayList<Node>> cords= new ArrayList<ArrayList<Node>>();
 	private ArrayList<Entity> selected=new ArrayList<Entity>() ;
 		
 	private int mouseX;
@@ -115,8 +115,12 @@ public class RTSMain extends GameApplication
         //left click runs onLeftClick method
         onBtnDown(MouseButton.PRIMARY,() -> onLeftClick());
 
-        onBtnDown(MouseButton.SECONDARY,() -> moveSelected(selected,mouseX, mouseY));
+
         
+        
+
+        onBtnDown(MouseButton.SECONDARY,() -> moveSelected(mouseX, mouseY));
+
         onKeyDown(KeyCode.H,() -> System.out.println(unitEntities[mouseX][mouseY]));
         onKeyDown(KeyCode.X,() -> System.out.println(selected));
         
@@ -197,58 +201,90 @@ public class RTSMain extends GameApplication
 	protected void onUpdate(double tpf) {
 		Input input = getInput();
 		frame++;
-		if(frame!=12) {
-			
+		if(frame%12!=0) {
+			movetime=false;
 			mouseX=(int)(input.getMouseXWorld()/blockSize + camera.getx());
 			mouseY=(int)(input.getMouseYWorld()/blockSize + camera.gety());
 			mouseX1=(int)(input.getMouseXWorld()/blockSize);
 			mouseY1=(int)(input.getMouseYWorld()/blockSize);
 			
 
-		
+		//System.out.println(mouseX+" "+ mouseY);
 			
 		}
 		else
 		{	
-			frame=0;
+			
+			
+			
+
+
+			//checks if INFANTRY can see eachother. NOT DONE YET
+
+			for(int i = 0;i<unitEntities.length;i++)
+				{
+					for(int j = 0;j<unitEntities[0].length;j++)
+					{
+						Unit[][] map = uMap.getUMap();
+						if(map[i][j].getUType() == UnitType.INFANTRY)
+						{
+							for(int a = 0;i<unitEntities.length;i++)
+							{
+								for(int b = 0;j<unitEntities[0].length;j++)
+								{
+									if(unitEntities[i][j].isColliding(unitEntities[a][b]))
+										{
+											Damage.dealDam(1,(Unit) unitEntities[i][j]);
+											Damage.dealDam(1,(Unit) unitEntities[a][b]);
+											System.out.println("goober");
+										}
+								}
+							}
+						}
+					}
+				}
+
+		}
+
+		
+		
+		
+		
+		
+		moveMap(camera.getDX(),camera.getDY());//moves the camera
+			
+			camera.setDX(0);//sets the change in  x to zero
+			camera.setDY(0);//sets the change in  y to zero
+			
+			
 			
 		}
-		
-		
-		
-		
-			moveTerrainMap(camera.getDX(),camera.getDY());//moves the camera
-			moveUnitMap(camera.getDX(),camera.getDY());//moves the camera
-			camera.setDX(0);//sets the change in  x to zero
-			camera.setDY(0);//sets the change in  x to zero
-			
-			
-			
-		
-	}
+	
 	
 private void move(Entity e,int x, int y) {//work in progress
 		
 		int dx=0;
 		int dy=0;
 		
-		int susx= (int) Math.round(e.getX()/(blockSize)+camera.getx()); 
-		int susy=(int)  Math.round(e.getY()/(blockSize)+camera.gety());
+		int currentx= (int) Math.round(e.getX()/(blockSize)+camera.getx()); 
+		int currenty=(int)  Math.round(e.getY()/(blockSize)+camera.gety());
 		boolean moved=false;
 			
 			
-			if(e.getType()!=UnitType.NONE) 
-			{
+			//if(e.getType()!=UnitType.NONE) 
+			//{
 				
 				
 				while(!moved) 
 				{//loops until the unit moves to a valid position
 				
-					if(unitEntities[x+dx][y+dy]==unitEntities[susx][susy]) {//checks if the unit has not moved
+					if(unitEntities[x+dx][y+dy]==unitEntities[currentx][currenty]) {//checks if the unit has not moved
 						break;
 					}
 			
+
 				while(unitEntities[x+dx][y+dy].getType()!=UnitType.NONE) {//checks if the space is already occupied if so changes the dx and dy	
+
 					dx+=1;
 					}	
 		
@@ -259,9 +295,17 @@ private void move(Entity e,int x, int y) {//work in progress
 				
 				//moves the entity to the correct spot after all checks are made
 				Entity temp2=unitEntities[y+dx][x+dy];
-				unitEntities[x+dx][y+dy] = unitEntities[susx][susy];
-				unitEntities[susx][susy]=temp2;
-				e.setPosition((x-camera.getx()+dx)*blockSize,((y-camera.gety()+dy)*blockSize));
+
+				unitEntities[x+dx][y+dy] = unitEntities[currentx][currenty];
+				unitEntities[currentx][currenty]=temp2;
+				e.setPosition((int)Math.round(x-camera.getx()+dx)*blockSize,((int)Math.round(y-camera.gety()+dy)*blockSize));
+				
+				System.out.println((int)Math.round(x-camera.getx()+dx)+","+ (int)Math.round(y-camera.gety()+dy));
+				
+				
+				
+				//System.out.println((int)Math.round(x-camera.getx()+dx)+" "+ (int)Math.round(y-camera.gety()+dy) );
+
 				moved=true;
 				
 				}
@@ -269,77 +313,53 @@ private void move(Entity e,int x, int y) {//work in progress
 			dx=0;
 			dy=0;
 			
-		}
-			
-		
-	
+		//}
+
 			}
 
-	
-	
+
+
 	
 	/**moves units in array list selected to the x and y cord */
-	private void moveSelected(ArrayList<Entity> selected, int x, int y) {
-		
-		
-		
-		for(int i=0; i<selected.size(); i++) {
-			
-			
-			
-			
-//			ArrayList<Integer> ids = AStar.printPath(nodeMap[(int) Math.round(selected.get(i).getX()/blockSize)][(int) Math.round(selected.get(i).getY()/blockSize)],nodeMap[x][y]);
-//			
-//			
-//			for(int j=1; j<ids.size();j+=2) {
-//				move(selected.get(i),ids.get(j-1),ids.get(j));
-//				System.out.println(ids.get(j-1)+" "+ids.get(j));
-				
-			
-			
-			}
-				
-		
-			}
-			
-	//}
+private void moveSelected(int x, int y) {
+
+
+    for(int i=0; i<selected.size(); i++) {
+
+         AStar.printPath(nodeMap[(int) Math.round(selected.get(i).getX()/blockSize)][(int) Math.round(selected.get(i).getY()/blockSize)],nodeMap[x][y]);
+         ArrayList<Node> ids = AStar.reconstructPath(nodeMap[x][y]);
+
+         cords.add(ids);
+
+    movetime=true;
+
+
+        }
+
+}
+
 	
 	/**iterates through the terrain entity's list moving each entity on the panel, moving the entire map*/
-	private void moveTerrainMap(double dx, double dy) 
+	private void moveMap(double dx, double dy) 
 	{
 		
 		for(int i=0; i<terrainEntities.length;i++) {
 			
-			for(int j=0; j<terrainEntities[i].length;j++)
+			for(int j=0; j<terrainEntities[i].length;j++) {
+				
 				terrainEntities[i][j].setPosition(
 						terrainEntities[i][j].getX() - (dx * blockSize),
-						terrainEntities[i][j].getY() - (dy * blockSize)
-					
-				);
-		
-		}
-  	
-		
+						terrainEntities[i][j].getY() - (dy * blockSize));
+				
+				unitEntities[i][j].setPosition(
+					unitEntities[i][j].getX() - (dx * blockSize),
+					unitEntities[i][j].getY() - (dy * blockSize));
+			}
+			}
 	}
 	
 	/**iterates through the unit entity's list moving each entity on the panel, moving the entire map*/
-	private void moveUnitMap(double dx, double dy) 
-	{
-		
-		
-		for(int i=0; i<unitEntities.length;i++) {
-			
-			for(int j=0; j<unitEntities[i].length;j++)
-				unitEntities[i][j].setPosition(
-						unitEntities[i][j].getX() - (dx * blockSize),
-						unitEntities[i][j].getY() - (dy * blockSize)
-					
-				);
-			
-		}
-  	
-		
-	}
+	
 
 	
 	
@@ -354,7 +374,7 @@ private void move(Entity e,int x, int y) {//work in progress
 		{
 			for(int c = 0; c<mapSize; c++)
 			{
-				int tempInt = (int) (Math.random()*10+1);
+				int tempInt = 0;//(int) (Math.random()*10+1);
 				
 				
 				
@@ -372,19 +392,9 @@ private void move(Entity e,int x, int y) {//work in progress
 				}
 		}
 
-
-
-			
-
 			
 
 		}
-	
-
-		
-
-		
-		
 
 	}
 
