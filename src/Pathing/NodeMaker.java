@@ -150,8 +150,9 @@ public class NodeMaker
 	}
 
 public static void main(String[] args)
-{}
 
+{
 
+}
 
 }
