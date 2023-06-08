@@ -34,7 +34,7 @@ public class UnitFactory implements EntityFactory{
 
 	            .type(UnitType.INFANTRY)
 	            .view(new Texture(image))
-	            .bbox(new HitBox(BoundingShape.box(200,200)))
+	            .bbox(new HitBox(BoundingShape.box(150,150)))
 	            .with(new CollidableComponent(true))
 	            .build();
 	}

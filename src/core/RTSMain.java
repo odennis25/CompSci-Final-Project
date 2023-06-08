@@ -215,42 +215,11 @@ public class RTSMain extends GameApplication
 		else
 		{	
 			
-			
-			
+			if(frame%20==0) 
+            {
 
-
-			//checks if INFANTRY can see eachother. NOT DONE YET
-
-			for(int i = 0;i<unitEntities.length;i++)
-				{
-					for(int j = 0;j<unitEntities[0].length;j++)
-					{
-						Unit[][] map = uMap.getUMap();
-						if(map[i][j].getUType() == UnitType.INFANTRY)
-						{
-							for(int a = 0;i<unitEntities.length;i++)
-							{
-								for(int b = 0;j<unitEntities[0].length;j++)
-								{
-									if(unitEntities[i][j].isColliding(unitEntities[a][b]))
-										{
-											Damage.dealDam(1,(Unit) unitEntities[i][j]);
-											Damage.dealDam(1,(Unit) unitEntities[a][b]);
-											System.out.println("goober");
-										}
-								}
-							}
-						}
-					}
-				}
-
-		}
-
-		
-		
-		
-		
-		
+                moveHelper();
+            }	
 		moveMap(camera.getDX(),camera.getDY());//moves the camera
 			
 			camera.setDX(0);//sets the change in  x to zero
@@ -259,6 +228,8 @@ public class RTSMain extends GameApplication
 			
 			
 		}
+	}
+	
 	
 	
 private void move(Entity e,int x, int y) {//work in progress
@@ -316,6 +287,28 @@ private void move(Entity e,int x, int y) {//work in progress
 		//}
 
 			}
+private void moveHelper() {
+
+
+    if(!cords.isEmpty()) {
+        if(!cords.get(0).isEmpty()) {
+    for(int k=0; k<selected.size();k++) {
+
+
+
+                move(selected.get(k),cords.get(0).get(0).getRow(),cords.get(0).get(0).getColumn());
+                cords.get(0).remove(0);
+
+                }
+                }
+
+
+
+    if(cords.get(0).isEmpty()) {
+        cords.remove(0);
+    }
+}
+        }
 
 
 
