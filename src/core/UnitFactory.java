@@ -2,6 +2,8 @@ package core;
 
 import static com.almasb.fxgl.dsl.FXGL.entityBuilder;
 
+import java.awt.Color;
+
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.EntityFactory;
 import com.almasb.fxgl.entity.SpawnData;
@@ -54,6 +56,7 @@ public class UnitFactory implements EntityFactory{
 	    return  entityBuilder(data)
 	            .type(UnitType.ENEMYINFANTRY)
 	            .view(new Texture(image))
+	            .bbox(new HitBox(BoundingShape.circle(150)))
 	            .build();
 	}
 	

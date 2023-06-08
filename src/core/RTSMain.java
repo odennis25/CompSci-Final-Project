@@ -28,6 +28,7 @@ import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.shape.Rectangle;
+import javafx.util.Duration;
 import map.TerrainType;
 import map.UnitMap;
 import units.Unit;
@@ -74,11 +75,11 @@ public class RTSMain extends GameApplication
 	public static Node[][] getNMap()
 	{
 		return nodeMap;
-	}
+	}//returns map size
 	public static int getMapSize()
 	{
 		return mapSize;
-	}
+	}//returns terrain map
 	public static Boolean[][] getTerrainMap()
 	{
 		return terrain;
@@ -98,7 +99,7 @@ public class RTSMain extends GameApplication
 	@Override
 	/**Initializes inputs*/
 	protected void initInput() {
-		
+		// on certain key press do certain action
 		onKey(KeyCode.A, () -> moveLeft());
 		onKey(KeyCode.D, () -> camera.moveRight());
 		onKey(KeyCode.W, () -> camera.moveUp());
@@ -107,10 +108,11 @@ public class RTSMain extends GameApplication
         onKey(KeyCode.Z,()-> selected.clear());
       
        
-        
+        //left click runs onLeftClick method
         onBtnDown(MouseButton.PRIMARY,() -> onLeftClick());
 
         onBtnDown(MouseButton.SECONDARY,() -> moveSelected(selected,mouseX, mouseY));
+        
         onKeyDown(KeyCode.H,() -> System.out.println(unitEntities[mouseX][mouseY]));
         onKeyDown(KeyCode.X,() -> System.out.println(selected));
         
@@ -119,7 +121,7 @@ public class RTSMain extends GameApplication
 	@Override
 	protected void initUI() 
 	{
-		//makes backround for button area. opacity is set to 0 for some reason idk why
+		//makes backround for button area
 		Rectangle rect = new Rectangle(400,100);
 	    rect.setTranslateX(400); 
 	    rect.setTranslateY(700);
@@ -152,9 +154,8 @@ public class RTSMain extends GameApplication
 		getGameWorld().addEntityFactory(new TerrainFactory());
 		getGameWorld().addEntityFactory(new UnitFactory());
 		getGameWorld().spawn("infantry",700,600);
-		
-		
-		
+		//calls method that makes factories spawn units
+		factorySpawnUnits();
 		renderTerrain(0,0);
 		renderUnits(0,0);   
         nodeMap = NodeMaker.nodeMaker(new Node[mapSize][mapSize]);
@@ -174,8 +175,7 @@ public class RTSMain extends GameApplication
 			mouseY=(int)(input.getMouseYWorld()/blockSize + camera.gety());
 			mouseX1=(int)(input.getMouseXWorld()/blockSize);
 			mouseY1=(int)(input.getMouseYWorld()/blockSize);
-			System.out.println(point.getX());
-			System.out.println(point.getY());
+			
 
 		
 			
@@ -185,28 +185,27 @@ public class RTSMain extends GameApplication
 			frame=0;
 			
 			//checks if INFANTRY can see eachother. NOT DONE YET
-//			for(int i = 0;i<unitEntities.length;i++)
-//				{
-//					for(int j = 0;j<unitEntities[0].length;j++)
-//					{
-//						Unit[][] map = uMap.getUMap();
-//						if(map[i][j].getUType() == UnitType.INFANTRY)
-//						{
-//							for(int a = 0;i<unitEntities.length;i++)
-//							{
-//								for(int b = 0;j<unitEntities[0].length;j++)
-//								{
-//									if(unitEntities[i][j].isColliding(unitEntities[a][b]))
-//										{
-//											Damage.dealDam(1,(Unit) unitEntities[i][j]);
-//											Damage.dealDam(1,(Unit) unitEntities[a][b]);
-//											System.out.println("goober");
-//										}
-//								}
-//							}
-//						}
-//					}
-//				}
+			for(int i = 0;i<unitEntities.length;i++)
+				{
+					for(int j = 0;j<unitEntities[0].length;j++)
+					{
+						Unit[][] map = uMap.getUMap();
+						if(unitEntities[i][j].getType() == UnitType.ENEMYINFANTRY)
+						{
+							for(int a = 0;i<unitEntities.length;i++)
+							{
+								for(int b = 0;j<unitEntities[0].length;j++)
+								{
+									if(unitEntities[i][j].isColliding(unitEntities[a][b]))
+										{
+											Damage.dealDam(1,(Unit) unitEntities[a][b]);
+											System.out.println("goober");
+										}
+								}
+							}
+						}
+					}
+				}
 		}
 		
 		
@@ -446,12 +445,8 @@ public void onLeftClick()
 	if(buildID == "factory")
 	{
 		Point2D point = new Point2D(1,1);
-		
 		unitEntities[(int)Math.round(mouseX+camera.getDX())][(int)Math.round(mouseY+camera.getDY())].removeFromWorld();
-				
-		//unitEntities[(int)Math.round(mouseX+camera.getDX())][(int)Math.round(mouseY+camera.getDY())]=spawn("factory",(mouseX+camera.getDX())*blockSize,(mouseY+camera.getDY())*blockSize);
 		unitEntities[(int)Math.round(mouseX+camera.getDX())][(int)Math.round(mouseY+camera.getDY())]=spawn("factory",(mouseX1)*blockSize,(mouseY1)*blockSize);
-		
 		buildID = "";
 	}
 	else {
@@ -492,6 +487,38 @@ public void buttonMaker(String str)
 	}
 	selected.clear();
 	System.out.println(buildID);
+}
+public void factorySpawnUnits()
+{
+	getGameTimer().runAtInterval(() -> {
+		for(int i = 0;i<unitEntities.length;i++)
+		{
+			for(int j = 0;j<unitEntities[0].length;j++)
+			{
+				//checks if tile is a factory
+				if(unitEntities[i][j].getType() == UnitType.FACTORY)
+				{
+					//checks if the block to the left of the factory is empty
+					if(unitEntities[i-1][j].getType() == UnitType.NONE)
+					{
+						//spawns unit to the left
+						unitEntities[i-1][j]=spawn("infantry",(i-1)*blockSize,(j)*blockSize);
+					}
+					//spawns unit on top
+					else if(unitEntities[i][j-1].getType() == UnitType.NONE)
+						unitEntities[i][j-1]=spawn("infantry",(i)*blockSize,(j-1)*blockSize);
+					//spawns unit to the right
+					else if(unitEntities[i+1][j].getType() == UnitType.NONE)
+						unitEntities[i+1][j]=spawn("infantry",(i+1)*blockSize,(j)*blockSize);
+					//spawns unit below
+					else if(unitEntities[i][j+1].getType() == UnitType.NONE)
+						unitEntities[i][j+1]=spawn("infantry",(i)*blockSize,(j+1)*blockSize);
+					
+					
+				}
+			}
+		}
+	}, Duration.seconds(5));
 }
 public void moveLeft()
 {
