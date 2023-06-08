@@ -16,6 +16,8 @@ import com.almasb.fxgl.physics.CollisionHandler;
 import com.almasb.fxgl.physics.box2d.collision.shapes.Shape;
 import com.almasb.fxgl.texture.Texture;
 
+import javafx.geometry.Point2D;
+
 //import Pathing.NodeMaker;
 
 
@@ -59,6 +61,7 @@ public class RTSMain extends GameApplication
 	private int mouseY1;
 	private int frame=0;
 	private int count;
+	private Point2D point;
 	private String buildID;
 	
 	private static Node[][] nodeMap = new Node[mapSize][mapSize];
@@ -122,6 +125,7 @@ public class RTSMain extends GameApplication
 	    rect.setTranslateY(700);
 	    getGameScene().addUINode(rect);
 	    
+	    
 
 	    //puts image of factory on screen
 	  Texture tex = makeImageForUI("factory");
@@ -129,6 +133,8 @@ public class RTSMain extends GameApplication
 	    // makes button to build factory
 	    Button factorybtn = makeButtonForUI("factory");
 	    getGameScene().addUINode(factorybtn);
+	    
+	    
 
 	    
 	    
@@ -146,6 +152,7 @@ public class RTSMain extends GameApplication
 		getGameWorld().addEntityFactory(new TerrainFactory());
 		getGameWorld().addEntityFactory(new UnitFactory());
 		getGameWorld().spawn("infantry",700,600);
+		
 		
 		
 		renderTerrain(0,0);
@@ -167,6 +174,8 @@ public class RTSMain extends GameApplication
 			mouseY=(int)(input.getMouseYWorld()/blockSize + camera.gety());
 			mouseX1=(int)(input.getMouseXWorld()/blockSize);
 			mouseY1=(int)(input.getMouseYWorld()/blockSize);
+			System.out.println(point.getX());
+			System.out.println(point.getY());
 
 		
 			
@@ -434,6 +443,8 @@ public void onLeftClick()
 {
 	if(buildID == "factory")
 	{
+		Point2D point = new Point2D(1,1);
+		
 		unitEntities[(int)Math.round(mouseX+camera.getDX())][(int)Math.round(mouseY+camera.getDY())].removeFromWorld();
 				
 		//unitEntities[(int)Math.round(mouseX+camera.getDX())][(int)Math.round(mouseY+camera.getDY())]=spawn("factory",(mouseX+camera.getDX())*blockSize,(mouseY+camera.getDY())*blockSize);
