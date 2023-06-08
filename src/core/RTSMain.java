@@ -171,9 +171,8 @@ public class RTSMain extends GameApplication
 		}
 		else
 		{	
-			if (frame%25!=0) {
-				moveReal();
-			}
+			
+			
 			
 			//checks if INFANTRY can see eachother. NOT DONE YET
 //			for(int i = 0;i<unitEntities.length;i++)
@@ -198,19 +197,19 @@ public class RTSMain extends GameApplication
 //						}
 //					}
 //				}
-		}
 		
 		
 		
 		
-			moveMap(camera.getDX(),camera.getDY());//moves the camera
+		
+		moveMap(camera.getDX(),camera.getDY());//moves the camera
 			
 			camera.setDX(0);//sets the change in  x to zero
 			camera.setDY(0);//sets the change in  y to zero
 			
 			
 			
-		
+		}
 	}
 	
 private void move(Entity e,int x, int y) {//work in progress
@@ -266,26 +265,20 @@ private void move(Entity e,int x, int y) {//work in progress
 
 
 
-
-
-private void moveReal() {
-	
-	
-}
 	
 	/**moves units in array list selected to the x and y cord */
 	private void moveSelected(int x, int y) {
-		cords.clear();
+		
 		
 		for(int i=0; i<selected.size(); i++) {
 			ArrayList<Integer> ids = AStar.printPath(nodeMap[(int) Math.round(selected.get(i).getX()/blockSize)][(int) Math.round(selected.get(i).getY()/blockSize)],nodeMap[x][y]);
 			
-			cords.add(ids);
+		
 			
 			for(int j=ids.size()-2; j>0;j-=2) {
 			
 				move(selected.get(i),ids.get(j+1),ids.get(j));
-				System.out.println(ids.get(j+1)+" "+ids.get(j));
+				
 			}
 				
 		
@@ -347,19 +340,9 @@ private void moveReal() {
 				}
 		}
 
-
-
-			
-
 			
 
 		}
-	
-
-		
-
-		
-		
 
 	}
 
