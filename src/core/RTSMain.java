@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
+import com.almasb.fxgl.dsl.components.HealthIntComponent;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.GameWorld;
 import com.almasb.fxgl.input.Input;
@@ -15,6 +16,9 @@ import com.almasb.fxgl.input.UserAction;
 import com.almasb.fxgl.physics.CollisionHandler;
 import com.almasb.fxgl.physics.box2d.collision.shapes.Shape;
 import com.almasb.fxgl.texture.Texture;
+import com.almasb.fxgl.time.TimerAction;
+
+import javafx.geometry.Point2D;
 
 //import Pathing.NodeMaker;
 
@@ -51,15 +55,19 @@ public class RTSMain extends GameApplication
 	private static Boolean[][] terrain = new Boolean[mapSize][mapSize];
 	private boolean movetime=false;
 	private Camera camera;
-	private ArrayList<ArrayList<Integer>> cords= new ArrayList<ArrayList<Integer>>();
+	private ArrayList<ArrayList<Node>> cords= new ArrayList<ArrayList<Node>>();
 	private ArrayList<Entity> selected=new ArrayList<Entity>() ;
 		
 	private int mouseX;
 	private int mouseY;
-	private int m1;
-	private int m2;
+	private int mouseX1;
+	private int mouseY1;
 	private int frame=0;
+	private int count;
+	private Point2D point;
 	private String buildID;
+	private Entity currentEnemy = null;
+	
 	
 	private static Node[][] nodeMap = new Node[mapSize][mapSize];
 	
@@ -71,11 +79,11 @@ public class RTSMain extends GameApplication
 	public static Node[][] getNMap()
 	{
 		return nodeMap;
-	}
+	}//returns map size
 	public static int getMapSize()
 	{
 		return mapSize;
-	}
+	}//returns terrain map
 	public static Boolean[][] getTerrainMap()
 	{
 		return terrain;
@@ -95,8 +103,8 @@ public class RTSMain extends GameApplication
 	@Override
 	/**Initializes inputs*/
 	protected void initInput() {
-		
-		onKey(KeyCode.A, () -> camera.moveLeft());
+		// on certain key press do certain action
+		onKey(KeyCode.A, () -> moveLeft());
 		onKey(KeyCode.D, () -> camera.moveRight());
 		onKey(KeyCode.W, () -> camera.moveUp());
         onKey(KeyCode.S, () -> camera.moveDown());
@@ -104,10 +112,15 @@ public class RTSMain extends GameApplication
         onKey(KeyCode.Z,()-> selected.clear());
       
        
-        
+        //left click runs onLeftClick method
         onBtnDown(MouseButton.PRIMARY,() -> onLeftClick());
 
+
+        
+        
+
         onBtnDown(MouseButton.SECONDARY,() -> moveSelected(mouseX, mouseY));
+
         onKeyDown(KeyCode.H,() -> System.out.println(unitEntities[mouseX][mouseY]));
         onKeyDown(KeyCode.X,() -> System.out.println(selected));
         
@@ -116,11 +129,12 @@ public class RTSMain extends GameApplication
 	@Override
 	protected void initUI() 
 	{
-		//makes backround for button area. opacity is set to 0 for some reason idk why
+		//makes backround for button area
 		Rectangle rect = new Rectangle(400,100);
 	    rect.setTranslateX(400); 
 	    rect.setTranslateY(700);
 	    getGameScene().addUINode(rect);
+	    
 	    
 
 	    //puts image of factory on screen
@@ -130,9 +144,35 @@ public class RTSMain extends GameApplication
 	    Button factorybtn = makeButtonForUI("factory");
 	    getGameScene().addUINode(factorybtn);
 
-	    
-	    
-	    
+	}
+	protected void initPhysics() {
+		//adds collision handler for infantry and enemy infantry types
+	    getPhysicsWorld().addCollisionHandler(new CollisionHandler(UnitType.INFANTRY, UnitType.ENEMYINFANTRY) {
+	       
+	    	
+	    	@Override
+	        protected void onCollision(Entity infantry, Entity enemyInfantry) {
+	        	
+	        		
+	        		
+	        		//TimerAction timerAction = getGameTimer().runAtInterval(() -> {
+	        		var hp= enemyInfantry.getComponent(HealthIntComponent.class);
+	        		hp.damage(1);
+	        		System.out.println("goober");
+	                if (hp.getValue() == 0) {
+	                    enemyInfantry.removeFromWorld();
+	                    
+	                    
+	                    
+	                    
+	                }
+	        	//}, Duration.seconds(1));
+	        	
+	        	
+	        	
+	        	
+	        }
+	    });
 	}
 	
  		
@@ -146,12 +186,12 @@ public class RTSMain extends GameApplication
 		getGameWorld().addEntityFactory(new TerrainFactory());
 		getGameWorld().addEntityFactory(new UnitFactory());
 		getGameWorld().spawn("infantry",700,600);
-		
-		
+		//calls method that makes factories spawn units
+		factorySpawnUnits();
 		renderTerrain(0,0);
 		renderUnits(0,0);   
         nodeMap = NodeMaker.nodeMaker(new Node[mapSize][mapSize]);
-
+        
 	}
 	int temp=1;
 	//runs at speed tpf
@@ -165,6 +205,9 @@ public class RTSMain extends GameApplication
 			movetime=false;
 			mouseX=(int)(input.getMouseXWorld()/blockSize + camera.getx());
 			mouseY=(int)(input.getMouseYWorld()/blockSize + camera.gety());
+			mouseX1=(int)(input.getMouseXWorld()/blockSize);
+			mouseY1=(int)(input.getMouseYWorld()/blockSize);
+			
 
 		//System.out.println(mouseX+" "+ mouseY);
 			
@@ -172,39 +215,11 @@ public class RTSMain extends GameApplication
 		else
 		{	
 			
-			
-			
-			//checks if INFANTRY can see eachother. NOT DONE YET
+			if(frame%20==0) 
+            {
 
-			for(int i = 0;i<unitEntities.length;i++)
-				{
-					for(int j = 0;j<unitEntities[0].length;j++)
-					{
-						Unit[][] map = uMap.getUMap();
-						if(map[i][j].getUType() == UnitType.INFANTRY)
-						{
-							for(int a = 0;i<unitEntities.length;i++)
-							{
-								for(int b = 0;j<unitEntities[0].length;j++)
-								{
-									if(unitEntities[i][j].isColliding(unitEntities[a][b]))
-										{
-											Damage.dealDam(1,(Unit) unitEntities[i][j]);
-											Damage.dealDam(1,(Unit) unitEntities[a][b]);
-											System.out.println("goober");
-										}
-								}
-							}
-						}
-					}
-				}
-		}
-
-		
-		
-		
-		
-		
+                moveHelper();
+            }	
 		moveMap(camera.getDX(),camera.getDY());//moves the camera
 			
 			camera.setDX(0);//sets the change in  x to zero
@@ -213,6 +228,8 @@ public class RTSMain extends GameApplication
 			
 			
 		}
+	}
+	
 	
 	
 private void move(Entity e,int x, int y) {//work in progress
@@ -270,36 +287,54 @@ private void move(Entity e,int x, int y) {//work in progress
 		//}
 
 			}
+private void moveHelper() {
+
+
+    if(!cords.isEmpty()) {
+        if(!cords.get(0).isEmpty()) {
+    for(int k=0; k<selected.size();k++) {
+
+
+
+                move(selected.get(k),cords.get(0).get(0).getRow(),cords.get(0).get(0).getColumn());
+                cords.get(0).remove(0);
+
+                }
+                }
+
+
+
+    if(cords.get(0).isEmpty()) {
+        cords.remove(0);
+    }
+}
+        }
 
 
 
 	
 	/**moves units in array list selected to the x and y cord */
 private void moveSelected(int x, int y) {
-	
-	
-	for(int i=0; i<selected.size(); i++) {
 
-		 AStar.printPath(nodeMap[(int) Math.round(selected.get(i).getX()/blockSize)][(int) Math.round(selected.get(i).getY()/blockSize)],nodeMap[x][y]);
-		 ArrayList<Node> ids = AStar.reconstructPath(nodeMap[x][y]);
-	
-		
-		for(int j=0; j<ids.size();j++) {
-		
-			move(selected.get(i),ids.get(j).getRow(),ids.get(j).getColumn());
-			
-			
-		}
-			
-	
-		}
-		
+
+    for(int i=0; i<selected.size(); i++) {
+
+         AStar.printPath(nodeMap[(int) Math.round(selected.get(i).getX()/blockSize)][(int) Math.round(selected.get(i).getY()/blockSize)],nodeMap[x][y]);
+         ArrayList<Node> ids = AStar.reconstructPath(nodeMap[x][y]);
+
+         cords.add(ids);
+
+    movetime=true;
+
+
+        }
+
 }
+
 	
 	/**iterates through the terrain entity's list moving each entity on the panel, moving the entire map*/
 	private void moveMap(double dx, double dy) 
 	{
-		
 		
 		for(int i=0; i<terrainEntities.length;i++) {
 			
@@ -416,11 +451,9 @@ public void onLeftClick()
 {
 	if(buildID == "factory")
 	{
+		Point2D point = new Point2D(1,1);
 		unitEntities[(int)Math.round(mouseX+camera.getDX())][(int)Math.round(mouseY+camera.getDY())].removeFromWorld();
-				
-		unitEntities[(int)Math.round(mouseX+camera.getDX())][(int)Math.round(mouseY+camera.getDY())]=spawn("factory",(mouseX+camera.getDX())*blockSize,(mouseY+camera.getDY())*blockSize);
-
-		
+		unitEntities[(int)Math.round(mouseX+camera.getDX())][(int)Math.round(mouseY+camera.getDY())]=spawn("factory",(mouseX1)*blockSize,(mouseY1)*blockSize);
 		buildID = "";
 	}
 	else {
@@ -442,7 +475,7 @@ public Button makeButtonForUI(String str)
 }
 public Texture makeImageForUI(String str)
 {
-	Image image = new Image("/resources/UnitPlaceHolder.png");  
+	Image image = new Image("/resources/UnitPlaceHolder.png");
 	if(str == "factory")
 	{
 		image = new Image("/resources/factory.png");
@@ -461,6 +494,50 @@ public void buttonMaker(String str)
 	}
 	selected.clear();
 	System.out.println(buildID);
+}
+public void factorySpawnUnits()
+{
+	getGameTimer().runAtInterval(() -> {
+		for(int i = 0;i<unitEntities.length;i++)
+		{
+			for(int j = 0;j<unitEntities[0].length;j++)
+			{
+				//checks if tile is a factory
+				if(unitEntities[i][j].getType() == UnitType.FACTORY)
+				{
+					//checks if the block to the left of the factory is empty
+					if(unitEntities[i-1][j].getType() == UnitType.NONE)
+					{
+						//spawns unit to the left
+						unitEntities[i-1][j]=spawn("infantry",(i-1)*blockSize,(j)*blockSize);
+					}
+					//spawns unit on top
+					else if(unitEntities[i][j-1].getType() == UnitType.NONE)
+						unitEntities[i][j-1]=spawn("infantry",(i)*blockSize,(j-1)*blockSize);
+					//spawns unit to the right
+					else if(unitEntities[i+1][j].getType() == UnitType.NONE)
+						unitEntities[i+1][j]=spawn("infantry",(i+1)*blockSize,(j)*blockSize);
+					//spawns unit below
+					else if(unitEntities[i][j+1].getType() == UnitType.NONE)
+						unitEntities[i][j+1]=spawn("infantry",(i)*blockSize,(j+1)*blockSize);
+					
+					
+				}
+			}
+		}
+	}, Duration.seconds(5));
+}
+public void moveLeft()
+{
+	if(count != 50)
+		count ++;
+	else
+	{
+		count = 0;
+	}
+	camera.moveLeft();
+	System.out.println(count);
+	
 }
 	
 	

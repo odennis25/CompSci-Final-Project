@@ -34,6 +34,8 @@ public class UnitMap {
 		map[1][5]= new Unit(UnitType.INFANTRY,1,5,100);
 		map[1][6]= new Unit(UnitType.INFANTRY,1,6,100);
 		map[1][7]= new Unit(UnitType.INFANTRY,1,7,100);
+		map[3][7]= new Unit(UnitType.ENEMYINFANTRY,3,7,100);
+		map[4][7]= new Unit(UnitType.ENEMYINFANTRY,4,7,100);
 	
 	}
 

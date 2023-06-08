@@ -85,7 +85,7 @@ public class AStar
         node.g = Double.MAX_VALUE;
     }
     //reconstructs the path made by A*
-    private static ArrayList<Node> reconstructPath(Node node) 
+    public static ArrayList<Node> reconstructPath(Node node) 
     {
         ArrayList<Node> path = new ArrayList<>();
 
