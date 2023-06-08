@@ -185,28 +185,28 @@ public class RTSMain extends GameApplication
 			frame=0;
 			
 			//checks if INFANTRY can see eachother. NOT DONE YET
-			for(int i = 0;i<unitEntities.length;i++)
-				{
-					for(int j = 0;j<unitEntities[0].length;j++)
-					{
-						Unit[][] map = uMap.getUMap();
-						if(map[i][j].getUType() == UnitType.INFANTRY)
-						{
-							for(int a = 0;i<unitEntities.length;i++)
-							{
-								for(int b = 0;j<unitEntities[0].length;j++)
-								{
-									if(unitEntities[i][j].isColliding(unitEntities[a][b]))
-										{
-											Damage.dealDam(1,(Unit) unitEntities[i][j]);
-											Damage.dealDam(1,(Unit) unitEntities[a][b]);
-											System.out.println("goober");
-										}
-								}
-							}
-						}
-					}
-				}
+//			for(int i = 0;i<unitEntities.length;i++)
+//				{
+//					for(int j = 0;j<unitEntities[0].length;j++)
+//					{
+//						Unit[][] map = uMap.getUMap();
+//						if(map[i][j].getUType() == UnitType.INFANTRY)
+//						{
+//							for(int a = 0;i<unitEntities.length;i++)
+//							{
+//								for(int b = 0;j<unitEntities[0].length;j++)
+//								{
+//									if(unitEntities[i][j].isColliding(unitEntities[a][b]))
+//										{
+//											Damage.dealDam(1,(Unit) unitEntities[i][j]);
+//											Damage.dealDam(1,(Unit) unitEntities[a][b]);
+//											System.out.println("goober");
+//										}
+//								}
+//							}
+//						}
+//					}
+//				}
 		}
 		
 		
@@ -227,8 +227,8 @@ private void move(Entity e,int x, int y) {//work in progress
 		int dx=0;
 		int dy=0;
 		
-		int susx= (int) Math.round(e.getX()/(blockSize)+camera.getx()); 
-		int susy=(int)  Math.round(e.getY()/(blockSize)+camera.gety());
+		int currentx= (int) Math.round(e.getX()/(blockSize)+camera.getx()); 
+		int currenty=(int)  Math.round(e.getY()/(blockSize)+camera.gety());
 		boolean moved=false;
 			
 			
@@ -239,24 +239,31 @@ private void move(Entity e,int x, int y) {//work in progress
 				while(!moved) 
 				{//loops until the unit moves to a valid position
 				
-					if(unitEntities[x+dx][y+dy]==unitEntities[susx][susy]) {//checks if the unit has not moved
-						break;
-					}
+					
 			
-				while(unitEntities[x+dx][y+dy].getType()!=UnitType.NONE) {//checks if the space is already occupied if so changes the dx and dy	
-					dx+=1;
-					}	
+				//while(unitEntities[x+dx][y+dy].getType()!=UnitType.NONE) {//checks if the space is already occupied if so changes the dx and dy	
+					//dx+=1;
+					//}	
 		
 				if(x+dx==21||y+dy==21||x+dx==-1||y+dy==-1) {//checks if out of bounds
+					System.out.println("error 2");
 					break;
 					}
 				
 				
 				//moves the entity to the correct spot after all checks are made
 				Entity temp2=unitEntities[y+dx][x+dy];
-				unitEntities[x+dx][y+dy] = unitEntities[susx][susy];
-				unitEntities[susx][susy]=temp2;
+				
+				
+				
+				unitEntities[x+dx][y+dy] = unitEntities[currentx][currenty];
+				
+				;
+				unitEntities[currentx][currenty]=temp2;
+				
 				e.setPosition((x-camera.getx()+dx)*blockSize,((y-camera.gety()+dy)*blockSize));
+				
+				System.out.println((x-camera.getx()+dx)+" "+ (y-camera.gety()+dy) );
 				moved=true;
 				
 				}
@@ -280,15 +287,10 @@ private void move(Entity e,int x, int y) {//work in progress
 		
 		for(int i=0; i<selected.size(); i++) {
 			
-			
-			
-			
 			ArrayList<Integer> ids = AStar.printPath(nodeMap[(int) Math.round(selected.get(i).getX()/blockSize)][(int) Math.round(selected.get(i).getY()/blockSize)],nodeMap[x][y]);
-			
-			
-			for(int j=1; j<ids.size();j+=2) {
-				move(selected.get(i),ids.get(j-1),ids.get(j));
-				System.out.println(ids.get(j-1)+" "+ids.get(j));
+			for(int j=ids.size()-2; j>0;j-=2) {
+				move(selected.get(i),ids.get(j+1),ids.get(j));
+				//System.out.println(ids.get(j)+" "+ids.get(j-1));
 				
 			
 			
