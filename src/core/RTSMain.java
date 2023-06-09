@@ -5,6 +5,7 @@ import static com.almasb.fxgl.dsl.FXGL.getGameWorld;
 import static com.almasb.fxgl.dsl.FXGL.spawn;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
@@ -110,10 +111,7 @@ public class RTSMain extends GameApplication
 	/**Initializes inputs*/
 	protected void initInput() {
 		// on certain key press do certain action
-		onKey(KeyCode.A, () -> moveLeft());
-		onKey(KeyCode.D, () -> camera.moveRight());
-		onKey(KeyCode.W, () -> camera.moveUp());
-        onKey(KeyCode.S, () -> camera.moveDown());
+	
         
         onKey(KeyCode.Z,()-> selected.clear());
       
@@ -205,7 +203,7 @@ public class RTSMain extends GameApplication
 	/**Initializes game world*/
 	protected void initGame() 
 	{
-		play("RTS1_Hollowrock.wav");
+		
 		
 
 		getGameWorld().addEntityFactory(new TerrainFactory());
@@ -220,15 +218,12 @@ public class RTSMain extends GameApplication
         
 	}
 	int temp=1;
-	//runs at speed tpf
-
-	
-	/**runs at speed tpf*/
+	//runs at speed tpf	
 	protected void onUpdate(double tpf) {
 		Input input = getInput();
 		frame++;
 		if(frame%12!=0) {
-			movetime=false;
+			
 			mouseX=(int)(input.getMouseXWorld()/blockSize + camera.getx());
 			mouseY=(int)(input.getMouseYWorld()/blockSize + camera.gety());
 			mouseX1=(int)(input.getMouseXWorld()/blockSize);
@@ -242,10 +237,13 @@ public class RTSMain extends GameApplication
 		{	
 			
 			if(frame%20==0) 
-            {
+			{
+				
+				moveHelper();
+			}
+			
+	
 
-                moveHelper();
-            }	
 		moveMap(camera.getDX(),camera.getDY());//moves the camera
 			
 			camera.setDX(0);//sets the change in  x to zero
@@ -297,7 +295,6 @@ private void move(Entity e,int x, int y) {
 				unitEntities[x+dx][y+dy] = unitEntities[currentx][currenty];
 				unitEntities[currentx][currenty]=temp2;
 				e.setPosition((int)Math.round(x-camera.getx()+dx)*blockSize,((int)Math.round(y-camera.gety()+dy)*blockSize));
-				
 				System.out.println((int)Math.round(x-camera.getx()+dx)+","+ (int)Math.round(y-camera.gety()+dy));
 				
 				
@@ -318,33 +315,37 @@ private void move(Entity e,int x, int y) {
  * method that calls the move method to move units
  */
 private void moveHelper() {
-
-
-    if(!cords.isEmpty()) {
-        if(!cords.get(0).isEmpty()) {
-    for(int k=0; k<selected.size();k++) {
-
-
-
-                move(selected.get(k),cords.get(0).get(0).getRow(),cords.get(0).get(0).getColumn());
-                cords.get(0).remove(0);
-
-                }
-                }
-
-
-
-    if(cords.get(0).isEmpty()) {
-        cords.remove(0);
-    }
+	
+	
+	if(!cords.isEmpty()) {
+		if(!cords.get(0).isEmpty()) {		
+	for(int k=0; k<selected.size();k++) {
+				
+			
+				
+				move(selected.get(k),cords.get(0).get(0).getRow(),cords.get(0).get(0).getColumn());
+				cords.get(0).remove(0);
+				
+				}
+				}
+			
+			
+			
+	if(cords.get(0).isEmpty()) {
+		cords.remove(0);
+	}
 }
-        }
-
+		}
+		
+		
+	
+	
 
 
 	
 	/**moves units in array list selected to the x and y cord */
 private void moveSelected(int x, int y) {
+
 
 
     for(int i=0; i<selected.size(); i++) {
@@ -358,6 +359,7 @@ private void moveSelected(int x, int y) {
 
 
         }
+
 
 }
 
@@ -382,12 +384,7 @@ private void moveSelected(int x, int y) {
 	}
 	
 	/**iterates through the unit entity's list moving each entity on the panel, moving the entire map*/
-	
 
-	
-	
-	
-	
 	/**iterates through the terrain Map and spawns entity's with the terrains texture*/
 	private void renderTerrain(int dx, int dy) 
 	{
@@ -397,7 +394,9 @@ private void moveSelected(int x, int y) {
 		{
 			for(int c = 0; c<mapSize; c++)
 			{
+
 				int tempInt =(int) (Math.random()*7+1);
+
 				
 				
 				
@@ -531,7 +530,7 @@ public Texture makeImageForUI(String str)
 	}
 	if(str == "enemyFactory")
 	{
-		image = new Image("/resources/factory.png");
+		image = new Image("/resources/factoryMean.png");
 	}
 	Texture tex = new Texture(image);
 	    tex.setTranslateX(750);
@@ -615,6 +614,7 @@ public void factorySpawnUnits(String str)
 		}
 	}, Duration.seconds(5));
 }
+
 /**
  * move left
  */
@@ -630,6 +630,7 @@ public void moveLeft()
 	System.out.println(count);
 	
 }
+
 	
 	
 /**starts the game application*/ 

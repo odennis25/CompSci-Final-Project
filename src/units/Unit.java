@@ -68,6 +68,7 @@ public class Unit extends Entity {
 	{
 		return hp;
 	}
+
 	/**
 	 * unused method that moves unit
 	 * @param desX	
@@ -81,4 +82,5 @@ public class Unit extends Entity {
 	map.setUMap(x, y, new Unit(null,desX,desY,hp));
 	
 }
+
 	}

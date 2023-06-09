@@ -70,10 +70,10 @@ public class AStar
         ArrayList<Node> path = findPath(startNode, goalNode);
         if (path != null) 
         {
-            System.out.println("Path found:");
+          
             for (Node node : path) 
             {
-                System.out.println(node);
+                
             }
         } 
         else 
