@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
+import com.almasb.fxgl.audio.AudioPlayer;
 import com.almasb.fxgl.dsl.components.HealthIntComponent;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.GameWorld;
@@ -44,15 +45,19 @@ import Pathing.NodeMaker;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import static com.almasb.fxgl.dsl.FXGL.*;
-
+/**
+ * this class is the main and is how the game is put together
+ * @author tanel
+ * @author Owen
+ */
 public class RTSMain extends GameApplication 
 {
 	private static int mapSize=21;//21x21 tile map
 	private static int blockSize=50;//the amount of space each entity will take up
-	private TerrainMap terrainMap= new TerrainMap(mapSize, mapSize);
-	private UnitMap uMap = new UnitMap(mapSize,mapSize);
+	private TerrainMap terrainMap= new TerrainMap(mapSize, mapSize);//map that shows terrain
+	private UnitMap uMap = new UnitMap(mapSize,mapSize);//map of units
 	private Entity[][] unitEntities= new Entity[mapSize][mapSize];//2d array that has location of where units are on the map
-	private static Entity[][] terrainEntities= new Entity[mapSize][mapSize];
+	private static Entity[][] terrainEntities= new Entity[mapSize][mapSize];//2d array that holds all terrain entities
 	private static Boolean[][] terrain = new Boolean[mapSize][mapSize];
 	private boolean movetime=false;
 	private Camera camera;
@@ -176,7 +181,7 @@ public class RTSMain extends GameApplication
 	        		//TimerAction timerAction = getGameTimer().runAtInterval(() -> {
 	        		var hp= enemyInfantry.getComponent(HealthIntComponent.class);
 	        		hp.damage(1);
-	        		System.out.println("goober");
+	        		
 	                if (hp.getValue() == 0) {
 	                	 unitEntities[(int) (enemyInfantry.getX() / blockSize)][(int) (enemyInfantry.getY() / blockSize)].removeFromWorld();
 	                	
@@ -200,7 +205,8 @@ public class RTSMain extends GameApplication
 	/**Initializes game world*/
 	protected void initGame() 
 	{
-		//play("RTS1_Hollowrock.wav");
+		play("RTS1_Hollowrock.wav");
+		
 
 		getGameWorld().addEntityFactory(new TerrainFactory());
 		getGameWorld().addEntityFactory(new UnitFactory());
@@ -251,8 +257,13 @@ public class RTSMain extends GameApplication
 	}
 	
 	
-	
-private void move(Entity e,int x, int y) {//work in progress
+	/**
+	 * moves units
+	 * @param e		entity being moved
+	 * @param x		x cord of tile its being moved to		
+	 * @param y		y cord of tile its being moved to
+	 */
+private void move(Entity e,int x, int y) {
 		
 		int dx=0;
 		int dy=0;
@@ -261,11 +272,7 @@ private void move(Entity e,int x, int y) {//work in progress
 		int currenty=(int)  Math.round(e.getY()/(blockSize)+camera.gety());
 		boolean moved=false;
 			
-			
-			//if(e.getType()!=UnitType.NONE) 
-			//{
-				
-				
+
 				while(!moved) 
 				{//loops until the unit moves to a valid position
 				
@@ -295,7 +302,7 @@ private void move(Entity e,int x, int y) {//work in progress
 				
 				
 				
-				//System.out.println((int)Math.round(x-camera.getx()+dx)+" "+ (int)Math.round(y-camera.gety()+dy) );
+				
 
 				moved=true;
 				
@@ -304,9 +311,12 @@ private void move(Entity e,int x, int y) {//work in progress
 			dx=0;
 			dy=0;
 			
-		//}
+		
 
 			}
+/**
+ * method that calls the move method to move units
+ */
 private void moveHelper() {
 
 
@@ -387,7 +397,7 @@ private void moveSelected(int x, int y) {
 		{
 			for(int c = 0; c<mapSize; c++)
 			{
-				int tempInt = 0;//(int) (Math.random()*10+1);
+				int tempInt =(int) (Math.random()*7+1);
 				
 				
 				
@@ -466,7 +476,9 @@ public static int getBlockSize()
 public static void setBlockSize(double b) {
 	blockSize=(int) b;
 }
-//called when leftclick happens
+/**
+ * code that executed when you left click
+ */
 public void onLeftClick()
 {
 	if(buildID == "factory")
@@ -488,6 +500,11 @@ public void onLeftClick()
 		
 	}
 }
+/**
+ * makes a button for the UI to use
+ * @param str		determines what type of button to make
+ * @return			returns button
+ */
 public Button makeButtonForUI(String str)
 {
 	Button factorybtn = new Button("");
@@ -500,6 +517,11 @@ public Button makeButtonForUI(String str)
     factorybtn.setOpacity(0);
     return factorybtn;
 }
+/**
+ * creates a texture for a UI object to use
+ * @param str		what type of image is used
+ * @return			texture with image
+ */
 public Texture makeImageForUI(String str)
 {
 	Image image = new Image("/resources/UnitPlaceHolder.png");
@@ -516,7 +538,10 @@ public Texture makeImageForUI(String str)
 	    tex.setTranslateY(700);
 	    return tex;
 }
-	//stuff that factory button does when clicked
+	/**
+	 * changes build ID to what needs to be built when a button is pressed
+	 * @param str		what type of building is being made
+	 */
 public void buttonMaker(String str)
 {
 	if(str == "factory")
@@ -530,6 +555,10 @@ public void buttonMaker(String str)
 	selected.clear();
 	System.out.println(buildID);
 }
+/**
+ * method that spawns units around the factories
+ * @param str		what type of unit to spawn
+ */
 public void factorySpawnUnits(String str)
 {
 	getGameTimer().runAtInterval(() -> {
@@ -586,6 +615,9 @@ public void factorySpawnUnits(String str)
 		}
 	}, Duration.seconds(5));
 }
+/**
+ * move left
+ */
 public void moveLeft()
 {
 	if(count != 50)

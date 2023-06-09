@@ -3,7 +3,11 @@ package map;
 import java.io.Serializable;
 
 import com.almasb.fxgl.entity.Entity;
-
+/**
+ * class that makes terrain entities
+ * @author Owen
+ *
+ */
 public class Terrain extends Entity{
 private boolean occupied;
 private TerrainType type;
