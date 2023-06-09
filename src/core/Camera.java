@@ -4,6 +4,11 @@ import javafx.scene.layout.Pane;
 import map.TerrainMap;
 import map.UnitMap;
 import javafx.scene.transform.Translate;
+/**
+ * camera that can move around
+ * @author Owen
+ *
+ */
 public class Camera {
 	private double dX;
 	private double dY;

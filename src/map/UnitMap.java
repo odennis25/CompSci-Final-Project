@@ -5,7 +5,11 @@ import com.almasb.fxgl.entity.Entity;
 
 import units.Unit;
 import units.UnitType;
-
+/**
+ * creates a map of all unit entities
+ * @author Owen
+ *
+ */
 public class UnitMap {
 	private int width;
 	private int height;
@@ -34,8 +38,8 @@ public class UnitMap {
 		map[1][5]= new Unit(UnitType.INFANTRY,1,5,100);
 		map[1][6]= new Unit(UnitType.INFANTRY,1,6,100);
 		map[1][7]= new Unit(UnitType.INFANTRY,1,7,100);
-		map[3][7]= new Unit(UnitType.ENEMYINFANTRY,3,7,100);
-		map[4][7]= new Unit(UnitType.ENEMYINFANTRY,4,7,100);
+		
+	
 	
 	}
 
@@ -55,7 +59,13 @@ public class UnitMap {
 	public int length() {
 		return map.length;
 	}
-	
+	/**
+	 * sets specified unit in row and column
+	 * @param row		row of what you want to change
+	 * @param column	column of what you want to change
+	 * @param unit		unit replacing other unit
+	 * @return		new map
+	 */
 	public Unit[][] setUMap(int row, int column, Unit unit ) {
 		
 		map[row][column]= unit;
@@ -63,7 +73,12 @@ public class UnitMap {
 		return map;
 		
 	}
-
+/**
+ * get unit at x and y
+ * @param x		
+ * @param y
+ * @return
+ */
 	public Unit get(int x, int y) {
 		return map[x][y];
 	}

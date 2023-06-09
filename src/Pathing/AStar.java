@@ -3,10 +3,14 @@ package Pathing;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.PriorityQueue;
-
+/**
+ * class that does pathfinding. specifically AStar
+ * @author Dylan
+ *
+ */
 public class AStar 
 {
-
+	//this is Thomas, i dont even know what going on here
     public static ArrayList<Node> findPath(Node startNode, Node goalNode) 
     {
         PriorityQueue<Node> openSet = new PriorityQueue<>();
