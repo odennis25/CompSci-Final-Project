@@ -30,6 +30,7 @@ import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
 import javafx.util.Duration;
 import map.TerrainType;
 import map.UnitMap;
@@ -46,40 +47,39 @@ import static com.almasb.fxgl.dsl.FXGL.*;
 
 public class RTSMain extends GameApplication 
 {
-	private static int mapSize=21;
+	private static int mapSize=21;//21x21 tile map
 	private static int blockSize=50;//the amount of space each entity will take up
 	private TerrainMap terrainMap= new TerrainMap(mapSize, mapSize);
 	private UnitMap uMap = new UnitMap(mapSize,mapSize);
-	private Entity[][] unitEntities= new Entity[mapSize][mapSize];
+	private Entity[][] unitEntities= new Entity[mapSize][mapSize];//2d array that has location of where units are on the map
 	private static Entity[][] terrainEntities= new Entity[mapSize][mapSize];
 	private static Boolean[][] terrain = new Boolean[mapSize][mapSize];
 	private boolean movetime=false;
 	private Camera camera;
 	private ArrayList<ArrayList<Node>> cords= new ArrayList<ArrayList<Node>>();
-	private ArrayList<Entity> selected=new ArrayList<Entity>() ;
+	private ArrayList<Entity> selected=new ArrayList<Entity>() ;//array list of units that are selected to move
 		
-	private int mouseX;
-	private int mouseY;
-	private int mouseX1;
-	private int mouseY1;
+	private int mouseX;//location of mouse measured in tiles
+	private int mouseY;//location of mouse measured in tiles
+	private int mouseX1;//actual location of mouse
+	private int mouseY1;//actual location of mouse
 	private int frame=0;
 	private int count;
-	private Point2D point;
-	private String buildID;
-	private Entity currentEnemy = null;
+	private String buildID;//build ID used to determine what to build
+	
 	
 	
 	private static Node[][] nodeMap = new Node[mapSize][mapSize];
 	
 	
-	//returns nodeMap
+
 
 
 	/**returns nodeMap*/
 	public static Node[][] getNMap()
 	{
 		return nodeMap;
-	}//returns map size
+	}
 	public static int getMapSize()
 	{
 		return mapSize;
@@ -88,6 +88,7 @@ public class RTSMain extends GameApplication
 	{
 		return terrain;
 	}
+	
 	
 	
 	
@@ -126,6 +127,9 @@ public class RTSMain extends GameApplication
         
         
 	}
+	/**
+	 * creates the UI
+	 */
 	@Override
 	protected void initUI() 
 	{
@@ -143,13 +147,27 @@ public class RTSMain extends GameApplication
 	    // makes button to build factory
 	    Button factorybtn = makeButtonForUI("factory");
 	    getGameScene().addUINode(factorybtn);
+	    //puts image of factory on screen
+		  Texture tex2 = makeImageForUI("enemyFactory");
+		    getGameScene().addUINode(tex2);
+		    tex2.setTranslateX(700);
+		    
+		    // makes button to build factory
+		    Button factorybtn2 = makeButtonForUI("enemyFactory");
+		    factorybtn2.setTranslateX(700);
+		    getGameScene().addUINode(factorybtn2);
 
 	}
+	/**
+	 * determines how units interact with eachother
+	 */
 	protected void initPhysics() {
 		//adds collision handler for infantry and enemy infantry types
 	    getPhysicsWorld().addCollisionHandler(new CollisionHandler(UnitType.INFANTRY, UnitType.ENEMYINFANTRY) {
 	       
-	    	
+	    	/**
+	    	 * when unit hitboxes collide
+	    	 */
 	    	@Override
 	        protected void onCollision(Entity infantry, Entity enemyInfantry) {
 	        	
@@ -160,7 +178,8 @@ public class RTSMain extends GameApplication
 	        		hp.damage(1);
 	        		System.out.println("goober");
 	                if (hp.getValue() == 0) {
-	                    enemyInfantry.removeFromWorld();
+	                	 unitEntities[(int) (enemyInfantry.getX() / blockSize)][(int) (enemyInfantry.getY() / blockSize)].removeFromWorld();
+	                	
 	                    
 	                    
 	                    
@@ -187,7 +206,8 @@ public class RTSMain extends GameApplication
 		getGameWorld().addEntityFactory(new UnitFactory());
 		getGameWorld().spawn("infantry",700,600);
 		//calls method that makes factories spawn units
-		factorySpawnUnits();
+		factorySpawnUnits("infantry");
+		factorySpawnUnits("enemyInfantry");
 		renderTerrain(0,0);
 		renderUnits(0,0);   
         nodeMap = NodeMaker.nodeMaker(new Node[mapSize][mapSize]);
@@ -451,9 +471,16 @@ public void onLeftClick()
 {
 	if(buildID == "factory")
 	{
-		Point2D point = new Point2D(1,1);
+		
 		unitEntities[(int)Math.round(mouseX+camera.getDX())][(int)Math.round(mouseY+camera.getDY())].removeFromWorld();
 		unitEntities[(int)Math.round(mouseX+camera.getDX())][(int)Math.round(mouseY+camera.getDY())]=spawn("factory",(mouseX1)*blockSize,(mouseY1)*blockSize);
+		buildID = "";
+	}
+	else if(buildID == "enemyFactory")
+	{
+		
+		unitEntities[(int)Math.round(mouseX+camera.getDX())][(int)Math.round(mouseY+camera.getDY())].removeFromWorld();
+		unitEntities[(int)Math.round(mouseX+camera.getDX())][(int)Math.round(mouseY+camera.getDY())]=spawn("enemyFactory",(mouseX1)*blockSize,(mouseY1)*blockSize);
 		buildID = "";
 	}
 	else {
@@ -464,8 +491,8 @@ public void onLeftClick()
 public Button makeButtonForUI(String str)
 {
 	Button factorybtn = new Button("");
-    if(str == "factory")
-    	factorybtn.setOnAction(e -> buttonMaker("factory"));
+    
+    	factorybtn.setOnAction(e -> buttonMaker(str));
     factorybtn.setTranslateX(750); 
     factorybtn.setTranslateY(700); 
     factorybtn.setPrefWidth(50);
@@ -477,6 +504,10 @@ public Texture makeImageForUI(String str)
 {
 	Image image = new Image("/resources/UnitPlaceHolder.png");
 	if(str == "factory")
+	{
+		image = new Image("/resources/factory.png");
+	}
+	if(str == "enemyFactory")
 	{
 		image = new Image("/resources/factory.png");
 	}
@@ -492,10 +523,14 @@ public void buttonMaker(String str)
 	{
 		buildID = "factory";
 	}
+	if(str == "enemyFactory")
+	{
+		buildID = "enemyFactory";
+	}
 	selected.clear();
 	System.out.println(buildID);
 }
-public void factorySpawnUnits()
+public void factorySpawnUnits(String str)
 {
 	getGameTimer().runAtInterval(() -> {
 		for(int i = 0;i<unitEntities.length;i++)
@@ -503,25 +538,49 @@ public void factorySpawnUnits()
 			for(int j = 0;j<unitEntities[0].length;j++)
 			{
 				//checks if tile is a factory
+				if(str == "infantry")
+				{
 				if(unitEntities[i][j].getType() == UnitType.FACTORY)
 				{
 					//checks if the block to the left of the factory is empty
 					if(unitEntities[i-1][j].getType() == UnitType.NONE)
 					{
 						//spawns unit to the left
-						unitEntities[i-1][j]=spawn("infantry",(i-1)*blockSize,(j)*blockSize);
+						unitEntities[i-1][j]=spawn(str,(i-1)*blockSize,(j)*blockSize);
 					}
 					//spawns unit on top
 					else if(unitEntities[i][j-1].getType() == UnitType.NONE)
-						unitEntities[i][j-1]=spawn("infantry",(i)*blockSize,(j-1)*blockSize);
+						unitEntities[i][j-1]=spawn(str,(i)*blockSize,(j-1)*blockSize);
 					//spawns unit to the right
 					else if(unitEntities[i+1][j].getType() == UnitType.NONE)
-						unitEntities[i+1][j]=spawn("infantry",(i+1)*blockSize,(j)*blockSize);
+						unitEntities[i+1][j]=spawn(str,(i+1)*blockSize,(j)*blockSize);
 					//spawns unit below
 					else if(unitEntities[i][j+1].getType() == UnitType.NONE)
-						unitEntities[i][j+1]=spawn("infantry",(i)*blockSize,(j+1)*blockSize);
+						unitEntities[i][j+1]=spawn(str,(i)*blockSize,(j+1)*blockSize);
 					
+				}	
+				}
+				else if(str == "enemyInfantry")
+				{
+				if(unitEntities[i][j].getType() == UnitType.ENEMYFACTORY)
+				{
+					//checks if the block to the left of the factory is empty
+					if(unitEntities[i-1][j].getType() == UnitType.NONE)
+					{
+						//spawns unit to the left
+						unitEntities[i-1][j]=spawn(str,(i-1)*blockSize,(j)*blockSize);
+					}
+					//spawns unit on top
+					else if(unitEntities[i][j-1].getType() == UnitType.NONE)
+						unitEntities[i][j-1]=spawn(str,(i)*blockSize,(j-1)*blockSize);
+					//spawns unit to the right
+					else if(unitEntities[i+1][j].getType() == UnitType.NONE)
+						unitEntities[i+1][j]=spawn(str,(i+1)*blockSize,(j)*blockSize);
+					//spawns unit below
+					else if(unitEntities[i][j+1].getType() == UnitType.NONE)
+						unitEntities[i][j+1]=spawn(str,(i)*blockSize,(j+1)*blockSize);
 					
+				}	
 				}
 			}
 		}

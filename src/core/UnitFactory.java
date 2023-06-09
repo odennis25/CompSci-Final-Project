@@ -34,7 +34,7 @@ public class UnitFactory implements EntityFactory{
 
 	            .type(UnitType.INFANTRY)
 	            .view(new Texture(image))
-	            .bbox(new HitBox(BoundingShape.box(150,150)))
+	            .bbox(new HitBox(BoundingShape.box(200,200)))
 	            .with(new CollidableComponent(true))
 	            .build();
 	}
@@ -69,6 +69,16 @@ public class UnitFactory implements EntityFactory{
 		
 	    return  entityBuilder(data)
 	            .type(UnitType.FACTORY)
+	            .view(new Texture(image))
+	            .build();
+	}
+	@Spawns ("enemyFactory")
+	public Entity enemyFactory(SpawnData data) 
+	{
+		Image image = new Image("/resources/factory.png");
+		
+	    return  entityBuilder(data)
+	            .type(UnitType.ENEMYFACTORY)
 	            .view(new Texture(image))
 	            .build();
 	}
