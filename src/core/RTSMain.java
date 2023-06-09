@@ -105,10 +105,7 @@ public class RTSMain extends GameApplication
 	/**Initializes inputs*/
 	protected void initInput() {
 		// on certain key press do certain action
-		onKey(KeyCode.A, () -> moveLeft());
-		onKey(KeyCode.D, () -> camera.moveRight());
-		onKey(KeyCode.W, () -> camera.moveUp());
-        onKey(KeyCode.S, () -> camera.moveDown());
+	
         
         onKey(KeyCode.Z,()-> selected.clear());
       
@@ -375,7 +372,7 @@ private void moveSelected(int x, int y) {
 		{
 			for(int c = 0; c<mapSize; c++)
 			{
-				int tempInt = 0;//(int) (Math.random()*10+1);
+				int tempInt = (int) (Math.random()*10+1);
 				
 				
 				
@@ -535,18 +532,7 @@ public void factorySpawnUnits()
 		}
 	}, Duration.seconds(5));
 }
-public void moveLeft()
-{
-	if(count != 50)
-		count ++;
-	else
-	{
-		count = 0;
-	}
-	camera.moveLeft();
-	System.out.println(count);
-	
-}
+
 	
 	
 /**starts the game application*/ 

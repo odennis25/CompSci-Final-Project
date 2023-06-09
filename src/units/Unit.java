@@ -59,11 +59,5 @@ public class Unit extends Entity {
 		return hp;
 	}
 	
-	public void MoveUnit(int desX, int desY, UnitMap map) {
-	
-	Unit type =map.getUMap()[x][y].getU();
-	map.setUMap(desX, desY, type);
-	map.setUMap(x, y, new Unit(null,desX,desY,hp));
-	
-}
+
 	}
