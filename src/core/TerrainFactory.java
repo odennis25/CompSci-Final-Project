@@ -18,7 +18,11 @@ import javafx.util.Duration;
 import map.Terrain;
 import map.TerrainType;
 import units.UnitType;
-
+/**
+ * creates terrain for map
+ * @author Owen
+ *
+ */
 public class TerrainFactory implements EntityFactory 
 {
 

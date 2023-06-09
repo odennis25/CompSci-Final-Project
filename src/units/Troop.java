@@ -2,7 +2,11 @@ package units;
 
 import core.RTSMain;
 import map.TerrainType;
-
+/**
+ * unused class that spawns troops
+ * @author Owen
+ *
+ */
 public class Troop extends Unit{
 
 

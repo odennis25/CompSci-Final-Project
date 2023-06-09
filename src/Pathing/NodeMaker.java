@@ -3,7 +3,11 @@ package Pathing;
 import java.util.ArrayList;
 
 import core.RTSMain;
-
+/**
+ * this class makes the nodes used in the pathfinding
+ * @author Dylan
+ *
+ */
 public class NodeMaker 
 {
 	
@@ -148,7 +152,10 @@ public class NodeMaker
 			
 		return temp;
 	}
-
+/**
+ * if you're reading this, please don't fail us, we bit off a lot more than we could chew. we originally had 5 people but Auden left us stranded.
+ * @param args
+ */
 public static void main(String[] args)
 {
 

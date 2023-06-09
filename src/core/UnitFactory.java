@@ -21,10 +21,20 @@ import units.Unit;
 import units.UnitType;
 import com.almasb.fxgl.physics.BoundingShape;
 import com.almasb.fxgl.physics.HitBox;
+/**
+ * creates specified units
+ * @author tanel
+ * @author Owen
+ *
+ */
 public class UnitFactory implements EntityFactory{
 
 	
-	
+	/**
+	 * spawns infantry units
+	 * @param data		general information regarding spawning things
+	 * @return			returns new entity
+	 */
 	@Spawns("infantry")
 	public Entity infantry(SpawnData data) 
 	{
@@ -34,11 +44,15 @@ public class UnitFactory implements EntityFactory{
 
 	            .type(UnitType.INFANTRY)
 	            .view(new Texture(image))
-	            .bbox(new HitBox(BoundingShape.box(200,200)))
+	            .bbox(new HitBox(BoundingShape.box(250,250)))
 	            .with(new CollidableComponent(true))
 	            .build();
 	}
-	
+	/**
+	 * spawns "none" units
+	 * @param data		general information regarding spawning things
+	 * @return			returns new entity
+	 */
 	@Spawns ("none")
 	public Entity none(SpawnData data) 
 	{
@@ -48,7 +62,11 @@ public class UnitFactory implements EntityFactory{
 	            .type(UnitType.NONE)
 	            .build();
 	}
-	
+	/**
+	 * spawns enemy infantry units
+	 * @param data		general information regarding spawning things
+	 * @return			returns new entity
+	 */
 	@Spawns ("enemyInfantry")
 	public Entity enemyInfantry(SpawnData data) 
 	{
@@ -61,7 +79,11 @@ public class UnitFactory implements EntityFactory{
 	            .with(hp)
 	            .build();
 	}
-	
+	/**
+	 * spawns factory units
+	 * @param data		general information regarding spawning things
+	 * @return			returns new entity
+	 */
 	@Spawns ("factory")
 	public Entity factory(SpawnData data) 
 	{
@@ -72,6 +94,11 @@ public class UnitFactory implements EntityFactory{
 	            .view(new Texture(image))
 	            .build();
 	}
+	/**
+	 * spawns enemy factories units
+	 * @param data		general information regarding spawning things
+	 * @return			returns new entity
+	 */
 	@Spawns ("enemyFactory")
 	public Entity enemyFactory(SpawnData data) 
 	{
@@ -82,6 +109,11 @@ public class UnitFactory implements EntityFactory{
 	            .view(new Texture(image))
 	            .build();
 	}
+	/**
+	 * spawns main base units
+	 * @param data		general information regarding spawning things
+	 * @return			returns new entity
+	 */
 	@Spawns ("mainBase")
 	public Entity mainBase(SpawnData data) 
 	{

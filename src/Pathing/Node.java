@@ -3,7 +3,11 @@ package Pathing;
 import java.util.ArrayList;
 
 import core.RTSMain;
-
+/**
+ * Nodes used for pathfinding
+ * @author Dylan
+ *
+ */
 public class Node implements Comparable<Node>
 {
 	//x+y coords for each node
@@ -24,9 +28,16 @@ public class Node implements Comparable<Node>
 	public double g = Double.MAX_VALUE;
 	
 	//hard-coded heuristic
+	//how much it costs to move there
 	public double h;
 	
-	//
+	/**
+	 * 
+	 * @param h  is cost
+	 * @param id	id of the node
+	 * @param x	x cords
+	 * @param y	y cord
+	 */
 	Node(double h, int id, int x, int y)
 	{
 		this.x = x;
@@ -35,6 +46,9 @@ public class Node implements Comparable<Node>
 		this.id=id;
 		this.neighbors = new ArrayList<>();
 	}
+	/**
+	 * sets all values to default
+	 */
 	public Node()
 	{
 		this.x = -1;
@@ -44,20 +58,30 @@ public class Node implements Comparable<Node>
 		this.neighbors = new ArrayList<>();
 	}
 	
-	//does what the name implies
+	/**
+	 * tells the node what other nodes its connected to
+	 * @param cost		cost of move
+	 * @param node		the other nodes
+	 */
 	public void addBranch(int cost, Node node)
 	{
 		Edge newEdge = new Edge(cost, node);
 		neighbors.add(newEdge);
 	}
-	
+	/**
+	 * calculate how much it costs to move to this node
+	 * @param target	target node
+	 * @return			cost of target node
+	 */
 	public double calcHeur(Node target)
 	{
 		return this.h;
 	}
 	
-
-	@Override//compare stuff
+	/**
+	 * compares this nodes cost to another nodes cost
+	 */
+	@Override
 	public int compareTo(Node n) 
 	{
 		return Double.compare(this.f, n.f);
